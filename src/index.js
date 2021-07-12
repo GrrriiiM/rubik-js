@@ -110,8 +110,8 @@ function rotateSide(cube, x, y, z, axis, antiClock = false) {
     let newX = x;
     let direction = !antiClock ? 1 : -1;
     if (axis == AXIES.x) {
-        newZ = ((y - offset) * -direction) + offset;
-        newY = ((z - offset) * direction) + offset;
+        newZ = ((y - offset) * direction) + offset;
+        newY = ((z - offset) * -direction) + offset;
     } else if (axis == AXIES.y) {
         newZ = ((x - offset) * -direction) + offset;
         newX = ((z - offset) * direction) + offset;
@@ -150,7 +150,7 @@ function rotate(cube, blockElements, axis, side, timeRotating, antiClock) {
     let dimension = cube.length;
     if (!isRotating) {
         isRotating = true;
-        let axisName = ['x', 'y', 'z'][axis]
+        let axisName = ['x', 'y', 'z'][axis];
         let blockEelementsToRotate = blockElements.filter(_ => side == undefined || parseInt(_.dataset[axisName]) == side);
         rotateAnimate(blockEelementsToRotate, axis, dimension, antiClock, timeRotating);
         setTimeout(() => {
@@ -219,39 +219,56 @@ let dragStartX = 0;
 let dragStartY = 0;
 let isDragingX = false;
 let isDragingY = false;
-let isDragingFront = false;
+let isDragingFrontFace = false;
+let isDragingRightFace = false;
+let isDragingTopFace = false;
 let isDraging = false;
+let dragingAxis;
 
 function dragStart(event) {
-    console.log(event.target);
-    isDragingFront = event.target.classList.contains("face-front");
-    if (isDragingFront) {
-        isDraging = true;
+    blockElements.forEach(blockElementToRotate => {
+        blockElementToRotate.style.transform = `rotateX(0deg) rotateY(0deg) rotateZ(0deg) ${getTranslate3d(blockElementToRotate, dimension)}`;
+    });
+    isDraging = true;
+    dragStartX = event.screenX;
+    dragStartY = event.screenY;
+    isDragingFrontFace = event.target.classList.contains("face-front");
+    isDragingRightFace = event.target.classList.contains("face-right");
+    isDragingTopFace = event.target.classList.contains("face-top");
+    if (isDragingFrontFace || isDragingRightFace || isDragingTopFace) {
         blockElementDraging = event.target.parentElement;
-        dragStartX = event.screenX;
-        dragStartY = event.screenY;
     }
 }
-
 
 function drag(event) {
     if (event.screenX == 0 && event.screenY == 0) return;
     let x = event.screenX - dragStartX;
     let y = event.screenY - dragStartY;
-
     if (isDraging) {
-        if (isDragingFront) {
-            console.log(x, y);
-            let axisName = Math.abs(x) < Math.abs(y) ? 'x' : 'y';
-            let side = blockElementDraging.dataset[axisName];
-            let blockElementsToRotate = blockElements.filter(_ => parseInt(_.dataset[axisName]) == side);
-            let move = Math.abs(x) < Math.abs(y) ? -y : x;
-            blockElementsToRotate.forEach(blockElementToRotate => {
-                blockElementToRotate.style.transform = `rotate${axisName.toUpperCase()}(${move}deg) ${getTranslate3d(blockElementToRotate, dimension)}`;
-            });
-        } else {
+        isDragingX = Math.abs(x) > Math.abs(y);
+        if (isDragingY == isDragingX) rotateDraging(0, dragingAxis);
+        isDragingY = !isDragingX;
+        if (isDragingFrontFace) dragingAxis = isDragingX ? 'y' : 'x';
+        else if (isDragingRightFace) dragingAxis = isDragingX ? 'y' : 'z';
+        else if (isDragingTopFace) dragingAxis = isDragingX ? 'z' : 'x';
+        else dragingAxis = isDragingX ? 'y' : 'x'
+        rotateDraging(isDragingX ? x : dragingAxis == 'y' ? y : -y, dragingAxis, true);
+    }
+}
 
-        }
+function rotateDraging(move, axisName, allSides = false) {
+    let deg = move / 2;
+    deg = deg > 90 ? 90 : deg;
+    if (!allSides) {
+        let side = blockElementDraging.dataset[axisName];
+        let blockElementsToRotate = blockElements.filter(_ => parseInt(_.dataset[axisName]) == side);
+        blockElementsToRotate.forEach(blockElementToRotate => {
+            blockElementToRotate.style.transform = `rotate${axisName.toUpperCase()}(${deg}deg) ${getTranslate3d(blockElementToRotate, dimension)}`;
+        });
+    } else {
+        blockElements.forEach(blockElementToRotate => {
+            blockElementToRotate.style.transform = `rotate${axisName.toUpperCase()}(${deg}deg) ${getTranslate3d(blockElementToRotate, dimension)}`;
+        });
     }
 }
 
@@ -259,164 +276,21 @@ function dragEnd(event) {
     let x = event.screenX - dragStartX;
     let y = event.screenY - dragStartY;
     if (isDraging) {
-        if (isDragingFront) {
-            let axisName = Math.abs(x) < Math.abs(y) ? 'x' : 'y';
-            let antiClock = Math.abs(x) < Math.abs(y) ? y > 0 : x < 0;
-            let side = blockElementDraging.dataset[axisName];
-            let blockElementsToRotate = blockElements.filter(_ => parseInt(_.dataset[axisName]) == side);
-            rotate(cube, blockElementsToRotate, AXIES[axisName], side, timeRotating / 2, antiClock)
+        let move = (isDragingX ? Math.abs(x) : Math.abs(y));
+        if (move < 30) {
+            rotateDraging(0, dragingAxis);
+        } else {
+            let side = blockElementDraging.dataset[dragingAxis];
+            let antiClock = isDragingX ? x < 0 : y > 0;
+            let blockElementsToRotate = blockElements.filter(_ => parseInt(_.dataset[dragingAxis]) == side);
+            rotate(cube, blockElementsToRotate, AXIES[dragingAxis], side, timeRotating / 2, antiClock)
         }
     }
     isDraging = false;
+    isDragingX = false;
+    isDragingY = false;
+    blockElementDraging = null;
 }
-
-// 
-// function rotate(e, t) {
-//     let n = [e[0], e[1]];
-//     [...Array(t).keys()].forEach(() => {
-//         n = [n[1] * -1, n[0]];
-//     });
-//     return n;
-// }
-
-
-
-// function createBlock(type, colors, x, y, z) {
-//     var blockElement = document.getElementById("block").cloneNode(true);
-//     blockElement.id = "";
-
-//     blockElement.dataset.frontColor = colors.front || 'black';
-//     blockElement.dataset.topColor = colors.top || 'black';
-//     blockElement.dataset.leftColor = colors.left || 'black';
-//     blockElement.dataset.backColor = colors.back || 'black';
-//     blockElement.dataset.bottomColor = colors.bottom || 'black';
-//     blockElement.dataset.rightColor = colors.right || 'black';
-
-//     blockElement.dataset.type = type;
-//     blockElement.dataset.x = x;
-//     blockElement.dataset.y = y;
-//     blockElement.dataset.z = z;
-
-//     updateTranslate(blockElement);
-//     updateFacesColor(blockElement);
-
-//     return blockElement;
-// }
-
-// function updateTranslate(blockElement) {
-//     let transform = "translate3d(";
-//     transform += `calc(var(--block-size) * ${-0.5 + parseInt(blockElement.dataset.x)}),`;
-//     transform += `calc(var(--block-size) * ${-0.5 + parseInt(blockElement.dataset.y)}),`;
-//     transform += `calc(var(--block-size) * ${-parseInt(blockElement.dataset.z)}))`;
-//     blockElement.style.transform = transform;
-// }
-
-// function updateFacesColor(blockElement) {
-//     blockElement.querySelector('.face-front').style.backgroundColor = blockElement.dataset.frontColor;
-//     blockElement.querySelector('.face-top').style.backgroundColor = blockElement.dataset.topColor;
-//     blockElement.querySelector('.face-left').style.backgroundColor = blockElement.dataset.leftColor;
-//     blockElement.querySelector('.face-back').style.backgroundColor = blockElement.dataset.backColor;
-//     blockElement.querySelector('.face-bottom').style.backgroundColor = blockElement.dataset.bottomColor;
-//     blockElement.querySelector('.face-right').style.backgroundColor = blockElement.dataset.rightColor;
-// }
-
-
-
-// let rotating = false
-// let timeRotating = 0.2;
-
-// function rotateBlocks(axis, side, antiClock = false) {
-//     if (rotating) return;
-//     rotating = true;
-
-//     let blocksToRotate = blocks.filter(_ => side == undefined || parseInt(_.dataset[axis.toLowerCase()]) == side);
-
-//     let move = (((side ?? 1) * (!antiClock ? -1 : 1)) + 4) % 4;
-//     blocksToRotate.forEach(blockElement => {
-//         blockElement.style.transform = `rotate${axis.toUpperCase()}(0deg) ${blockElement.style.transform}`;
-//         blockElement.style.transition = `transform ${timeRotating}s ease-out`;
-//         blockElement.style.transform = `rotate${axis.toUpperCase()}(${-move * 90}deg) ${blockElement.style.transform}`;
-//     });
-
-//     setTimeout(() => {
-//         blocksToRotate.forEach(blockElement => {
-//             let x = parseInt(blockElement.dataset.x);
-//             let y = parseInt(blockElement.dataset.y);
-//             let z = parseInt(blockElement.dataset.z);
-
-
-//             let colorsOrder = [];
-//             if (axis.toLowerCase() == 'x') {
-//                 [y, z] = rotate([y, z], move);
-//                 colorsOrder = ['front', 'bottom', 'back', 'top']
-//             } else if (axis.toLowerCase() == 'y') {
-//                 [z, x] = rotate([z, x], move);
-//                 colorsOrder = ['front', 'left', 'back', 'right']
-//             } else {
-//                 [y, x] = rotate([y, x], move);
-//                 colorsOrder = ['top', 'left', 'bottom', 'right']
-//             }
-
-//             blockElement.style.transition = "";
-//             [
-//                 blockElement.dataset[`${colorsOrder[0]}Color`],
-//                 blockElement.dataset[`${colorsOrder[1]}Color`],
-//                 blockElement.dataset[`${colorsOrder[2]}Color`],
-//                 blockElement.dataset[`${colorsOrder[3]}Color`]
-//             ] = [
-//                     blockElement.dataset[`${colorsOrder[((0 - move) + 4) % 4]}Color`],
-//                     blockElement.dataset[`${colorsOrder[((1 - move) + 4) % 4]}Color`],
-//                     blockElement.dataset[`${colorsOrder[((2 - move) + 4) % 4]}Color`],
-//                     blockElement.dataset[`${colorsOrder[((3 - move) + 4) % 4]}Color`]
-//                 ];
-//             blockElement.dataset.x = x;
-//             blockElement.dataset.y = y;
-//             blockElement.dataset.z = z;
-//             updateTranslate(blockElement);
-//             updateFacesColor(blockElement);
-//         });
-//         rotating = false;
-//     }, timeRotating * 1010);
-// }
-
-
-
-
-
-// const blocks = [
-//     cubeElement.appendChild(createBlock("center", { front: "orange" }, 0, 0, -1)),
-//     cubeElement.appendChild(createBlock("center", { top: "yellow" }, 0, -1, 0)),
-//     cubeElement.appendChild(createBlock("center", { left: "green" }, -1, 0, 0)),
-//     cubeElement.appendChild(createBlock("center", { back: "red" }, 0, 0, 1)),
-//     cubeElement.appendChild(createBlock("center", { bottom: "white" }, 0, 1, 0)),
-//     cubeElement.appendChild(createBlock("center", { right: "blue" }, 1, 0, 0)),
-
-//     cubeElement.appendChild(createBlock("edge", { front: "orange", top: "yellow" }, 0, -1, -1)),
-//     cubeElement.appendChild(createBlock("edge", { front: "orange", left: "green" }, -1, 0, -1)),
-//     cubeElement.appendChild(createBlock("edge", { front: "orange", bottom: "white" }, 0, 1, -1)),
-//     cubeElement.appendChild(createBlock("edge", { front: "orange", right: "blue" }, 1, 0, -1)),
-
-//     cubeElement.appendChild(createBlock("edge", { back: "red", top: "yellow" }, 0, -1, 1)),
-//     cubeElement.appendChild(createBlock("edge", { back: "red", left: "green" }, -1, 0, 1)),
-//     cubeElement.appendChild(createBlock("edge", { back: "red", bottom: "white" }, 0, 1, 1)),
-//     cubeElement.appendChild(createBlock("edge", { back: "red", right: "blue" }, 1, 0, 1)),
-
-//     cubeElement.appendChild(createBlock("edge", { top: "yellow", left: "green" }, -1, -1, 0)),
-//     cubeElement.appendChild(createBlock("edge", { top: "yellow", right: "blue" }, 1, -1, 0)),
-//     cubeElement.appendChild(createBlock("edge", { bottom: "white", left: "green" }, -1, 1, 0)),
-//     cubeElement.appendChild(createBlock("edge", { bottom: "white", right: "blue" }, 1, 1, 0)),
-
-//     cubeElement.appendChild(createBlock("corner", { front: "orange", top: "yellow", left: "green" }, -1, -1, -1)),
-//     cubeElement.appendChild(createBlock("corner", { front: "orange", top: "yellow", right: "blue" }, 1, -1, -1)),
-//     cubeElement.appendChild(createBlock("corner", { front: "orange", bottom: "white", right: "blue" }, 1, 1, -1)),
-//     cubeElement.appendChild(createBlock("corner", { front: "orange", bottom: "white", left: "green" }, -1, 1, -1)),
-
-//     cubeElement.appendChild(createBlock("corner", { back: "red", top: "yellow", left: "green" }, -1, -1, 1)),
-//     cubeElement.appendChild(createBlock("corner", { back: "red", top: "yellow", right: "blue" }, 1, -1, 1)),
-//     cubeElement.appendChild(createBlock("corner", { back: "red", bottom: "white", right: "blue" }, 1, 1, 1)),
-//     cubeElement.appendChild(createBlock("corner", { back: "red", bottom: "white", left: "green" }, -1, 1, 1)),
-
-// ];
 
 function keypress(event) {
     if (event.key == 'a') rotateL();
