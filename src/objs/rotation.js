@@ -1,3 +1,4 @@
+import { Block } from "./block";
 import { AXIS, CLOCK, SIDES } from "./constants";
 
 
@@ -38,4 +39,16 @@ export function rotate(axis, size, layer = 0, clock = CLOCK.NORMAL) {
     }
     console.log(newCube);
     return newCube;
+}
+
+export function rotateBlocks(axis, blocks, layer = 0, clock = CLOCK.NORMAL) {
+    let size = blocks.length;
+    let layers = [...Array(size).keys()];
+    let position = rotate(axis, blocks.length, layer, clock).flat(3);
+    let blocksFlat = blocks.flat(3);
+    let newBlocksFlat = blocksFlat.map(_ => _);
+    for(let i of [...Array(position.length).keys()]) {
+        newBlocksFlat[position[i]] = new Block(rotateSides(axis, blocksFlat[i].sides, clock));
+    }
+    let blocks = layers.map(z => layers.map(y => layers.map(x => newBlocksFlat[z*size*size + y*size + x])));
 }
