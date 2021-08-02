@@ -1,5 +1,5 @@
-import { cubeFromFlat, cubeToFlat } from "./transformer";
-import { AXIS, CLOCK, SIDES } from "./constants";
+import { cubeFromFlat, cubeToFlat } from "./transformer.js";
+import { AXIS, CLOCK, SIDES } from "./constants.js";
 
 
 export function rotateSide(axis, side, clock = CLOCK.NORMAL) {

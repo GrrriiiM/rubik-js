@@ -1,5 +1,5 @@
-import { AXIS, COLORS, SIDES } from "./constants";
-import { cubeToFlat } from "./transformer";
+import { AXIS, COLORS, SIDES } from "./constants.js";
+import { cubeToFlat } from "./transformer.js";
 
 
 export function findCubeColorBySide(cube, side) {

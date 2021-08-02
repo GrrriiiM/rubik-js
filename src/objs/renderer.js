@@ -1,6 +1,6 @@
 
-import { COLORS, SIDES } from "./constants";
-import { inverseKeyValue } from "./transformer";
+import { COLORS, SIDES } from "./constants.js";
+import { inverseKeyValue } from "./transformer.js";
 
 
 /**
@@ -11,7 +11,15 @@ import { inverseKeyValue } from "./transformer";
  */
 export function render(cube, document, rootId) {
     let rootElement = document.getElementById(rootId);
-    let sceneElement = rootElement.getElementsByClassName("scene").length ? rootElement.getElementsByClassName("scene")[0] : renderScene(document);
+    let sceneElement;
+    let sceneElements = rootElement.getElementsByClassName("scene");
+    if (!sceneElements.length) {
+        sceneElement = renderScene(document);
+        rootElement.appendChild(sceneElement);
+    } else {
+        sceneElement = sceneElements[0];
+    }
+
     while(sceneElement.getElementsByClassName("cube").length) sceneElement.removeChild(sceneElement.getElementsByClassName("cube"));
     sceneElement.appendChild(renderCube(cube, document));
 }
@@ -38,7 +46,7 @@ function renderCube(cube, document) {
     let size = cube.length;
     let layers = [...Array(size).keys()];
     let cubeElement = document.createElement("div");
-    cubeElement.classList.add("cube");
+    cubeElement.classList.add("cube", `size-${size}`);
     let i = 0;
     for (let z in layers) {
         for (let y in layers) {
@@ -67,7 +75,7 @@ function renderBlock(document, id, x, y, z, colors) {
         if (side[1] != SIDES.CENTER) {
             let sideElement = document.createElement("div");
             sideElement.classList.add("side", side[0].toLowerCase(), colorEntries[colors[side[1]]].toLowerCase())
-            blockElement.appendChild(blockElement);
+            blockElement.appendChild(sideElement);
         }
     }
     return blockElement;

@@ -1,4 +1,4 @@
-import { COLORS, SIDES } from "./constants";
+import { COLORS, SIDES } from "./constants.js";
 
 
 /**

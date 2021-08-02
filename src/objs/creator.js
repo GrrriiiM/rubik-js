@@ -19,7 +19,7 @@ export function createBlock({
     return block;
 }
 
-export function createCube({size=3}={}) {
+export function createCube(size=3) {
     let layers = [...Array(size).keys()];
     let zs = [];
     for(let z in layers) {
