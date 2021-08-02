@@ -20,7 +20,7 @@ export function render(cube, document, rootId) {
         sceneElement = sceneElements[0];
     }
 
-    while(sceneElement.getElementsByClassName("cube").length) sceneElement.removeChild(sceneElement.getElementsByClassName("cube"));
+    while(sceneElement.getElementsByClassName("cube").length) sceneElement.removeChild(sceneElement.getElementsByClassName("cube")[0]);
     sceneElement.appendChild(renderCube(cube, document));
 }
 

@@ -29,8 +29,12 @@
     transform: rotateX(var(--rotate-x)) rotateY(var(--rotate-y)) rotateZ(var(--rotate-z)) translate3d(var(--block-position-x), var(--block-position-y), var(--block-position-z));
     transform-style: preserve-3d;
     background-color: black;
-    /* transition: all 0.3s ease-out; */
+    /* visibility: hidden; */
 }
+
+/* .scene>.cube>.block.position-x-0.position-y-0.position-z-0 {
+    visibility: visible;
+} */
 
 .scene>.cube>.block>.side {
     position: inherit;

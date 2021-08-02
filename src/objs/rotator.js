@@ -10,8 +10,9 @@ export function rotateSide(axis, side, clock = CLOCK.NORMAL) {
     return sides.indexOf(side) >= 0 ? sides[(sides.indexOf(side) + (clock ? 1 : sides.length - 1)) % sides.length] : side;
 }
 
-export function rotateBlock(axis, sides, clock = CLOCK.NORMAL) {
-    return sides.map(s => rotateSide(axis, s, clock));
+export function rotateBlock(axis, colors, clock = CLOCK.NORMAL) {
+    let sides = [...Object.values(SIDES).values()]
+    return sides.map(s => colors[rotateSide(axis, s, !clock)]);
 }
 
 export function rotateXYZ(axis, clock, x, y, z) {
@@ -45,9 +46,14 @@ export function rotateCube(axis, cube, layer = 0, clock = CLOCK.NORMAL) {
     let size = cube.length;
     let positionFlat = cubeToFlat(rotatePosition(axis, size, layer, clock));
     let cubeFlat = cubeToFlat(cube);
-    let newcubeFlat = cubeFlat.map(_ => _);
+    let newcubeFlat = cubeFlat.map(_ => _.map(c => c));
     for(let i of [...Array(positionFlat.length).keys()]) {
-        newcubeFlat[positionFlat[i]] = rotateBlock(axis, cubeFlat[i], clock);
+        if (positionFlat[i] != i) {
+            newcubeFlat[i] = rotateBlock(axis, cubeFlat[positionFlat[i]], clock);
+        } else {
+            newcubeFlat[i] = cubeFlat[positionFlat[i]];    
+        }
+        
     }
-    return cubeFromFlat(newcubeFlat);
+    return cubeFromFlat(newcubeFlat, size);
 }
