@@ -1,6 +1,6 @@
-export class Side {
-    #color;
-    constructor(color) {
-        this.#color = color;
-    }
-}
+// export class Side {
+//     #color;
+//     constructor(color) {
+//         this.#color = color;
+//     }
+// }

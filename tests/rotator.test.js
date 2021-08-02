@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import theoretically from "jest-theories";
 import { AXIS, CLOCK, SIDES } from "../src/objs/constants";
-import { rotate, rotateSide } from "../src/objs/rotation";
+import { rotatePosition, rotateSide } from "../src/objs/rotator";
 
 
 describe('Rotate Side', () => {
@@ -49,6 +49,7 @@ describe('Rotate', () => {
 
     ]
     theoretically('input {input} expected {expected}', theories, theory => {
-        expect(rotate(...theory.input)).toEqual(theory.expected);
+        expect(rotatePosition(...theory.input)).toEqual(theory.expected);
     })
 });
+

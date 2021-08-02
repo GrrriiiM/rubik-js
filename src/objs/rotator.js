@@ -1,4 +1,4 @@
-import { Block } from "./block";
+import { cubeFromFlat, cubeToFlat } from "./transformer";
 import { AXIS, CLOCK, SIDES } from "./constants";
 
 
@@ -10,7 +10,7 @@ export function rotateSide(axis, side, clock = CLOCK.NORMAL) {
     return sides.indexOf(side) >= 0 ? sides[(sides.indexOf(side) + (clock ? 1 : sides.length - 1)) % sides.length] : side;
 }
 
-export function rotateSides(axis, sides, clock = CLOCK.NORMAL) {
+export function rotateBlock(axis, sides, clock = CLOCK.NORMAL) {
     return sides.map(s => rotateSide(axis, s, clock));
 }
 
@@ -20,7 +20,7 @@ export function rotateXYZ(axis, clock, x, y, z) {
     if (axis == AXIS.X) return clock ? [x, z, -y] : [x, -z, y];
 }
 
-export function rotate(axis, size, layer = 0, clock = CLOCK.NORMAL) {
+export function rotatePosition(axis, size, layer = 0, clock = CLOCK.NORMAL) {
     let offset = (size - 1) / 2;
     let layers = [...Array(size).keys()];
     let zs = axis == AXIS.Z ? [layer] : layers;
@@ -41,14 +41,13 @@ export function rotate(axis, size, layer = 0, clock = CLOCK.NORMAL) {
     return newCube;
 }
 
-export function rotateBlocks(axis, blocks, layer = 0, clock = CLOCK.NORMAL) {
-    let size = blocks.length;
-    let layers = [...Array(size).keys()];
-    let position = rotate(axis, blocks.length, layer, clock).flat(3);
-    let blocksFlat = blocks.flat(3);
-    let newBlocksFlat = blocksFlat.map(_ => _);
-    for(let i of [...Array(position.length).keys()]) {
-        newBlocksFlat[position[i]] = new Block(rotateSides(axis, blocksFlat[i].sides, clock));
+export function rotateCube(axis, cube, layer = 0, clock = CLOCK.NORMAL) {
+    let size = cube.length;
+    let positionFlat = cubeToFlat(rotatePosition(axis, size, layer, clock));
+    let cubeFlat = cubeToFlat(cube);
+    let newcubeFlat = cubeFlat.map(_ => _);
+    for(let i of [...Array(positionFlat.length).keys()]) {
+        newcubeFlat[positionFlat[i]] = rotateBlock(axis, cubeFlat[i], clock);
     }
-    let blocks = layers.map(z => layers.map(y => layers.map(x => newBlocksFlat[z*size*size + y*size + x])));
+    return cubeFromFlat(newcubeFlat);
 }
