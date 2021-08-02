@@ -5,6 +5,9 @@
     --block-border-size: calc(var(--block-size) / 10);
     --perpective: 40em;
     --scene-size: 40em;
+    --rotate-x: 0deg;
+    --rotate-y: 0deg;
+    --rotate-z: 0deg;
     font-size: var(--base-size);
     background-color: purple;
     height: 100%;
@@ -23,7 +26,7 @@
 
 .scene>.cube>.block {
     position: absolute;
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translate3d(var(--block-position-x), var(--block-position-y), var(--block-position-z));
+    transform: rotateX(var(--rotate-x)) rotateY(var(--rotate-y)) rotateZ(var(--rotate-z)) translate3d(var(--block-position-x), var(--block-position-y), var(--block-position-z));
     transform-style: preserve-3d;
     background-color: black;
     /* transition: all 0.3s ease-out; */
@@ -105,46 +108,3 @@
 .scene>.cube.size-1>.block.position-z-0 {
     --block-position-z: calc(var(--block-size) * -0);
 }
-
-
-
-.scene>.cube.size-3>.block.position-x-0 {
-    --block-position-x: calc(var(--block-size) * -1.5);
-}
-.scene>.cube.size-3>.block.position-x-1 {
-    --block-position-x: calc(var(--block-size) * -0.5);
-}
-.scene>.cube.size-3>.block.position-x-2 {
-    --block-position-x: calc(var(--block-size) * 0.5);
-}
-.scene>.cube.size-3>.block.position-y-0 {
-    --block-position-y: calc(var(--block-size) * -1.5);
-}
-.scene>.cube.size-3>.block.position-y-1 {
-    --block-position-y: calc(var(--block-size) * -0.5);
-}
-.scene>.cube.size-3>.block.position-y-2 {
-    --block-position-y: calc(var(--block-size) * 0.5);
-}
-.scene>.cube.size-3>.block.position-z-0 {
-    --block-position-z: calc(var(--block-size) * 1);
-}
-.scene>.cube.size-3>.block.position-z-1 {
-    --block-position-z: calc(var(--block-size) * -0);
-}
-.scene>.cube.size-3>.block.position-z-2 {
-    --block-position-z: calc(var(--block-size) * -1);
-}
-
-
-/* .scene>.cube.size-3>.block.position-x-0 {
-    --block-position-x-0: calc(var(--block-size) * -1.5);
-    --block-position-y-0: calc(var(--block-size) * -1.5);
-    --block-position-z-0: calc(var(--block-size) * 1);
-    --block-position-x-1: calc(var(--block-size) * -0.5);
-    --block-position-y-1: calc(var(--block-size) * -0.5);
-    --block-position-z-1: 0;
-    --block-position-x-2: calc(var(--block-size) * 0.5);
-    --block-position-y-2: calc(var(--block-size) * 0.5);
-    --block-position-z-2: calc(var(--block-size) * -1);
-} */

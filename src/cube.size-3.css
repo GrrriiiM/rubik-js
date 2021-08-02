@@ -1,0 +1,28 @@
+
+.scene>.cube.size-3>.block.position-x-0 {
+    --block-position-x: calc(var(--block-size) * -1.5);
+}
+.scene>.cube.size-3>.block.position-x-1 {
+    --block-position-x: calc(var(--block-size) * -0.5);
+}
+.scene>.cube.size-3>.block.position-x-2 {
+    --block-position-x: calc(var(--block-size) * 0.5);
+}
+.scene>.cube.size-3>.block.position-y-0 {
+    --block-position-y: calc(var(--block-size) * -1.5);
+}
+.scene>.cube.size-3>.block.position-y-1 {
+    --block-position-y: calc(var(--block-size) * -0.5);
+}
+.scene>.cube.size-3>.block.position-y-2 {
+    --block-position-y: calc(var(--block-size) * 0.5);
+}
+.scene>.cube.size-3>.block.position-z-0 {
+    --block-position-z: calc(var(--block-size) * 1);
+}
+.scene>.cube.size-3>.block.position-z-1 {
+    --block-position-z: calc(var(--block-size) * -0);
+}
+.scene>.cube.size-3>.block.position-z-2 {
+    --block-position-z: calc(var(--block-size) * -1);
+}
