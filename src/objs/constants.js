@@ -9,9 +9,9 @@ export const SIDES = {
 };
 
 export const AXIS = {
-    Z: SIDES.FRONT,
-    Y: SIDES.UP,
-    X: SIDES.LEFT
+    X: 0,
+    Y: 1,
+    Z: 2
 }
 
 

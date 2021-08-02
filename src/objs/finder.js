@@ -1,7 +1,8 @@
 import { AXIS, COLORS, SIDES } from "./constants";
+import { cubeToFlat } from "./transformer";
 
 
-export function findSideColor(cube, side) {
+export function findCubeColorBySide(cube, side) {
     let size = cube.length;
     let middle = (size - 1) / 2
     if (side == SIDES.FRONT) return cube[0][middle][middle][SIDES.FRONT];
@@ -13,7 +14,7 @@ export function findSideColor(cube, side) {
     return COLORS.BLACK;
 }
 
-export function findPositions(size, { x = null, y = null, z = null } = {}) {
+export function findPositionsByAxis(size, { x = null, y = null, z = null } = {}) {
     let layers = [...Array(size).keys()];
     let positions = [];
     let i = 0;
@@ -29,4 +30,28 @@ export function findPositions(size, { x = null, y = null, z = null } = {}) {
         }
     }
     return positions;
+}
+
+
+
+function findPositionByColors(cube, colors) {
+    colors = [...colors, ...Object.keys(SIDES).map(()=>COLORS.BLACK).slice(colors.length)].sort();
+    let flat = cubeToFlat(cube);
+    for(let i of [...Array(flat.length).keys()]) {
+        let block = flat[i].sort();
+        if (block.every((b,ib) => b == colors[ib])) return i;
+    }
+    return -1;
+}
+
+export function findCenterPositionByColor(cube, color) {
+    return findPositionByColors(cube, [color]);
+}
+
+export function findEdgePositionByColor(cube, color1, color2) {
+    return findPositionByColors(cube, [color1, color2]);
+}
+
+export function findCornerPositionByColor(cube, color1, color2, color3) {
+    return findPositionByColors(cube, [color1, color2, color3]);
 }

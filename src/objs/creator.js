@@ -1,5 +1,5 @@
-import { COLORS, SIDES } from "./constants";
-import { colorFromSide, sideFromCube } from "./transformer";
+import { COLORS, SIDES } from "./constants.js";
+import { colorFromSide, sideFromCube } from "./transformer.js";
 
 export function createBlock({
     front = COLORS.BLACK,
