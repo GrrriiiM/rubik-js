@@ -1,5 +1,5 @@
-import { AXIS, SIDES } from "./constants";
-import { Side } from "../side";
+import { AXIS, SIDES } from "./constants.js";
+import { Side } from "../side.js";
 
 export class Block {
 
