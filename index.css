@@ -1,7 +1,7 @@
 body {
     padding: 0px;
     margin: 0px;
-    overscroll-behavior: contain;
+    overscroll-behavior-y: none;
 }
 .cube-area {
     height: 70vh;
