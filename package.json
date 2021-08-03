@@ -1,0 +1,32 @@
+{
+  "name": "rubik-js",
+  "version": "1.0.0",
+  "description": "* [Introdução](#introdução)\r * [Instruções](#intrucoes)\r * [Rubik](#rubik)\r * [Implementações Futuras](#implementações-futuras)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrrriiiM/rubik-js.git"
+  },
+  "author": "Allison GrrriiiM",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GrrriiiM/rubik-js/issues"
+  },
+  "homepage": "https://github.com/GrrriiiM/rubik-js#readme",
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
+    "jest": "^26.6.3",
+    "jest-theories": "^1.2.0",
+    "serve": "^11.3.2"
+  },
+  "jest": {
+    "collectCoverage": true, 
+    "verbose": true
+  }
+}

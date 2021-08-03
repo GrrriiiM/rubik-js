@@ -1,179 +1,19 @@
-:root {
-    --red: red;
-    --green: green;
-    --blue: blue;
-    --yellow: yellow;
-    --orange: orange;
-    --white: white;
-    --purple: purple;
-    --block-color: black;
-    --base-size: 12px;
-    --block-size: 5em;
-
-    
-    --block-position-center-x: calc(var(--block-size) * -0.5);
-    --block-position-center-y: calc(var(--block-size) * -0.5);
-    --block-position-center-z: calc(var(--block-size) * 1);
-
-
-    
-    --block-position-edge-x: calc(var(--block-size) * -0.5);
-    --block-position-edge-y: calc(var(--block-size) * -1.5);
-    --block-position-edge-z: calc(var(--block-size) * 1);
-
-    --block-position-corner-x: calc(var(--block-size) * -1.5);
-    --block-position-corner-y: calc(var(--block-size) * -1.5);
-    --block-position-corner-z: calc(var(--block-size) * 1);
-
-
-    --block-position-x-0: calc(var(--block-size) * -1.5);
-    --block-position-y-0: calc(var(--block-size) * -1.5);
-    --block-position-z-0: calc(var(--block-size) * 1);
-    --block-position-x-1: calc(var(--block-size) * -0.5);
-    --block-position-y-1: calc(var(--block-size) * -0.5);
-    --block-position-z-1: 0;
-    --block-position-x-2: calc(var(--block-size) * 0.5);
-    --block-position-y-2: calc(var(--block-size) * 0.5);
-    --block-position-z-2: calc(var(--block-size) * -1);
-
-    --block-size-neg: calc(var(--block-size) * -1);
-    --block-size-half: calc(var(--block-size) / 2);
-    --block-size-half-neg: calc(var(--block-size) / -2);
-    --block-size-one-half: calc(var(--block-size) * 1.5);
-    --block-size-one-half-neg: calc(var(--block-size) * -1.5);
-    --block-size-quarter: calc(var(--block-size) / 4);
-    --block-size-quarter-neg: calc(var(--block-size) / -4);
-    --block-size-three-quarter: calc(var(--block-size-quarter) * 3);
-    --block-size-three-quarter-neg: calc(var(--block-size-quarter-neg) * 3);
-    --block-border-size: calc(var(--block-size) / 10);
-    --perpective: 40em;
-    --scene-size: 40em;
+body {
+    padding: 0px;
+    margin: 0px;
+}
+.cube-area {
+    height: 70vh;
 }
 
-input[type=button] {
-    width: var(--block-size);
-    height: var(--block-size);
+.button-area {
+    height: 30vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
 }
 
-.scene {
-    font-size: var(--base-size);
-    position: relative;
-    width: var(--scene-size);
-    height: var(--scene-size);
-    perspective: var(--perpective);
-    perspective-origin: 50% 50%;
-}
-
-.cube {
-    position: absolute;
-    transform: rotateX(-30deg) rotateY(-30deg) rotateZ(0deg);
-    transform-style: preserve-3d;
-    left: calc(50%);
-    top: calc(50%);
-}
-
-.block {
-    position: absolute;
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translate3d(var(--block-position-x-1), var(--block-position-y-1), var(--block-position-z-1));
-    transform-style: preserve-3d;
-    background-color: black;
-    /* transition: all 0.3s ease-out; */
-}
-
-.face:hover {
-    --block-color:rgba(0, 0, 0, 0.5);
-}
-
-/* .block.center.yellow .face-front {
-    background-color: var(--yellow);
-}
-
-.block.center.orange .face-front {
-    background-color: var(--orange);
-}
-
-.block.center.blue .face-front {
-    background-color: var(--blue);
-}
-
-.block.center.red .face-front {
-    background-color: var(--red);
-}
-
-.block.center.green .face-front {
-    background-color: var(--green);
-}
-
-.block.center.white .face-front {
-    background-color: var(--white);
-}
-
-
- */
-
-
-
-
-.face {
-    position: inherit;
-    width: calc(var(--block-size) - var(--block-border-size) * 2);
-    height: calc(var(--block-size) - var(--block-border-size) * 2);
-    border-color: var(--block-color);
-    border-width: var(--block-border-size);
-    transform-style: preserve-3d;
-    border-style: solid;
-    border-collapse: separate;
-    background-color: black;
-}
-
-.face-top {
-    transform: rotateX(90deg) translateZ(var(--block-size-half));
-}
-
-.face-bottom {
-    transform: rotateX(-90deg) translateZ(var(--block-size-half));
-}
-
-.face-left {
-    transform: rotateY(-90deg) translateZ(var(--block-size-half));
-}
-
-.face-right {
-    transform: rotateY(90deg) translateZ(var(--block-size-half));
-}
-
-.face-front {
-    transform: translateZ(var(--block-size-half));
-}
-
-.face-back {
-    transform: rotateX(180deg) translateZ(var(--block-size-half));
-}
-
-.red {
-    background-color: var(--red);
-}
-
-.green {
-    background-color: var(--green);
-}
-
-.blue {
-    background-color: var(--blue);
-}
-
-.yellow {
-    background-color: var(--yellow);
-}
-
-.orange {
-    background-color: var(--orange);
-}
-
-.white {
-    background-color: var(--white);
-}
-
-.purple {
-    background-color: var(--purple);
+.button-area>.button-rotate {
+    width: calc(100% / 6);
 }

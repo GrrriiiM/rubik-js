@@ -1,0 +1,22 @@
+.scene>.cube.size-3>.block.rotate {
+    transition: transform 300ms ease-out;
+}
+.scene>.cube.size-3>.block.rotate-z {
+    --rotate-z: 90deg;
+}
+.scene>.cube.size-3>.block.rotate-y {
+    --rotate-y: -90deg;
+}
+.scene>.cube.size-3>.block.rotate-x {
+    --rotate-x: -90deg;
+}
+.scene>.cube.size-3>.block.rotate-z-anti {
+    --rotate-z: -90deg;
+}
+.scene>.cube.size-3>.block.rotate-y-anti {
+    --rotate-y: 90deg;
+}
+.scene>.cube.size-3>.block.rotate-x-anti {
+    --rotate-x: 90deg;
+}
+
