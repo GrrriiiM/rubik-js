@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="block.center.position.css">
+    <title>rubik</title>
+</head>
+
+<body onkeydown="keypress(event)" onmousedown="dragStart(event)" onmousemove="drag(event)" onmouseup="dragEnd(event)">
+    <div class="scene purple">
+        <div id="cube" class="cube">
+            <div id="block" class="block">
+                <div class="face face-back" onmousedown="dragStart(event)"></div>
+                <div class="face face-front" onmousedown="dragStart(event)"></div>
+                <div class="face face-left" onmousedown="dragStart(event)"></div>
+                <div class="face face-right" onmousedown="dragStart(event)"></div>
+                <div class="face face-top" onmousedown="dragStart(event)"></div>
+                <div class="face face-bottom" onmousedown="dragStart(event)"></div>
+            </div>
+        </div>
+    </div>
+    <input type="button" value="F" onclick="rotateF()">
+    <input type="button" value="U" onclick="rotateU()">
+    <input type="button" value="L" onclick="rotateL()">
+    <input type="button" value="R" onclick="rotateR()">
+    <input type="button" value="D" onclick="rotateD()">
+    <input type="button" value="B" onclick="rotateB()">
+    <input type="button" value="X" onclick="rotateX()">
+    <input type="button" value="Y" onclick="rotateY()">
+    <input type="button" value="Z" onclick="rotateZ()">
+    <br>
+    <input type="button" value="F'" onclick="rotateF(true)">
+    <input type="button" value="U'" onclick="rotateU(true)">
+    <input type="button" value="L'" onclick="rotateL(true)">
+    <input type="button" value="R'" onclick="rotateR(true)">
+    <input type="button" value="D'" onclick="rotateD(true)">
+    <input type="button" value="B'" onclick="rotateB(true)">
+    <input type="button" value="X'" onclick="rotateX(true)">
+    <input type="button" value="Y'" onclick="rotateY(true)">
+    <input type="button" value="Z'" onclick="rotateZ(true)">
+    <script src="index.js"></script>
+</body>
+
+</html>
