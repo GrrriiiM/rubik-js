@@ -38,7 +38,6 @@ export function rotatePosition(axis, size, layer = 0, clock = CLOCK.NORMAL) {
             }
         }
     }
-    console.log(newCube);
     return newCube;
 }
 

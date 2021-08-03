@@ -8,4 +8,12 @@ body {
 
 .button-area {
     height: 30vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
+}
+
+.button-area>.button-rotate {
+    width: calc(100% / 6);
 }

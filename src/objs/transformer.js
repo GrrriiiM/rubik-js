@@ -1,4 +1,5 @@
-import { COLORS, SIDES } from "./constants.js";
+import { AXIS, COLORS, SIDES } from "./constants.js";
+import { MOVEMENTS } from "./movements.js";
 
 
 /**
@@ -36,4 +37,31 @@ export function inverseKeyValue(dict) {
     let entries = {}
     Object.entries(dict).forEach(_ => entries[_[1]] = _[0]);
     return entries;
+}
+
+export function movementFromString(str) {
+    if (str.toUpperCase() == "F") return MOVEMENTS.F;
+    if (str.toUpperCase() == "B") return MOVEMENTS.B;
+    if (str.toUpperCase() == "L") return MOVEMENTS.L;
+    if (str.toUpperCase() == "R") return MOVEMENTS.R;
+    if (str.toUpperCase() == "U") return MOVEMENTS.U;
+    if (str.toUpperCase() == "D") return MOVEMENTS.D;
+    if (str.toUpperCase() == "F'") return MOVEMENTS.F_;
+    if (str.toUpperCase() == "B'") return MOVEMENTS.B_;
+    if (str.toUpperCase() == "L'") return MOVEMENTS.L_;
+    if (str.toUpperCase() == "R'") return MOVEMENTS.R_;
+    if (str.toUpperCase() == "U'") return MOVEMENTS.U_;
+    if (str.toUpperCase() == "D'") return MOVEMENTS.D_;
+    if (str.toUpperCase() == "X") return MOVEMENTS.X;
+    if (str.toUpperCase() == "Y") return MOVEMENTS.Y;
+    if (str.toUpperCase() == "Z") return MOVEMENTS.Z;
+    if (str.toUpperCase() == "X'") return MOVEMENTS.X_;
+    if (str.toUpperCase() == "Y'") return MOVEMENTS.Y_;
+    if (str.toUpperCase() == "Z'") return MOVEMENTS.Z_;
+}
+
+export function axisToString(axis) {
+    if (AXIS.Z == axis) return 'z';
+    if (AXIS.Y == axis) return 'y';
+    if (AXIS.X == axis) return 'x';
 }
