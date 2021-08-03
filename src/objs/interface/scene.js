@@ -26,6 +26,8 @@ export function createScene(document, cube) {
         _.addEventListener("touchstart", (event) => scene.dragger.dragStart(event.target, event.touches[0].screenX, event.touches[0].screenY))
         _.addEventListener("mousedown", (event) => scene.dragger.dragStart(event.target, event.screenX, event.screenY))
     });
+    scene.sceneHtmlElement.addEventListener("touchstart", (event) => scene.dragger.dragStart(null, event.touches[0].screenX, event.touches[0].screenY))
+    scene.sceneHtmlElement.addEventListener("mousedown", (event) => scene.dragger.dragStart(null, event.screenX, event.screenY))
     scene.sceneHtmlElement.addEventListener("touchmove", (event) => scene.dragger.dragMove(event.touches[0].screenX, event.touches[0].screenY));
     scene.sceneHtmlElement.addEventListener("mousemove", (event) => scene.dragger.dragMove(event.screenX, event.screenY));
     scene.sceneHtmlElement.addEventListener("touchleave", () => scene.dragger.dragEnd(rotateScene));
@@ -99,30 +101,52 @@ function createBlockHtmlElement(document, position, x, y, z, colors) {
     return blockElement;
 }
 
+
+/**
+ * 
+ * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement }} scene 
+ * @param {{ axis: number, layers: number[], clock: bool }} movement 
+ * @param {*} onFinished 
+ */
 export function rotateScene(scene, movement, onFinished) {
     let axis = axisToString(movement.axis);
-    let blockElements = [];
     let layers = [];
-    if (movement.layers) {
+    if (movement.layers && movement.layers.length) {
         layers = movement.layers.map(_ => _ < 0 ? scene.cube.length + _ : _);
     } else {
         layers = [...Array(scene.cube.length).keys()];
     }
     
     for(let layer of layers) {
-        scene.cubeHtmlElement.querySelectorAll(`.block.position-${axis}-${layer}`).forEach(_ => blockElements.push(_));
+        scene.cubeHtmlElement.querySelectorAll(`.block.position-${axis}-${layer}`).forEach(_ => {
+            _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)
+            _.style.transform = '';
+        });
     }
-
-    blockElements.forEach(_ => {
-        _.style.transform = '';
-        _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)
-    });
 
     setTimeout(() => {
         for(let layer of layers) {
             scene.cube = rotateCube(movement.axis, scene.cube, layer, movement.clock);
         }
         refreshScene(scene);
+        onFinished && onFinished();
+    }, 350);
+}
+
+/**
+ * 
+ * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement }} scene 
+ * @param {*} onFinished 
+ */
+export function resetScene(scene, onFinished) {
+    scene.cubeHtmlElement.querySelectorAll(`.block`).forEach(_ => {
+        _.classList.add('rotate');
+        _.style.transform = '';
+    });
+    setTimeout(() => {
+        scene.cubeHtmlElement.querySelectorAll(`.block`).forEach(_ => {
+            _.classList.remove('rotate');
+        });
         onFinished && onFinished();
     }, 350);
 }
