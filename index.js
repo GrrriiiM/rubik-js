@@ -1,5 +1,6 @@
 import { createCube } from "./objs/creator.js";
-import { createScene, rotateScene } from "./objs/interface/scene.js";
+import { createScene, refreshScene, rotateScene } from "./objs/interface/scene.js";
+import { shuffle as shuffleCube } from "./objs/rotator.js";
 import { movementFromString } from "./objs/transformer.js";
 
 
@@ -13,6 +14,16 @@ document.querySelectorAll(".button-movement").forEach(_ =>
         isBusy = true;
         rotateScene(scene, movementFromString(event.currentTarget.id.replace("button-movement-","")), () => isBusy = false)
     }));
+
+document.querySelector(".button-tool-action-shuffle").addEventListener("click", () => {
+    scene.cube = shuffleCube(scene.cube);
+    refreshScene(scene);
+})
+
+document.querySelector(".button-tool-action-reset").addEventListener("click", () => {
+    scene.cube = createCube(scene.cube.length);
+    refreshScene(scene);
+})
 
 
 document.querySelector(".button-help").addEventListener("click", () => toggleMenuHelp())
