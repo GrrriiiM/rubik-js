@@ -9,7 +9,6 @@
     --rotate-y: 0deg;
     --rotate-z: 0deg;
     font-size: var(--base-size);
-    background-color: purple;
     height: 100%;
     width: 100%;
     perspective: var(--perpective);
