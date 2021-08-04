@@ -1,4 +1,4 @@
-import { cubeFromFlat, cubeToFlat } from "./transformer.js";
+import { cubeFromFlat, cubeToFlat, movementFromString } from "./transformer.js";
 import { AXIS, CLOCK, SIDES } from "./constants.js";
 
 
@@ -46,13 +46,45 @@ export function rotateCube(axis, cube, layer = 0, clock = CLOCK.NORMAL) {
     let positionFlat = cubeToFlat(rotatePosition(axis, size, layer, clock));
     let cubeFlat = cubeToFlat(cube);
     let newcubeFlat = cubeFlat.map(_ => _.map(c => c));
-    for(let i of [...Array(positionFlat.length).keys()]) {
+    for (let i of [...Array(positionFlat.length).keys()]) {
         if (positionFlat[i] != i) {
             newcubeFlat[i] = rotateBlock(axis, cubeFlat[positionFlat[i]], clock);
         } else {
-            newcubeFlat[i] = cubeFlat[positionFlat[i]];    
+            newcubeFlat[i] = cubeFlat[positionFlat[i]];
         }
-        
+
     }
     return cubeFromFlat(newcubeFlat, size);
 }
+
+export function rotateCubeWithMovement(cube, movement) {
+    let layers = [];
+    if (movement.layers && movement.layers.length) {
+        layers = movement.layers.map(_ => _ < 0 ? cube.length + _ : _);
+    } else {
+        layers = [...Array(cube.length).keys()];
+    }
+    for (let layer of layers) {
+        cube = rotateCube(movement.axis, cube, layer, movement.clock);
+    }
+    return cube;
+}
+
+export function rotateCubeWithMovementStr(movements, cube) {
+    for (let movement of movements) {
+        cube = rotateCubeWithMovement(cube, movementFromString(movement))
+    }
+    return cube;
+}
+
+export function shuffle(cube) {
+    let str = ["L", "U", "F", "L'", "U'", "F'", "R", "D", "B", "R'", "D'", "B'"];
+    let movements = [];
+    for(let r of [...Array(200).keys()]) {
+        movements.push(str[parseInt(Math.random() * str.length)])
+    }
+    return rotateCubeWithMovementStr(movements, cube);
+}
+
+
+

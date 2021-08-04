@@ -47,22 +47,22 @@
     background-color: black;
 }
 .scene>.cube>.block>.side.orange {
-    background-color: orange;
+    background-color: #f3722c;
 }
 .scene>.cube>.block>.side.yellow {
-    background-color: yellow;
+    background-color: #f9c74f;
 }
 .scene>.cube>.block>.side.green {
-    background-color: green;
+    background-color: #43aa8b;
 }
 .scene>.cube>.block>.side.red {
-    background-color: red;
+    background-color: #f94144;
 }
 .scene>.cube>.block>.side.white {
     background-color: white;
 }
 .scene>.cube>.block>.side.blue {
-    background-color: blue;
+    background-color: #277da1;
 }
 
 .scene>.cube>.block>.side.up {
