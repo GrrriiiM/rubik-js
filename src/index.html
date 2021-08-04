@@ -15,13 +15,22 @@
     <div class="wrapper">
         <div class="app background-primary">
             <div class="header">
-                <span class="material-icons title">
-                    view_in_ar
-                </span>
-                <span class="text">&nbsp;Rubik JS&nbsp;</span>
-                <span class="material-icons title">
-                    code
-                </span>
+                <div class="button button-help" type="button">
+                    <span class="material-icons hint">
+                        help
+                    </span>
+                    <span class="hint">Ajuda</span>
+                </div>
+                <div>
+                    <span class="material-icons title">
+                        view_in_ar
+                    </span>
+                    <span class="text">&nbsp;Rubik JS&nbsp;</span>
+                    <span class="material-icons title">
+                        code
+                    </span>
+                </div>
+                <div></div>
             </div>
             <div class="content overlay background-secondly">
                 <div class="header overlay shadow background-opacity">
@@ -37,18 +46,168 @@
                 <div class="cube-area"></div>
             </div>
             <div class="tools overlay shadow background-primary">
-                <div class="header overlay background-opacity"></div>
+                <div class="header overlay background-opacity">
+                    <div class="button button-tool-movement" type="button">
+                        <span class="material-icons hint">
+                            compare_arrows
+                        </span>
+                        <span class="hint">Movimentos</span>
+                    </div>
+                    <div class="button" type="button">
+                        <span class="material-icons hint">
+                            history
+                        </span>
+                        <span class="hint">Histórico</span>
+                    </div>
+                    <div class="button" type="button">
+                        <span class="material-icons hint">
+                            code
+                        </span>
+                        <span class="hint">Algorítimos</span>
+                    </div>
+                    <div class="button button-tool-action" type="button">
+                        <span class="material-icons hint">
+                            view_headline
+                        </span>
+                        <span class="hint">Ações</span>
+                    </div>
+                </div>
+                <div class="area">
+                    <div class="action">
+                        <div class="button button-shuffle" type="button">
+                            <span class="material-icons hint">
+                                help
+                            </span>
+                            <span class="hint">embaralhar</span>
+                        </div>
+                        <div class="button button-restart" type="button">
+                            <span class="material-icons hint">
+                                help
+                            </span>
+                            <span class="hint">reiniciar</span>
+                        </div>
+                    </div>
+                    <div class="movement">
+                        <div class="button button-movement" id="button-movement-L" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">L</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-U" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">U</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-F" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">F</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-L'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">L'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-U'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">U'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-F'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">F'</span>
+                        </div>
+
+                        <div class="button button-movement" id="button-movement-R" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">R</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-D" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">D</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-B" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">B</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-R'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">R'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-D'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">D'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-B'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">B'</span>
+                        </div>
+
+                        <div class="button button-movement" id="button-movement-X" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">X</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-Y" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">Y</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-Z" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">Z</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-X'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">X'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-Y'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">Y'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-Z'" type="button" >
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">Z'</span>
+                        </div>
+                    </div>
+                </div>
                 <!-- <div class="area-header background-primary">
                     <input class="tools-buttons background-opacity" type="button" value="Movimentos" />
-                    <input class="tools-buttons background-opacity" type="button" value="Histórico" />
-                    <input class="tools-buttons background-opacity" type="button" value="Algoritimos" />
-                    <input class="tools-buttons background-opacity" type="button" value="Algoritimos" />
-                    <input class="tools-buttons background-opacity" type="button" value="Ajuda" />
+                    
                 </div>
                 <div class="tools-area background-primary"></div> -->
                 <!-- <div class="movement-area">
                     <div class="button-area">
-                        <input type="button" class="button-rotate" value="L" />
+                        <input type="button" class="button-rotate"  />
                         <input type="button" class="button-rotate" value="U" />
                         <input type="button" class="button-rotate" value="F" />
                         <input type="button" class="button-rotate" value="L'" />
