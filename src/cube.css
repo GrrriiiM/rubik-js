@@ -45,22 +45,22 @@
     background-color: black;
 }
 .scene>.cube>.block>.side.orange {
-    background-color: #e29e28;
+    background-color: #f3722c;
 }
 .scene>.cube>.block>.side.yellow {
-    background-color: #e6d021;
+    background-color: #f9c74f;
 }
 .scene>.cube>.block>.side.green {
-    background-color: #73a5a8;
+    background-color: #43aa8b;
 }
 .scene>.cube>.block>.side.red {
-    background-color: #d7573b;
+    background-color: #f94144;
 }
 .scene>.cube>.block>.side.white {
     background-color: white;
 }
 .scene>.cube>.block>.side.blue {
-    background-color: #646199;
+    background-color: #277da1;
 }
 
 .scene>.cube>.block>.side.up {
