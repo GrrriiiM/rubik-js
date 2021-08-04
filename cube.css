@@ -1,14 +1,12 @@
 .scene {
-    --base-size: 12px;
-    --block-size: 5em;
+    --block-size: 60px;
     --block-size-half: calc(var(--block-size) / 2);
     --block-border-size: calc(var(--block-size) / 10);
-    --perpective: 40em;
-    --scene-size: 40em;
+    --perpective: calc(var(--block-size) * 8);
+    --scene-size: calc(var(--block-size) * 8);
     --rotate-x: 0deg;
     --rotate-y: 0deg;
     --rotate-z: 0deg;
-    font-size: var(--base-size);
     height: 100%;
     width: 100%;
     perspective: var(--perpective);
@@ -47,22 +45,22 @@
     background-color: black;
 }
 .scene>.cube>.block>.side.orange {
-    background-color: #f3722c;
+    background-color: #e29e28;
 }
 .scene>.cube>.block>.side.yellow {
-    background-color: #f9c74f;
+    background-color: #e6d021;
 }
 .scene>.cube>.block>.side.green {
-    background-color: #43aa8b;
+    background-color: #73a5a8;
 }
 .scene>.cube>.block>.side.red {
-    background-color: #f94144;
+    background-color: #d7573b;
 }
 .scene>.cube>.block>.side.white {
     background-color: white;
 }
 .scene>.cube>.block>.side.blue {
-    background-color: #277da1;
+    background-color: #646199;
 }
 
 .scene>.cube>.block>.side.up {

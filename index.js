@@ -1,27 +1,57 @@
 import { createCube } from "./objs/creator.js";
 import { createScene, refreshScene, rotateScene } from "./objs/interface/scene.js";
-import { shuffle as shuffleCube } from "./objs/rotator.js";
-import { movementFromString } from "./objs/transformer.js";
+import { MOVEMENTS_STR } from "./objs/movements.js";
+import { shuffleCube } from "./objs/rotator.js";
 
 
-let scene = createScene(document, createCube(3));
+
+let scene = createScene(document, shuffleCube(createCube(3)));
 document.querySelector(".cube-area").appendChild(scene.sceneHtmlElement);
 
-let isBusy = false
+let timeHtmlElement = document.querySelector(".time");
+let countHtmlElement = document.querySelector(".count");
+let historyHtmlElement = document.querySelector(".history");
+
+let movementsCount = 0;
+setInterval(() => {
+    let time = new Date(Date.now() - scene.createAt.getTime());
+    timeHtmlElement.innerHTML = `${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}:${time.getUTCSeconds().toString().padStart(2, "0")}`;
+
+    if (movementsCount != scene.movements.length) {
+        let excludeMoves = ["X", "X'", "Y", "Y'", "Z", "Z'"];
+        countHtmlElement.innerHTML = `${scene.movements.filter(_ => excludeMoves.indexOf(_) < 0).length.toString().padStart(5, "0")}`;
+        let movements = [];
+        if (movementsCount < scene.movements.length) {
+            movements = scene.movements.slice(movementsCount);
+        } else if (movementsCount > scene.movements.length) {
+            movements = scene.movements;
+            historyHtmlElement.querySelectorAll(".item").forEach(_ => _.remove());
+        }
+        for (let movement of movements) {
+            let historyItemLabelHtmlElement = document.createElement("div");
+            historyItemLabelHtmlElement.classList.add("hint");
+            historyItemLabelHtmlElement.innerHTML = movement;
+            let historyItemHtmlElement = document.createElement("div");
+            historyItemHtmlElement.classList.add("button", "item");
+            historyItemHtmlElement.appendChild(historyItemLabelHtmlElement);
+            historyHtmlElement.appendChild(historyItemHtmlElement);
+        }
+    }
+    movementsCount = scene.movements.length;
+}, 100);
+
 document.querySelectorAll(".button-movement").forEach(_ =>
     _.addEventListener("click", (event) => {
-        if (isBusy) return;
-        isBusy = true;
-        rotateScene(scene, movementFromString(event.currentTarget.id.replace("button-movement-","")), () => isBusy = false)
+        if (scene.isBusy) return;
+        scene.isBusy = true;
+        rotateScene(scene, MOVEMENTS_STR[event.currentTarget.id.replace("button-movement-", "")], () => scene.isBusy = false)
     }));
 
-document.querySelector(".button-tool-action-shuffle").addEventListener("click", () => {
-    scene.cube = shuffleCube(scene.cube);
-    refreshScene(scene);
-})
 
 document.querySelector(".button-tool-action-reset").addEventListener("click", () => {
-    scene.cube = createCube(scene.cube.length);
+    scene.cube = shuffleCube(createCube(scene.cube.length));
+    scene.createAt = new Date(Date.now());
+    scene.movements = [];
     refreshScene(scene);
 })
 
@@ -48,6 +78,7 @@ function resetTool() {
     hideMenuHelp();
     hideToolAction();
     hideToolMovement();
+    hideToolHistory();
 }
 
 
@@ -95,4 +126,27 @@ function hideToolMovement() {
     document.querySelector(".tools").classList.remove("tools-movement-expanded");
     document.querySelector(".content").classList.remove("tools-expanded");
     document.querySelector(".button-tool-movement").classList.remove("selected");
+}
+
+
+document.querySelector(".button-tool-history").addEventListener("click", () => toggleToolHistory())
+let isToolHistoryExpanded = false;
+function toggleToolHistory() {
+    if (!isToolHistoryExpanded) showToolHistory();
+    else hideToolHistory();
+}
+function showToolHistory() {
+    resetTool();
+    isToolHistoryExpanded = true;
+    document.querySelector(".tools").classList.add("tools-expanded");
+    document.querySelector(".tools").classList.add("tools-history-expanded");
+    document.querySelector(".content").classList.add("tools-expanded");
+    document.querySelector(".button-tool-history").classList.add("selected");
+}
+function hideToolHistory() {
+    isToolHistoryExpanded = false;
+    document.querySelector(".tools").classList.remove("tools-expanded");
+    document.querySelector(".tools").classList.remove("tools-history-expanded");
+    document.querySelector(".content").classList.remove("tools-expanded");
+    document.querySelector(".button-tool-history").classList.remove("selected");
 }

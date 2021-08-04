@@ -40,14 +40,14 @@
                         </span>
                         <div>
                             <span class="label">Tempo</span>
-                            <span class="text">00:00:00</span>
+                            <span class="text time">00:00:00</span>
                         </div>
 
                     </div>
                     <div>
                         <div>
                             <span class="label">Movimentos</span>
-                            <span class="text">0000</span>
+                            <span class="text count">0000</span>
                         </div>
                         <span class="material-icons hint">
                             swap_horiz
@@ -64,13 +64,13 @@
                         </span>
                         <span class="hint">Movimentos</span>
                     </div>
-                    <div class="button" type="button">
+                    <div class="button button-tool-history" type="button">
                         <span class="material-icons hint">
                             history
                         </span>
                         <span class="hint">Histórico</span>
                     </div>
-                    <div class="button" type="button">
+                    <div class="button button-tool-algo" type="button">
                         <span class="material-icons hint">
                             code
                         </span>
@@ -85,12 +85,6 @@
                 </div>
                 <div class="area">
                     <div class="action">
-                        <div class="button button-tool-action-shuffle" type="button">
-                            <span class="material-icons hint">
-                                sync_alt
-                            </span>
-                            <span class="hint">embaralhar</span>
-                        </div>
                         <div class="button button-tool-action-reset" type="button">
                             <span class="material-icons hint">
                                 autorenew
@@ -99,23 +93,29 @@
                         </div>
                     </div>
                     <div class="movement">
-                        <div class="button button-movement" id="button-movement-L" type="button">
-                            <span class="material-icons hint">
-                                arrow_right_alt
-                            </span>
-                            <span class="hint">L</span>
-                        </div>
                         <div class="button button-movement" id="button-movement-U" type="button">
                             <span class="material-icons hint">
                                 arrow_right_alt
                             </span>
                             <span class="hint">U</span>
                         </div>
+                        <div class="button button-movement" id="button-movement-L" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">L</span>
+                        </div>
                         <div class="button button-movement" id="button-movement-F" type="button">
                             <span class="material-icons hint">
                                 arrow_right_alt
                             </span>
                             <span class="hint">F</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-F'" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">F'</span>
                         </div>
                         <div class="button button-movement" id="button-movement-L'" type="button">
                             <span class="material-icons hint">
@@ -129,13 +129,69 @@
                             </span>
                             <span class="hint">U'</span>
                         </div>
-                        <div class="button button-movement" id="button-movement-F'" type="button">
+                        
+                        
+                        <div class="button button-movement" id="button-movement-E" type="button">
                             <span class="material-icons hint">
                                 arrow_right_alt
                             </span>
-                            <span class="hint">F'</span>
+                            <span class="hint">E</span>
                         </div>
-
+                        <div class="button button-movement" id="button-movement-M" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">M</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-S" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">S</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-S'" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">S'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-M'" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">M'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-E'" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">E'</span>
+                        </div>
+                        
+                        <div class="button button-movement" id="button-movement-D'" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">D'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-R'" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">R'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-B'" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">B'</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-B" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">B</span>
+                        </div>
                         <div class="button button-movement" id="button-movement-R" type="button">
                             <span class="material-icons hint">
                                 arrow_right_alt
@@ -148,48 +204,30 @@
                             </span>
                             <span class="hint">D</span>
                         </div>
-                        <div class="button button-movement" id="button-movement-B" type="button">
-                            <span class="material-icons hint">
-                                arrow_right_alt
-                            </span>
-                            <span class="hint">B</span>
-                        </div>
-                        <div class="button button-movement" id="button-movement-R'" type="button">
-                            <span class="material-icons hint">
-                                arrow_right_alt
-                            </span>
-                            <span class="hint">R'</span>
-                        </div>
-                        <div class="button button-movement" id="button-movement-D'" type="button">
-                            <span class="material-icons hint">
-                                arrow_right_alt
-                            </span>
-                            <span class="hint">D'</span>
-                        </div>
-                        <div class="button button-movement" id="button-movement-B'" type="button">
-                            <span class="material-icons hint">
-                                arrow_right_alt
-                            </span>
-                            <span class="hint">B'</span>
-                        </div>
-
-                        <div class="button button-movement" id="button-movement-X" type="button">
-                            <span class="material-icons hint">
-                                arrow_right_alt
-                            </span>
-                            <span class="hint">X</span>
-                        </div>
+                        
                         <div class="button button-movement" id="button-movement-Y" type="button">
                             <span class="material-icons hint">
                                 arrow_right_alt
                             </span>
                             <span class="hint">Y</span>
                         </div>
+                        <div class="button button-movement" id="button-movement-X" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">X</span>
+                        </div>
                         <div class="button button-movement" id="button-movement-Z" type="button">
                             <span class="material-icons hint">
                                 arrow_right_alt
                             </span>
                             <span class="hint">Z</span>
+                        </div>
+                        <div class="button button-movement" id="button-movement-Z'" type="button">
+                            <span class="material-icons hint">
+                                arrow_right_alt
+                            </span>
+                            <span class="hint">Z'</span>
                         </div>
                         <div class="button button-movement" id="button-movement-X'" type="button">
                             <span class="material-icons hint">
@@ -203,41 +241,13 @@
                             </span>
                             <span class="hint">Y'</span>
                         </div>
-                        <div class="button button-movement" id="button-movement-Z'" type="button">
-                            <span class="material-icons hint">
-                                arrow_right_alt
-                            </span>
-                            <span class="hint">Z'</span>
-                        </div>
+                        
+
+                    </div>
+                    <div class="history">
+                        
                     </div>
                 </div>
-                <!-- <div class="area-header background-primary">
-                    <input class="tools-buttons background-opacity" type="button" value="Movimentos" />
-                    
-                </div>
-                <div class="tools-area background-primary"></div> -->
-                <!-- <div class="movement-area">
-                    <div class="button-area">
-                        <input type="button" class="button-rotate"  />
-                        <input type="button" class="button-rotate" value="U" />
-                        <input type="button" class="button-rotate" value="F" />
-                        <input type="button" class="button-rotate" value="L'" />
-                        <input type="button" class="button-rotate" value="U'" />
-                        <input type="button" class="button-rotate" value="F'" />
-                        <input type="button" class="button-rotate" value="R" />
-                        <input type="button" class="button-rotate" value="D" />
-                        <input type="button" class="button-rotate" value="B" />
-                        <input type="button" class="button-rotate" value="R'" />
-                        <input type="button" class="button-rotate" value="D'" />
-                        <input type="button" class="button-rotate" value="B'" />
-                        <input type="button" class="button-rotate" value="X" />
-                        <input type="button" class="button-rotate" value="Y" />
-                        <input type="button" class="button-rotate" value="Z" />
-                        <input type="button" class="button-rotate" value="X'" />
-                        <input type="button" class="button-rotate" value="Y'" />
-                        <input type="button" class="button-rotate" value="Z'" />
-                    </div>
-                </div> -->
             </div>
         </div>
 
