@@ -1,3 +1,8 @@
+:root {
+    --header-height: 60px;
+    --header-radius: 20px;
+}
+
 body, .wrapper {
     position: absolute;
     top: 0px;
@@ -5,6 +10,7 @@ body, .wrapper {
     height: 100%;
     margin: 0;
     overflow-y: hidden;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -17,8 +23,114 @@ body {
     z-index: 2;
 }
 
+.background-primary {
+    background-color: darkblue;
+}
+
+.background-secondly {
+    background-color: purple;
+}
+
+.background-opacity {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.title {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.text {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.app {
+    height: 100%;
+    width: 100%;
+}
+
+.header {
+    height: var(--header-height);
+}
+
+.content {
+    height: calc(100% - var(--header-height));
+    width: 100%;
+    position: absolute;
+    top: var(--header-height);
+}
+
+.tools {
+    height: calc(100% - var(--header-height));
+    width: 100%;
+    position: absolute;
+    top: calc(100% - var(--header-height));
+}
+
+.overlay {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    
+}
+
+.overlay.shadow {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.app>.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.content>.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content>.header>div {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.content>.header>div:nth-child(1) {
+    text-align: left;
+}
+.content>.header>div:nth-child(2) {
+    text-align: right;
+}
+
+
 .cube-area {
-    height: 70%;
+    height: calc(100% - 120px);
+}
+
+
+
+.tools-buttons {
+    height: 50px;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    width: calc((100%/5) - 10px);
+    border-style: none;
+    border-radius: 5px;
+}
+
+.tools-area {
+    height: calc(100% - 60px);
 }
 
 .button-area {
