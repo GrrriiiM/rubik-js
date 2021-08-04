@@ -1,5 +1,6 @@
 import { AXIS, CLOCK, SIDES } from "../constants.js";
-import { axisToString } from "../transformer.js";
+import { MOVEMENTS } from "../movements.js";
+import { axisToString, movementByValues } from "../transformer.js";
 import { resetScene } from "./scene.js";
 
 export function createDragger(scene) {
@@ -31,7 +32,7 @@ export function createDragger(scene) {
      * @returns 
      */
     function dragStart(sideElement, x, y) {
-        if (isDragging) return;
+        if (scene.isBusy || isDragging) return;
         isDragging = true;
         dragSideElement = sideElement;
         if (dragSideElement) {
@@ -73,7 +74,7 @@ export function createDragger(scene) {
                 if (dragSide == SIDES.RIGHT) dragAxis = AXIS.Z;
             }
             if (dragSideElement) {
-                dragLayers = [dragSideElement.parentElement.dataset[axisToString(dragAxis)]];
+                dragLayers = [parseInt(dragSideElement.parentElement.dataset[axisToString(dragAxis)])];
                 dragBlockElements = scene.cubeHtmlElement.querySelectorAll(`.block.position-${axisToString(dragAxis)}-${dragLayers}`)
             } else {
                 dragLayers = [];
@@ -119,9 +120,10 @@ export function createDragger(scene) {
             if (dragSide == SIDES.UP) clock = !clock;
             if (dragSide == SIDES.FRONT && dragAxis == AXIS.X) clock = !clock;
             if (dragSide == SIDES.RIGHT && dragAxis == AXIS.Z) clock = !clock;
-            let movement = {
-                axis: dragAxis, layers: dragLayers, clock: clock
-            };
+            let movement = movementByValues(dragAxis, dragLayers, clock, scene.cube.length);
+            // let movement = {
+            //     axis: dragAxis, layers: dragLayers, clock: clock
+            // };
 
             rotateScene(dragScene, movement, () => {
                 isDragMoving = false;

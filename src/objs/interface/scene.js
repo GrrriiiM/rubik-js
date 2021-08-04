@@ -1,21 +1,24 @@
 
 import { COLORS, SIDES } from "../constants.js";
 import { rotateCube } from "../rotator.js";
-import { axisToString, inverseKeyValue } from "../transformer.js";
+import { axisToString, coordsToLayers, coordToLayer, inverseKeyValue } from "../transformer.js";
 import { createDragger } from "./dragger.js";
 
 /**
  * 
  * @param {HTMLDocument} document
  * @param {number[][][][]} cube
- * @return {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement }}
+ * @return {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool }}
  */
 export function createScene(document, cube) {
     let scene = {
         document: document,
         cube: cube,
         sceneHtmlElement: document.createElement("div"),
-        cubeHtmlElement: createCubeHtmlElement(cube, document)
+        cubeHtmlElement: createCubeHtmlElement(cube, document),
+        createAt: new Date(Date.now()),
+        movements: [],
+        isBusy: false
     }
     scene.dragger = createDragger(scene);
     
@@ -105,18 +108,13 @@ function createBlockHtmlElement(document, position, x, y, z, colors) {
 /**
  * 
  * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement }} scene 
- * @param {{ axis: number, layers: number[], clock: bool }} movement 
+ * @param {{ str: string, axis: number, layers: number[], clock: bool }} movement 
  * @param {*} onFinished 
  */
 export function rotateScene(scene, movement, onFinished) {
     let axis = axisToString(movement.axis);
-    let layers = [];
-    if (movement.layers && movement.layers.length) {
-        layers = movement.layers.map(_ => _ < 0 ? scene.cube.length + _ : _);
-    } else {
-        layers = [...Array(scene.cube.length).keys()];
-    }
-    
+    scene.movements.push(movement.str)
+    let layers = coordsToLayers(movement.layers, scene.cube.length);
     for(let layer of layers) {
         scene.cubeHtmlElement.querySelectorAll(`.block.position-${axis}-${layer}`).forEach(_ => {
             _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)

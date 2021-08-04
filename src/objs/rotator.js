@@ -1,5 +1,6 @@
-import { cubeFromFlat, cubeToFlat, movementFromString } from "./transformer.js";
+import { coordsToLayers, coordToLayer, cubeFromFlat, cubeToFlat } from "./transformer.js";
 import { AXIS, CLOCK, SIDES } from "./constants.js";
+import { MOVEMENTS_STR } from "./movements.js";
 
 
 export function rotateSide(axis, side, clock = CLOCK.NORMAL) {
@@ -24,6 +25,7 @@ export function rotateXYZ(axis, clock, x, y, z) {
 export function rotatePosition(axis, size, layer = 0, clock = CLOCK.NORMAL) {
     let offset = (size - 1) / 2;
     let layers = [...Array(size).keys()];
+    layer = coordToLayer(layer, size);
     let zs = axis == AXIS.Z ? [layer] : layers;
     let ys = axis == AXIS.Y ? [layer] : layers;
     let xs = axis == AXIS.X ? [layer] : layers;
@@ -58,32 +60,21 @@ export function rotateCube(axis, cube, layer = 0, clock = CLOCK.NORMAL) {
 }
 
 export function rotateCubeWithMovement(cube, movement) {
-    let layers = [];
-    if (movement.layers && movement.layers.length) {
-        layers = movement.layers.map(_ => _ < 0 ? cube.length + _ : _);
-    } else {
-        layers = [...Array(cube.length).keys()];
-    }
+    let size = cube.length;
+    let layers = coordsToLayers(movement.layers, size);
     for (let layer of layers) {
         cube = rotateCube(movement.axis, cube, layer, movement.clock);
     }
     return cube;
 }
 
-export function rotateCubeWithMovementStr(movements, cube) {
-    for (let movement of movements) {
-        cube = rotateCubeWithMovement(cube, movementFromString(movement))
+
+export function shuffleCube(cube) {
+    let str = Object.keys(MOVEMENTS_STR);
+    for(let r of [...Array(200).keys()]) {
+        cube = rotateCubeWithMovement(cube, MOVEMENTS_STR[str[parseInt(Math.random() * str.length)]]);
     }
     return cube;
-}
-
-export function shuffle(cube) {
-    let str = ["L", "U", "F", "L'", "U'", "F'", "R", "D", "B", "R'", "D'", "B'"];
-    let movements = [];
-    for(let r of [...Array(200).keys()]) {
-        movements.push(str[parseInt(Math.random() * str.length)])
-    }
-    return rotateCubeWithMovementStr(movements, cube);
 }
 
 

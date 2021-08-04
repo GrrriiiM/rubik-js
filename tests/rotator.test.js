@@ -1,7 +1,8 @@
 import { expect, test } from "@jest/globals";
 import theoretically from "jest-theories";
 import { AXIS, CLOCK, SIDES } from "../src/objs/constants";
-import { rotatePosition, rotateSide } from "../src/objs/rotator";
+import { createCube } from "../src/objs/creator";
+import { rotatePosition, rotateSide, shuffleCube } from "../src/objs/rotator";
 
 
 describe('Rotate Side', () => {
@@ -40,16 +41,28 @@ describe('Rotate', () => {
         { input: [AXIS.X, 3, 1, CLOCK.NORMAL], expected: [[[0, 19, 2], [3, 10, 5], [6, 1, 8]], [[9, 22, 11], [12, 13, 14], [15, 4, 17]], [[18, 25, 20], [21, 16, 23], [24, 7, 26]]] },
         { input: [AXIS.X, 3, 1, CLOCK.ANTI], expected: [[[0, 7, 2], [3, 16, 5], [6, 25, 8]], [[9, 4, 11], [12, 13, 14], [15, 22, 17]], [[18, 1, 20], [21, 10, 23], [24, 19, 26]]] },
 
-        { input: [AXIS.Z, 3, 2, CLOCK.NORMAL], expected: [[[0, 1, 2], [3, 4, 5], [6, 7, 8]], [[9, 10, 11], [12, 13, 14], [15, 16, 17]], [[24, 21, 18], [25, 22, 19], [26, 23, 20]]] },
-        { input: [AXIS.Z, 3, 2, CLOCK.ANTI], expected: [[[0, 1, 2], [3, 4, 5], [6, 7, 8]], [[9, 10, 11], [12, 13, 14], [15, 16, 17]], [[20, 23, 26], [19, 22, 25], [18, 21, 24]]] },
-        { input: [AXIS.Y, 3, 2, CLOCK.NORMAL], expected: [[[0, 1, 2], [3, 4, 5], [8, 17, 26]], [[9, 10, 11], [12, 13, 14], [7, 16, 25]], [[18, 19, 20], [21, 22, 23], [6, 15, 24]]] },
-        { input: [AXIS.Y, 3, 2, CLOCK.ANTI], expected: [[[0, 1, 2], [3, 4, 5], [24, 15, 6]], [[9, 10, 11], [12, 13, 14], [25, 16, 7]], [[18, 19, 20], [21, 22, 23], [26, 17, 8]]] },
-        { input: [AXIS.X, 3, 2, CLOCK.NORMAL], expected: [[[0, 1, 20], [3, 4, 11], [6, 7, 2]], [[9, 10, 23], [12, 13, 14], [15, 16, 5]], [[18, 19, 26], [21, 22, 17], [24, 25, 8]]] },
-        { input: [AXIS.X, 3, 2, CLOCK.ANTI], expected: [[[0, 1, 8], [3, 4, 17], [6, 7, 26]], [[9, 10, 5], [12, 13, 14], [15, 16, 23]], [[18, 19, 2], [21, 22, 11], [24, 25, 20]]] },
+        { input: [AXIS.Z, 3, -1, CLOCK.NORMAL], expected: [[[0, 1, 2], [3, 4, 5], [6, 7, 8]], [[9, 10, 11], [12, 13, 14], [15, 16, 17]], [[24, 21, 18], [25, 22, 19], [26, 23, 20]]] },
+        { input: [AXIS.Z, 3, -1, CLOCK.ANTI], expected: [[[0, 1, 2], [3, 4, 5], [6, 7, 8]], [[9, 10, 11], [12, 13, 14], [15, 16, 17]], [[20, 23, 26], [19, 22, 25], [18, 21, 24]]] },
+        { input: [AXIS.Y, 3, -1, CLOCK.NORMAL], expected: [[[0, 1, 2], [3, 4, 5], [8, 17, 26]], [[9, 10, 11], [12, 13, 14], [7, 16, 25]], [[18, 19, 20], [21, 22, 23], [6, 15, 24]]] },
+        { input: [AXIS.Y, 3, -1, CLOCK.ANTI], expected: [[[0, 1, 2], [3, 4, 5], [24, 15, 6]], [[9, 10, 11], [12, 13, 14], [25, 16, 7]], [[18, 19, 20], [21, 22, 23], [26, 17, 8]]] },
+        { input: [AXIS.X, 3, -1, CLOCK.NORMAL], expected: [[[0, 1, 20], [3, 4, 11], [6, 7, 2]], [[9, 10, 23], [12, 13, 14], [15, 16, 5]], [[18, 19, 26], [21, 22, 17], [24, 25, 8]]] },
+        { input: [AXIS.X, 3, -1, CLOCK.ANTI], expected: [[[0, 1, 8], [3, 4, 17], [6, 7, 26]], [[9, 10, 5], [12, 13, 14], [15, 16, 23]], [[18, 19, 2], [21, 22, 11], [24, 25, 20]]] },
 
     ]
     theoretically('input {input} expected {expected}', theories, theory => {
         expect(rotatePosition(...theory.input)).toEqual(theory.expected);
+    })
+});
+
+
+describe('Shuffle', () => {
+    const cube = createCube(3)
+    const theories = [
+        { input: cube, expected: createCube(3) }
+
+    ]
+    theoretically('input {input} expected {expected}', theories, theory => {
+        expect(shuffleCube(theory.input)).not.toEqual(theory.expected);
     })
 });
 

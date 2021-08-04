@@ -1,7 +1,8 @@
 :root {
     --header-height: 60px;
     --header-radius: 15px;
-    --tool-area-height: 150px;
+    --tool-area-height: 200px;
+    --cube-area-height: calc(100% - 120px);
 }
 
 body, .wrapper {
@@ -166,7 +167,7 @@ body {
 
 
 .cube-area {
-    height: calc(100% - 120px);
+    height: var(--cube-area-height);
     transition: height 250ms ease-out;
 }
 
@@ -202,7 +203,6 @@ body {
 .tools>.area>div>.button {
     margin-left: 10px;
     margin-top: 10px;
-    width: calc((100% - 50px) / 4);
 }
 
 .tools.tools-action-expanded>.area>.action {
@@ -213,13 +213,22 @@ body {
     display: flex;
 }
 
+.tools.tools-history-expanded>.area>.history {
+    display: flex;
+}
+
 .tools>.area>.action>.button {
     height: calc((100% - 30px) / 2);
+    width: calc((100% - 50px) / 4);
 }
 
 .tools>.area>.movement>.button {
     width: calc((100% - 70px) / 6);
-    height: calc((100% - 40px) / 3);
+    height: calc((100% - 50px) / 4);
+}
+
+.tools>.area>.history>.button {
+    padding: 10px;
 }
 
 .tools>.area>.movement>.button[id="button-movement-L"]>span:nth-child(1) {
@@ -258,7 +267,7 @@ body {
     transform: rotate(180deg)
 }
 .tools>.area>.movement>.button[id="button-movement-B'"]>span:nth-child(1) {
-    transform: rotate(45deg)
+    transform: rotate(-45deg)
 }
 
 
@@ -282,6 +291,27 @@ body {
     transform: rotate(135deg)
 }
 
+
+.tools>.area>.movement>.button[id="button-movement-M"]>span:nth-child(1) {
+    transform: rotate(90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-E"]>span:nth-child(1) {
+    transform: rotate(180deg)
+}
+.tools>.area>.movement>.button[id="button-movement-S"]>span:nth-child(1) {
+    transform: rotate(-45deg)
+}
+.tools>.area>.movement>.button[id="button-movement-M'"]>span:nth-child(1) {
+    transform: rotate(-90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-E'"]>span:nth-child(1) {
+    transform: rotate(0deg)
+}
+.tools>.area>.movement>.button[id="button-movement-S'"]>span:nth-child(1) {
+    transform: rotate(135deg)
+}
+
+
 .content.menu-expanded {
     top: calc(100% - var(--header-height)*1.5)
 }
@@ -291,7 +321,16 @@ body {
 }
 
 .content.tools-expanded>.cube-area {
-    height: calc(100% - 300px)
+    --cube-area-height: calc(100% - var(--tool-area-height) - (var(--header-height) * 2));
+}
+
+
+.content>.cube-area .scene {
+    --block-size: calc((100vh - (var(--header-height) * 2)) * 0.11) !important;
+}
+
+.content.tools-expanded>.cube-area .scene {
+    --block-size: calc((100vh - (var(--header-height) * 2) - var(--tool-area-height)) * 0.11) !important;
 }
 
 
