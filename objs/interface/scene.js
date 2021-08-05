@@ -1,5 +1,6 @@
 
 import { COLORS, SIDES } from "../constants.js";
+import { cubeIsCompleted, findCubeCrosses, findCubeF2L, findCubeOLL } from "../finder.js";
 import { rotateCube } from "../rotator.js";
 import { axisToString, coordsToLayers, coordToLayer, inverseKeyValue } from "../transformer.js";
 import { createDragger } from "./dragger.js";
@@ -8,7 +9,7 @@ import { createDragger } from "./dragger.js";
  * 
  * @param {HTMLDocument} document
  * @param {number[][][][]} cube
- * @return {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool }}
+ * @return {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool }}
  */
 export function createScene(document, cube) {
     let scene = {
@@ -18,7 +19,11 @@ export function createScene(document, cube) {
         cubeHtmlElement: createCubeHtmlElement(cube, document),
         createAt: new Date(Date.now()),
         movements: [],
-        isBusy: false
+        isBusy: false,
+        crossSides: [],
+        f2lSides: [],
+        ollSide: SIDES.CENTER,
+        isCompleted: false
     }
     scene.dragger = createDragger(scene);
     
@@ -107,7 +112,7 @@ function createBlockHtmlElement(document, position, x, y, z, colors) {
 
 /**
  * 
- * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement }} scene 
+ * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool }} scene 
  * @param {{ str: string, axis: number, layers: number[], clock: bool }} movement 
  * @param {*} onFinished 
  */
@@ -123,8 +128,14 @@ export function rotateScene(scene, movement, onFinished) {
     }
 
     setTimeout(() => {
-        for(let layer of layers) {
-            scene.cube = rotateCube(movement.axis, scene.cube, layer, movement.clock);
+        scene.cube = rotateCube(movement.axis, scene.cube, layers, movement.clock);
+        // console.log(JSON.stringify(scene.cube));
+        scene.isCompleted = cubeIsCompleted(scene.cube);
+        if (!scene.isCompleted) {
+            scene.crossSides = findCubeCrosses(scene.cube);
+            let f2lSide = findCubeF2L(scene.cube, scene.crossSides);
+            scene.f2lSides = f2lSide.sides;
+            scene.ollSide = findCubeOLL(scene.cube, f2lSide.crossSide);
         }
         refreshScene(scene);
         onFinished && onFinished();
@@ -133,7 +144,7 @@ export function rotateScene(scene, movement, onFinished) {
 
 /**
  * 
- * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement }} scene 
+ * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool }} scene 
  * @param {*} onFinished 
  */
 export function resetScene(scene, onFinished) {

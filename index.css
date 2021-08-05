@@ -2,7 +2,8 @@
     --header-height: 60px;
     --header-radius: 15px;
     --tool-area-height: 200px;
-    --cube-area-height: calc(100% - 120px);
+    --cube-steps-area-height: 40px;
+    --cube-area-height: calc(100% - var(--cube-steps-area-height) - (var(--header-height) * 2));
 }
 
 body, .wrapper {
@@ -37,23 +38,28 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
+.logo {
+    font-size: 30px !important;
+    color: rgba(255, 255, 255, 0.8);
+}
+
 .title {
-    font-size: 24px;
+    font-size: 24px !important;
     color: rgba(255, 255, 255, 0.8);
 }
 
 .text {
-    font-size: 18px;
+    font-size: 18px !important;
     color: rgba(255, 255, 255, 0.8);
 }
 
 .label {
-    font-size: 14px;
+    font-size: 14px !important;
     color: rgba(255, 255, 255, 0.5);
 }
 
 .hint {
-    font-size: 12px;
+    font-size: 12px !important;
     color: rgba(255, 255, 255, 0.4);
 }
 
@@ -144,6 +150,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 .content>.header>div>.material-icons {
@@ -165,8 +172,42 @@ body {
     text-align: right;
 }
 
+.content>.cube-steps-area {
+    height: var(--cube-steps-area-height);
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
 
-.cube-area {
+.content>.cube-steps-area>.steps-item {
+    height: calc(100% - 20px);
+    width: calc((100% - 50px) / 4);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: calc(var(--cube-steps-area-height) / 3);
+    background-color:rgba(255, 255, 255, 0.03) !important;
+}
+
+.content>.cube-steps-area>.steps-item>span {
+    color:rgba(255, 255, 255, 0.05) !important;
+}
+
+.content>.cube-steps-area>.steps-item.completed {
+    background-color:rgba(255, 255, 255, 0.2) !important;
+}
+
+.content>.cube-steps-area>.steps-item.completed>span {
+    color:rgba(255, 255, 255, 0.5) !important;
+}
+
+
+
+.content>.cube-area {
     height: var(--cube-area-height);
     transition: height 250ms ease-out;
 }
@@ -321,7 +362,7 @@ body {
 }
 
 .content.tools-expanded>.cube-area {
-    --cube-area-height: calc(100% - var(--tool-area-height) - (var(--header-height) * 2));
+    height: calc(var(--cube-area-height) - var(--tool-area-height));
 }
 
 
