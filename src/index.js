@@ -42,6 +42,31 @@ setInterval(() => {
         document.querySelector(".cube-steps-area>.steps-item.check-pll").classList.remove("completed");
     }
 
+    if (scene.crossAt) {
+        let at = new Date(scene.crossAt.getTime() - scene.createAt.getTime());
+        document.querySelector(".cube-steps-area>.steps-time.time-cross").innerHTML = `${at.getUTCHours().toString().padStart(2, "0")}:${at.getUTCMinutes().toString().padStart(2, "0")}:${at.getUTCSeconds().toString().padStart(2, "0")}`
+    } else {
+        document.querySelector(".cube-steps-area>.steps-time.time-cross").innerHTML = "";
+    }
+    if (scene.f2lAt) {
+        let at = new Date(scene.f2lAt.getTime() - scene.createAt.getTime());
+        document.querySelector(".cube-steps-area>.steps-time.time-f2l").innerHTML = `${at.getUTCHours().toString().padStart(2, "0")}:${at.getUTCMinutes().toString().padStart(2, "0")}:${at.getUTCSeconds().toString().padStart(2, "0")}`
+    } else {
+        document.querySelector(".cube-steps-area>.steps-time.time-f2l").innerHTML = "";
+    }
+    if (scene.ollAt) {
+        let at = new Date(scene.ollAt.getTime() - scene.createAt.getTime());
+        document.querySelector(".cube-steps-area>.steps-time.time-oll").innerHTML = `${at.getUTCHours().toString().padStart(2, "0")}:${at.getUTCMinutes().toString().padStart(2, "0")}:${at.getUTCSeconds().toString().padStart(2, "0")}`
+    } else {
+        document.querySelector(".cube-steps-area>.steps-time.time-oll").innerHTML = "";
+    }
+    if (scene.completedAt) {
+        let at = new Date(scene.completedAt.getTime() - scene.createAt.getTime());
+        document.querySelector(".cube-steps-area>.steps-time.time-pll").innerHTML = `${at.getUTCHours().toString().padStart(2, "0")}:${at.getUTCMinutes().toString().padStart(2, "0")}:${at.getUTCSeconds().toString().padStart(2, "0")}`
+    } else {
+        document.querySelector(".cube-steps-area>.steps-time.time-pll").innerHTML = "";
+    }
+
     if (movementsCount != scene.movements.length) {
         let excludeMoves = ["X", "X'", "Y", "Y'", "Z", "Z'"];
         countHtmlElement.innerHTML = `${scene.movements.filter(_ => excludeMoves.indexOf(_) < 0).length.toString().padStart(5, "0")}`;
@@ -77,6 +102,14 @@ document.querySelector(".button-tool-action-reset").addEventListener("click", ()
     scene.cube = shuffleCube(createCube(scene.cube.length));
     scene.createAt = new Date(Date.now());
     scene.movements = [];
+    scene.crossSides = [];
+    scene.f2lAt = [];
+    scene.ollAt = SIDES.CENTER;
+    scene.isCompleted = false;
+    scene.crossAt = null;
+    scene.f2lAt = null;
+    scene.ollAt = null;
+    scene.completedAt = null;
     refreshScene(scene);
 })
 

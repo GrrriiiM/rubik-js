@@ -9,7 +9,7 @@ import { createDragger } from "./dragger.js";
  * 
  * @param {HTMLDocument} document
  * @param {number[][][][]} cube
- * @return {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool }}
+ * @return {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool, crossAt: Date, f2lAt: Date, ollAt: Date, completedAt: Date }}
  */
 export function createScene(document, cube) {
     let scene = {
@@ -23,6 +23,10 @@ export function createScene(document, cube) {
         crossSides: [],
         f2lSides: [],
         ollSide: SIDES.CENTER,
+        crossAt: null,
+        f2lAt: null,
+        ollAt: null,
+        completedAt: null,
         isCompleted: false
     }
     scene.dragger = createDragger(scene);
@@ -112,7 +116,7 @@ function createBlockHtmlElement(document, position, x, y, z, colors) {
 
 /**
  * 
- * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool }} scene 
+ * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool, crossAt: Date, f2lAt: Date, ollAt: Date, completedAt: Date }} scene 
  * @param {{ str: string, axis: number, layers: number[], clock: bool }} movement 
  * @param {*} onFinished 
  */
@@ -131,11 +135,20 @@ export function rotateScene(scene, movement, onFinished) {
         scene.cube = rotateCube(movement.axis, scene.cube, layers, movement.clock);
         // console.log(JSON.stringify(scene.cube));
         scene.isCompleted = cubeIsCompleted(scene.cube);
+        if (scene.isCompleted) {
+            scene.crossAt = scene.crossAt || new Date(Date.now());
+            scene.f2lAt = scene.f2lAt || new Date(Date.now());
+            scene.ollAt = scene.ollAt || new Date(Date.now());
+            scene.completedAt = scene.completedAt || new Date(Date.now());
+        }
         if (!scene.isCompleted) {
             scene.crossSides = findCubeCrosses(scene.cube);
+            if (scene.crossSides.length) scene.crossAt = scene.crossAt || new Date(Date.now());
             let f2lSide = findCubeF2L(scene.cube, scene.crossSides);
             scene.f2lSides = f2lSide.sides;
+            if (scene.f2lSides.length == 4) scene.f2lAt = scene.f2lAt || new Date(Date.now());
             scene.ollSide = findCubeOLL(scene.cube, f2lSide.crossSide);
+            if (scene.ollSide != SIDES.CENTER) scene.ollAt = scene.ollAt || new Date(Date.now());
         }
         refreshScene(scene);
         onFinished && onFinished();
@@ -144,7 +157,7 @@ export function rotateScene(scene, movement, onFinished) {
 
 /**
  * 
- * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool }} scene 
+ * @param {{ document: HTMLDocument, cube: number[][][][], cubeHtmlElement: HTMLDocument, sceneHtmlElement: HTMLElement, createAt: Date, movements: string[], isBusy: bool, crossSides: [], f2lSides: [], ollSide: number, isCompleted: bool, crossAt: Date, f2lAt: Date, ollAt: Date, completedAt: Date }} scene 
  * @param {*} onFinished 
  */
 export function resetScene(scene, onFinished) {
