@@ -2,7 +2,7 @@
     --header-height: 60px;
     --header-radius: 15px;
     --tool-area-height: 200px;
-    --cube-steps-area-height: 40px;
+    --cube-steps-area-height: 60px;
     --cube-area-height: calc(100% - var(--cube-steps-area-height) - (var(--header-height) * 2));
 }
 
@@ -177,13 +177,15 @@ body {
     padding-left: 10px;
     padding-right: 10px;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    align-content: center;
 }
 
 .content>.cube-steps-area>.steps-item {
-    height: calc(100% - 20px);
+    height: 20px;
     width: calc((100% - 50px) / 4);
     display: flex;
     flex-direction: row;
@@ -191,6 +193,14 @@ body {
     align-items: center;
     border-radius: calc(var(--cube-steps-area-height) / 3);
     background-color:rgba(255, 255, 255, 0.03) !important;
+}
+
+.content>.cube-steps-area>.steps-time {
+    height: 25px;
+    line-height: 25px;
+    width: calc((100% - 50px) / 4);
+    text-align: center;
+    vertical-align: bottom;
 }
 
 .content>.cube-steps-area>.steps-item>span {
