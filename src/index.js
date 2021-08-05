@@ -1,3 +1,4 @@
+import { SIDES } from "./objs/constants.js";
 import { createCube } from "./objs/creator.js";
 import { createScene, refreshScene, rotateScene } from "./objs/interface/scene.js";
 import { MOVEMENTS_STR } from "./objs/movements.js";
@@ -16,6 +17,30 @@ let movementsCount = 0;
 setInterval(() => {
     let time = new Date(Date.now() - scene.createAt.getTime());
     timeHtmlElement.innerHTML = `${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}:${time.getUTCSeconds().toString().padStart(2, "0")}`;
+
+    if (scene.isCompleted || scene.crossSides.length) {
+        document.querySelector(".cube-steps-area>.steps-item.check-cross").classList.add("completed");
+    } else {
+        document.querySelector(".cube-steps-area>.steps-item.check-cross").classList.remove("completed");
+    }
+
+    if (scene.isCompleted || scene.f2lSides.length == 4) {
+        document.querySelector(".cube-steps-area>.steps-item.check-f2l").classList.add("completed");
+    } else {
+        document.querySelector(".cube-steps-area>.steps-item.check-f2l").classList.remove("completed");
+    }
+
+    if (scene.isCompleted || scene.ollSide != SIDES.CENTER) {
+        document.querySelector(".cube-steps-area>.steps-item.check-oll").classList.add("completed");
+    } else {
+        document.querySelector(".cube-steps-area>.steps-item.check-oll").classList.remove("completed");
+    }
+
+    if (scene.isCompleted) {
+        document.querySelector(".cube-steps-area>.steps-item.check-pll").classList.add("completed");
+    } else {
+        document.querySelector(".cube-steps-area>.steps-item.check-pll").classList.remove("completed");
+    }
 
     if (movementsCount != scene.movements.length) {
         let excludeMoves = ["X", "X'", "Y", "Y'", "Z", "Z'"];

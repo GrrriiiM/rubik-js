@@ -43,28 +43,30 @@ export function rotatePosition(axis, size, layer = 0, clock = CLOCK.NORMAL) {
     return newCube;
 }
 
-export function rotateCube(axis, cube, layer = 0, clock = CLOCK.NORMAL) {
+export function rotateCube(axis, cube, layers = [], clock = CLOCK.NORMAL) {
     let size = cube.length;
-    let positionFlat = cubeToFlat(rotatePosition(axis, size, layer, clock));
-    let cubeFlat = cubeToFlat(cube);
-    let newcubeFlat = cubeFlat.map(_ => _.map(c => c));
-    for (let i of [...Array(positionFlat.length).keys()]) {
-        if (positionFlat[i] != i) {
-            newcubeFlat[i] = rotateBlock(axis, cubeFlat[positionFlat[i]], clock);
-        } else {
-            newcubeFlat[i] = cubeFlat[positionFlat[i]];
+    layers = coordsToLayers(layers, size);
+    
+    for(let layer of layers) {
+        let cubeFlat = cubeToFlat(cube);
+        let newcubeFlat = cubeFlat.map(_ => _.map(c => c));
+        let positionFlat = cubeToFlat(rotatePosition(axis, size, layer, clock));
+        for (let i of [...Array(positionFlat.length).keys()]) {
+            if (positionFlat[i] != i) {
+                newcubeFlat[i] = rotateBlock(axis, cubeFlat[positionFlat[i]], clock);
+            } else {
+                newcubeFlat[i] = cubeFlat[positionFlat[i]];
+            }
         }
-
+        cube = cubeFromFlat(newcubeFlat, size);
     }
-    return cubeFromFlat(newcubeFlat, size);
+    return cube;
 }
 
 export function rotateCubeWithMovement(cube, movement) {
     let size = cube.length;
     let layers = coordsToLayers(movement.layers, size);
-    for (let layer of layers) {
-        cube = rotateCube(movement.axis, cube, layer, movement.clock);
-    }
+    cube = rotateCube(movement.axis, cube, layers, movement.clock);
     return cube;
 }
 

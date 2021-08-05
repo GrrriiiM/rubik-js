@@ -69,3 +69,7 @@ export function movementByValues(axis, layers, clock, size) {
         && coordsToLayers(_.layers, 3).join(' ') == layers);
     return movement;
 }
+
+export function cloneCube(cube) {
+    return cube.map(z => z.map(y => y.map(x => x.map(_ => _))));
+}
