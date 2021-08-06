@@ -2,17 +2,17 @@ import { expect } from "@jest/globals";
 import theoretically from "jest-theories";
 import { COLORS, SIDES } from "../src/objs/constants";
 import { createCube } from "../src/objs/creator";
-import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor } from "../src/objs/finder";
+import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor, findCubeCrosses as findCubeCrosses } from "../src/objs/finder";
 
 describe("Find side color from Cube", () => {
     const cube = createCube(3);
     const theories = [
-        { input: { cube: cube, side: SIDES.FRONT}, expected: COLORS.ORANGE },
-        { input: { cube: cube, side: SIDES.UP}, expected: COLORS.YELLOW },
-        { input: { cube: cube, side: SIDES.LEFT}, expected: COLORS.GREEN },
-        { input: { cube: cube, side: SIDES.BACK}, expected: COLORS.RED },
-        { input: { cube: cube, side: SIDES.DOWN}, expected: COLORS.WHITE },
-        { input: { cube: cube, side: SIDES.RIGHT}, expected: COLORS.BLUE },
+        { input: { cube: cube, side: SIDES.FRONT }, expected: COLORS.ORANGE },
+        { input: { cube: cube, side: SIDES.UP }, expected: COLORS.YELLOW },
+        { input: { cube: cube, side: SIDES.LEFT }, expected: COLORS.GREEN },
+        { input: { cube: cube, side: SIDES.BACK }, expected: COLORS.RED },
+        { input: { cube: cube, side: SIDES.DOWN }, expected: COLORS.WHITE },
+        { input: { cube: cube, side: SIDES.RIGHT }, expected: COLORS.BLUE },
     ];
     theoretically('input {input} expected {expected}', theories, theory => {
         expect(findCubeColorBySide(theory.input.cube, theory.input.side)).toEqual(theory.expected);
@@ -22,15 +22,15 @@ describe("Find side color from Cube", () => {
 
 describe("Find positions from Cube", () => {
     const theories = [
-        { input: { size: 3, axis: { z: 0 }}, expected: [0,1,2,3,4,5,6,7,8] },
-        { input: { size: 3, axis: { z: 0, y: 0 }}, expected: [0,1,2] },
-        { input: { size: 3, axis: { z: 0, y: 0, x: 0 }}, expected: [0] },
-        { input: { size: 3, axis: { x: 0 }}, expected: [0,3,6,9,12,15,18,21,24] },
-        { input: { size: 3, axis: { x: 0, y: 0 }}, expected: [0,9,18] },
-        { input: { size: 3, axis: { z: 0, y: 1, x: 2 }}, expected: [5] }
+        { input: { size: 3, axis: { z: 0 } }, expected: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
+        { input: { size: 3, axis: { z: 0, y: 0 } }, expected: [0, 1, 2] },
+        { input: { size: 3, axis: { z: 0, y: 0, x: 0 } }, expected: [0] },
+        { input: { size: 3, axis: { x: 0 } }, expected: [0, 3, 6, 9, 12, 15, 18, 21, 24] },
+        { input: { size: 3, axis: { x: 0, y: 0 } }, expected: [0, 9, 18] },
+        { input: { size: 3, axis: { z: 0, y: 1, x: 2 } }, expected: [5] }
     ];
     theoretically('input {input} expected {expected}', theories, theory => {
-        expect(findPositionsByAxis(theory.input.size, {...theory.input.axis})).toEqual(theory.expected);
+        expect(findPositionsByAxis(theory.input.size, { ...theory.input.axis })).toEqual(theory.expected);
     })
 });
 
@@ -83,5 +83,51 @@ describe("Find Corder position from Color", () => {
     ];
     theoretically('input {input} expected {expected}', theories, theory => {
         expect(findCornerPositionByColor(theory.input.cube, theory.input.color1, theory.input.color2, theory.input.color3)).toEqual(theory.expected);
+    })
+});
+
+describe("Find Cube Crosses", () => {
+    const cube = createCube(3);
+    const theories = [
+        { input: cube, expected: [SIDES.FRONT, SIDES.UP, SIDES.LEFT, SIDES.BACK, SIDES.DOWN, SIDES.RIGHT] },
+        {
+            input: [[[[0, 1, 6, 2, 0, 0, 0], [0, 5, 6, 0, 0, 0, 0], [0, 4, 3, 0, 0, 0, 5]],
+            [[0, 5, 0, 1, 0, 0, 0], [0, 5, 0, 0, 0, 0, 0], [0, 5, 0, 0, 0, 0, 4]],
+            [[0, 5, 0, 4, 0, 6, 0], [0, 5, 0, 0, 0, 3, 0], [0, 5, 0, 0, 0, 1, 3]]],
+            [[[0, 0, 3, 4, 0, 0, 0], [0, 0, 6, 0, 0, 0, 0], [0, 0, 6, 0, 0, 0, 2]],
+            [[0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 4]],
+            [[0, 0, 0, 1, 0, 6, 0], [0, 0, 0, 0, 0, 3, 0], [0, 0, 0, 0, 0, 3, 1]]],
+            [[[0, 0, 5, 1, 6, 0, 0], [0, 0, 6, 0, 4, 0, 0], [0, 0, 2, 0, 3, 0, 4]],
+            [[0, 0, 0, 3, 2, 0, 0], [0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 4, 0, 2]],
+            [[0, 0, 0, 3, 1, 2, 0], [0, 0, 0, 0, 1, 2, 0], [0, 0, 0, 0, 6, 2, 4]]]],
+            expected: [SIDES.FRONT]
+        },
+        {
+            input: [[[[0,4,2,6,0,0,0],[0,3,5,0,0,0,0],[0,6,4,0,0,0,5]],
+            [[0,1,0,6,0,0,0],[0,3,0,0,0,0,0],[0,6,0,0,0,0,2]],
+            [[0,5,0,3,0,4,0],[0,3,0,0,0,1,0],[0,4,0,0,0,3,2]]],
+            [[[0,0,5,1,0,0,0],[0,0,5,0,0,0,0],[0,0,5,0,0,0,4]],
+            [[0,0,0,1,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,4]],
+            [[0,0,0,2,0,3,0],[0,0,0,0,0,2,0],[0,0,0,0,0,6,4]]],
+            [[[0,0,1,2,6,0,0],[0,0,5,0,6,0,0],[0,0,1,0,5,0,3]],
+            [[0,0,0,4,2,0,0],[0,0,0,0,6,0,0],[0,0,0,0,3,0,4]],
+            [[0,0,0,6,1,5,0],[0,0,0,0,1,2,0],[0,0,0,0,2,1,3]]]],
+            expected: [SIDES.UP]
+        },
+        {
+            input: [[[[0,4,5,3,0,0,0],[0,1,3,0,0,0,0],[0,3,4,0,0,0,2]],
+            [[0,3,0,2,0,0,0],[0,2,0,0,0,0,0],[0,6,0,0,0,0,4]],
+            [[0,5,0,6,0,1,0],[0,2,0,0,0,1,0],[0,1,0,0,0,2,3]]],
+            [[[0,0,1,6,0,0,0],[0,0,3,0,0,0,0],[0,0,6,0,0,0,2]],
+            [[0,0,0,1,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,4]],
+            [[0,0,0,4,0,2,0],[0,0,0,0,0,6,0],[0,0,0,0,0,3,4]]],
+            [[[0,0,4,6,2,0,0],[0,0,3,0,5,0,0],[0,0,6,0,4,0,5]],
+            [[0,0,0,1,5,0,0],[0,0,0,0,5,0,0],[0,0,0,0,5,0,4]],
+            [[0,0,0,2,1,6,0],[0,0,0,0,5,6,0],[0,0,0,0,1,5,3]]]],
+            expected: [SIDES.BACK]
+        }
+    ];
+    theoretically('input {input} expected {expected}', theories, theory => {
+        expect(findCubeCrosses(theory.input)).toEqual(theory.expected);
     })
 });

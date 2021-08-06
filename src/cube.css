@@ -1,15 +1,12 @@
 .scene {
-    --base-size: 12px;
-    --block-size: 5em;
+    --block-size: 60px;
     --block-size-half: calc(var(--block-size) / 2);
     --block-border-size: calc(var(--block-size) / 10);
-    --perpective: 40em;
-    --scene-size: 40em;
+    --perpective: calc(var(--block-size) * 8);
+    --scene-size: calc(var(--block-size) * 8);
     --rotate-x: 0deg;
     --rotate-y: 0deg;
     --rotate-z: 0deg;
-    font-size: var(--base-size);
-    background-color: purple;
     height: 100%;
     width: 100%;
     perspective: var(--perpective);
@@ -18,7 +15,7 @@
 
 .scene>.cube {
     position: absolute;
-    transform: rotateX(-30deg) rotateY(-30deg) rotateZ(0deg);
+    transform: rotateX(-30deg) rotateY(-40deg) rotateZ(0deg);
     transform-style: preserve-3d;
     left: calc(50%);
     top: calc(50%);
@@ -48,22 +45,22 @@
     background-color: black;
 }
 .scene>.cube>.block>.side.orange {
-    background-color: orange;
+    background-color: #f3722c;
 }
 .scene>.cube>.block>.side.yellow {
-    background-color: yellow;
+    background-color: #f9c74f;
 }
 .scene>.cube>.block>.side.green {
-    background-color: green;
+    background-color: #43aa8b;
 }
 .scene>.cube>.block>.side.red {
-    background-color: red;
+    background-color: #f94144;
 }
 .scene>.cube>.block>.side.white {
     background-color: white;
 }
 .scene>.cube>.block>.side.blue {
-    background-color: blue;
+    background-color: #277da1;
 }
 
 .scene>.cube>.block>.side.up {
