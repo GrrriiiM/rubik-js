@@ -15,7 +15,7 @@
 
 .scene>.cube {
     position: absolute;
-    transform: rotateX(-30deg) rotateY(-40deg) rotateZ(0deg);
+    transform: rotateX(-30deg) rotateY(-35deg) rotateZ(0deg);
     transform-style: preserve-3d;
     left: calc(50%);
     top: calc(50%);

@@ -134,19 +134,19 @@ export function rotateScene(scene, movement, onFinished) {
     setTimeout(() => {
         scene.cube = rotateCube(movement.axis, scene.cube, layers, movement.clock);
         // console.log(JSON.stringify(scene.cube));
-        scene.isCompleted = cubeIsCompleted(scene.cube);
+        scene.isCompleted = scene.isCompleted || cubeIsCompleted(scene.cube);
         if (scene.isCompleted) {
             scene.crossAt = scene.crossAt || new Date(Date.now());
             scene.f2lAt = scene.f2lAt || new Date(Date.now());
             scene.ollAt = scene.ollAt || new Date(Date.now());
-            scene.completedAt = scene.completedAt || new Date(Date.now());
+            scene.completedAt = new Date(Date.now());
         }
         if (!scene.isCompleted) {
             scene.crossSides = findCubeCrosses(scene.cube);
             if (scene.crossSides.length) scene.crossAt = scene.crossAt || new Date(Date.now());
             let f2lSide = findCubeF2L(scene.cube, scene.crossSides);
             scene.f2lSides = f2lSide.sides;
-            if (scene.f2lSides.length == 4) scene.f2lAt = scene.f2lAt || new Date(Date.now());
+            if (scene.f2lSides.length == 4) scene.f2lAt = scene.f2lAt || scene.f2lAt || new Date(Date.now());
             scene.ollSide = findCubeOLL(scene.cube, f2lSide.crossSide);
             if (scene.ollSide != SIDES.CENTER) scene.ollAt = scene.ollAt || new Date(Date.now());
         }

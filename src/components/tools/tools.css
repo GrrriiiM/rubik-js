@@ -1,0 +1,52 @@
+@import url("./tools-movement.css");
+@import url("./tools-action.css");
+
+.tools>.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.tools>.header>.button {
+    margin-left: 10px;
+    width: calc((100% - 50px) / 4);
+    height: calc(100% - 15px);
+}
+
+.tools>.area {
+    width: 100%;
+    height: 100%;
+    
+}
+
+.tools>.area>div {
+    width: 100%;
+    height: calc(100% - var(--header-height));
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+.tools>.area>div>.button {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+
+
+.tools.tools-movement-expanded>.area>.movement {
+    display: flex;
+}
+
+.tools.tools-history-expanded>.area>.history {
+    display: flex;
+}
+
+
+
+.tools>.area>.history>.button {
+    padding: 10px;
+}
