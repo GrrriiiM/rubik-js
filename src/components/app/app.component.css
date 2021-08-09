@@ -1,0 +1,69 @@
+@import url("../content/content.component.css");
+@import url("../tools/tools.component.css");
+@import url("../scene/scene.component.css");
+
+:root {
+    --header-height: 60px;
+    --header-radius: 15px;
+    --tool-area-height: 200px;
+    --cube-steps-area-height: 60px;
+    --cube-area-height: calc(100% - var(--cube-steps-area-height) - (var(--header-height) * 2));
+}
+
+
+
+.app {
+    height: 100%;
+    width: 100%;
+}
+
+.header {
+    height: var(--header-height);
+}
+
+.content {
+    height: calc(100% - var(--header-height));
+    width: 100%;
+    position: absolute;
+    top: var(--header-height);
+    transition: top 250ms ease-out;
+}
+
+.tools {
+    height: calc(var(--header-height) + var(--tool-area-height));
+    width: 100%;
+    position: absolute;
+    top: calc(100% - var(--header-height));
+    transition: top 250ms ease-out;
+}
+
+.overlay {
+    border-top-left-radius: var(--header-radius);
+    border-top-right-radius: var(--header-radius);
+    
+}
+
+.overlay.shadow {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.app>.header {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app>.header>div:first-child, .app>.header>div:last-child {
+    height: calc(100% - 20px);
+    width: 60px;
+}
+
+.app>.header>div:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,8 @@
+.tools.tools-action-expanded>.area>.action {
+    display: flex;
+}
+
+.tools>.area>.action>.button {
+    height: calc((100% - 30px) / 2);
+    width: calc((100% - 50px) / 4);
+}

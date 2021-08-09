@@ -1,5 +1,5 @@
 import { AXIS, COLORS, SIDES } from "./constants.js";
-import { MOVEMENTS } from "./movements.js";
+import { MOVEMENTS, MOVEMENTS_STR } from "./movements.js";
 
 
 /**
@@ -40,28 +40,36 @@ export function inverseKeyValue(dict) {
 }
 
 export function movementFromString(str) {
-    if (str.toUpperCase() == "F") return MOVEMENTS.F;
-    if (str.toUpperCase() == "B") return MOVEMENTS.B;
-    if (str.toUpperCase() == "L") return MOVEMENTS.L;
-    if (str.toUpperCase() == "R") return MOVEMENTS.R;
-    if (str.toUpperCase() == "U") return MOVEMENTS.U;
-    if (str.toUpperCase() == "D") return MOVEMENTS.D;
-    if (str.toUpperCase() == "F'") return MOVEMENTS.F_;
-    if (str.toUpperCase() == "B'") return MOVEMENTS.B_;
-    if (str.toUpperCase() == "L'") return MOVEMENTS.L_;
-    if (str.toUpperCase() == "R'") return MOVEMENTS.R_;
-    if (str.toUpperCase() == "U'") return MOVEMENTS.U_;
-    if (str.toUpperCase() == "D'") return MOVEMENTS.D_;
-    if (str.toUpperCase() == "X") return MOVEMENTS.X;
-    if (str.toUpperCase() == "Y") return MOVEMENTS.Y;
-    if (str.toUpperCase() == "Z") return MOVEMENTS.Z;
-    if (str.toUpperCase() == "X'") return MOVEMENTS.X_;
-    if (str.toUpperCase() == "Y'") return MOVEMENTS.Y_;
-    if (str.toUpperCase() == "Z'") return MOVEMENTS.Z_;
+    return MOVEMENTS_STR[str];
 }
 
 export function axisToString(axis) {
     if (AXIS.Z == axis) return 'z';
     if (AXIS.Y == axis) return 'y';
     if (AXIS.X == axis) return 'x';
+}
+
+export function coordToLayer(coord, size) {
+    if (coord != parseInt(coord)) coord = Math.floor(size / 2) + (Math.floor(coord * 10) - 1);
+    return coord >= 0 ? coord : size + coord;
+}
+
+export function coordsToLayers(coords, size) {
+    coords = coords && coords.length > 0 ? coords : [...Array(size).keys()]
+    return coords.map(_ => coordToLayer(_ , size));
+}
+
+
+export function movementByValues(axis, layers, clock, size) {
+    let movements = Object.values(MOVEMENTS);
+    layers = coordsToLayers(layers, size).join(' ');
+    let movement = movements.find(_ => 
+        _.axis == axis 
+        && _.clock == clock 
+        && coordsToLayers(_.layers, 3).join(' ') == layers);
+    return movement;
+}
+
+export function cloneCube(cube) {
+    return cube.map(z => z.map(y => y.map(x => x.map(_ => _))));
 }

@@ -1,0 +1,86 @@
+.tools>.area>.movement>.button {
+    width: calc((100% - 70px) / 6);
+    height: calc((100% - 50px) / 4);
+}
+
+
+
+.tools>.area>.movement>.button[id="button-movement-L"]>span:nth-child(1) {
+    transform: rotate(90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-U"]>span:nth-child(1) {
+    transform: rotate(180deg)
+}
+.tools>.area>.movement>.button[id="button-movement-F"]>span:nth-child(1) {
+    transform: rotate(-45deg)
+}
+.tools>.area>.movement>.button[id="button-movement-L'"]>span:nth-child(1) {
+    transform: rotate(-90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-U'"]>span:nth-child(1) {
+    transform: rotate(0deg)
+}
+.tools>.area>.movement>.button[id="button-movement-F'"]>span:nth-child(1) {
+    transform: rotate(135deg)
+}
+
+
+.tools>.area>.movement>.button[id="button-movement-R"]>span:nth-child(1) {
+    transform: rotate(-90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-D"]>span:nth-child(1) {
+    transform: rotate(0deg)
+}
+.tools>.area>.movement>.button[id="button-movement-B"]>span:nth-child(1) {
+    transform: rotate(135deg)
+}
+.tools>.area>.movement>.button[id="button-movement-R'"]>span:nth-child(1) {
+    transform: rotate(90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-D'"]>span:nth-child(1) {
+    transform: rotate(180deg)
+}
+.tools>.area>.movement>.button[id="button-movement-B'"]>span:nth-child(1) {
+    transform: rotate(-45deg)
+}
+
+
+
+.tools>.area>.movement>.button[id="button-movement-X"]>span:nth-child(1) {
+    transform: rotate(90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-Y"]>span:nth-child(1) {
+    transform: rotate(180deg)
+}
+.tools>.area>.movement>.button[id="button-movement-Z"]>span:nth-child(1) {
+    transform: rotate(-45deg)
+}
+.tools>.area>.movement>.button[id="button-movement-X'"]>span:nth-child(1) {
+    transform: rotate(-90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-Y'"]>span:nth-child(1) {
+    transform: rotate(0deg)
+}
+.tools>.area>.movement>.button[id="button-movement-Z'"]>span:nth-child(1) {
+    transform: rotate(135deg)
+}
+
+
+.tools>.area>.movement>.button[id="button-movement-M"]>span:nth-child(1) {
+    transform: rotate(90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-E"]>span:nth-child(1) {
+    transform: rotate(180deg)
+}
+.tools>.area>.movement>.button[id="button-movement-S"]>span:nth-child(1) {
+    transform: rotate(-45deg)
+}
+.tools>.area>.movement>.button[id="button-movement-M'"]>span:nth-child(1) {
+    transform: rotate(-90deg)
+}
+.tools>.area>.movement>.button[id="button-movement-E'"]>span:nth-child(1) {
+    transform: rotate(0deg)
+}
+.tools>.area>.movement>.button[id="button-movement-S'"]>span:nth-child(1) {
+    transform: rotate(135deg)
+}
