@@ -15,6 +15,13 @@ export function findCubeColorBySide(cube, side) {
     return COLORS.BLACK;
 }
 
+export function findColorsByPosition(cube, position) {
+    let z = Math.floor(position / (cube.length * cube.length));
+    let y = Math.floor((position - (z * cube.length * cube.length)) / cube.length);
+    let x = position - (z * cube.length * cube.length) - (y * cube.length);
+    return cube[z][y][x];
+}
+
 export function findPositionsByAxis(size, { x = null, y = null, z = null } = {}) {
     let layers = [...Array(size).keys()];
     let positions = [];
@@ -39,7 +46,8 @@ function findPositionByColors(cube, colors) {
     colors = [...colors, ...Object.keys(SIDES).map(() => COLORS.BLACK).slice(colors.length)].sort();
     let flat = cubeToFlat(cube);
     for (let i of [...Array(flat.length).keys()]) {
-        let block = flat[i].sort();
+        let block = flat[i].map(_ => _);
+        block.sort();
         if (block.every((b, ib) => b == colors[ib])) return i;
     }
     return -1;

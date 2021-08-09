@@ -1,15 +1,17 @@
 import { COLORS, SIDES } from "../../objs/constants.js";
 import { createCube } from "../../objs/creator.js";
-import { isCubeCompleted, findCubeCrosses, findCubeF2L, findCubeOLL } from "../../objs/finder.js";
+import { crossAlgorithm } from "../../objs/cross-algorithm.js";
+import { isCubeCompleted, findCubeCrosses, findCubeF2L, findCubeOLL, findCubeColorBySide, findCornerPositionByColor, findEdgePositionByColor, findColorsByPosition } from "../../objs/finder.js";
+import { MOVEMENTS } from "../../objs/movements.js";
 import { rotateCube, shuffleCube } from "../../objs/rotator.js";
-import { axisToString, coordsToLayers, inverseKeyValue } from "../../objs/transformer.js";
+import { axisToString, coordsToLayers, inverseKeyValue, movementFromString } from "../../objs/transformer.js";
 
 export default function sceneComponent(dragSceneHandler) {
     let self;
     let dragHandler = dragSceneHandler;
     let element;
     let cubeElement;
-    let rotationDelay = 350;
+    let rotationDelay = 1000;
 
     let state = {
         cube: shuffleCube(createCube(3)),
@@ -103,24 +105,33 @@ export default function sceneComponent(dragSceneHandler) {
     }
 
 
-    function rotate(movement, onFinished) {
-        if (state.isBusy) return;
-        state.isBusy = true;
-        let axis = axisToString(movement.axis);
-        state.history.push({ isMovement: true, value: movement.str });
-        let layers = coordsToLayers(movement.layers, state.cube.length);
-        for (let layer of layers) {
-            cubeElement.querySelectorAll(`.block.position-${axis}-${layer}:not(.template)`).forEach(_ => {
-                _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)
-                _.style.transform = '';
-            });
-        }
+    function rotate(movement) {
+        if (state.isBusy) Promise.resolve();
+        return new Promise((resolve) => {
+            state.isBusy = true;
+            let axis = axisToString(movement.axis);
+            state.history.push({ isMovement: true, value: movement.str });
+            let layers = coordsToLayers(movement.layers, state.cube.length);
+            let transtion = false;
+            for (let layer of layers) {
+                let blockElements = cubeElement.querySelectorAll(`.block.position-${axis}-${layer}:not(.template)`);
+                if (!transtion) {
+                    transtion = true;
+                    blockElements[0].ontransitionend = (e) => rotateTransitionEnd(blockElements[0], movement, layers, resolve);
+                }
+                blockElements.forEach(_ => {
+                    _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)
+                    _.style.transform = '';
+                });
+            }
+        });
+    }
 
-        setTimeout(() => {
-            updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
-            onFinished && onFinished();
-            state.isBusy = false;
-        }, rotationDelay);
+    function rotateTransitionEnd(element, movement, layers, resolve) {
+        element.ontransitionend = null;
+        updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
+        state.isBusy = false;
+        setTimeout(resolve, 1);
     }
 
     function updateStateCube(cube) {
@@ -132,7 +143,7 @@ export default function sceneComponent(dragSceneHandler) {
         state.ollSide = state.f2lSides.length == 4 && findCubeOLL(state.cube, f2l.crossSide);
         state.isCompleted = isCubeCompleted(state.cube);
 
-        if (!state.crossAt) {    
+        if (!state.crossAt) {
             if (state.crossSides.length || state.isCompleted) {
                 state.crossAt = new Date(Date.now());
                 state.history.push({ isCheck: true, value: "Cross" });
@@ -193,13 +204,31 @@ export default function sceneComponent(dragSceneHandler) {
         refreshCubeElement();
     }
 
+    async function solveCross() {
+        while (!state.crossAt) {
+            let centerColors = crossAlgorithm.sides.map(_ => findCubeColorBySide(state.cube, _));
+            let position = findEdgePositionByColor(state.cube, centerColors[0], centerColors[1]);
+            let algo = Object.entries(crossAlgorithm.cases).find(_ => {
+                let c = _[1];
+                if (c.positions[0] != position) return false;
+                let positionColors = findColorsByPosition(state.cube, position);
+                let colors = c.sides.map(_ => positionColors[_]);
+                return colors.every((c, i) => c == centerColors[i]);
+            });
+            for (let move of [...algo[1].moves.map(_ => movementFromString(_)), MOVEMENTS.Y]) {
+                await rotate(move);   
+            }
+        }
+    }
+
     return self = {
         element,
         state,
         render,
         rotate,
         resetRotation,
-        reset
+        reset,
+        solve: solveCross
     };
 }
 

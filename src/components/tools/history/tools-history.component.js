@@ -18,6 +18,7 @@ export default function toolsHistoryComponent(sceneComponent) {
             } else if (historyCount > scene.state.history.length) {
                 histories = scene.state.history;
                 element.querySelectorAll(".item:not(.template)").forEach(_ => _.remove());
+                element.querySelectorAll(".check:not(.template)").forEach(_ => _.remove());
             }
             for (let history of histories) {
                 if (history.isMovement) {
