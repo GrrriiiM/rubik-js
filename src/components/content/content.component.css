@@ -1,0 +1,111 @@
+
+.content>.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content>.header>div {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content>.header>div>.material-icons {
+    font-size: 36px;
+}
+
+.content>.header>div>div {
+    padding-left: 5px;
+    padding-right: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.content>.header>div:nth-child(1) {
+    text-align: left;
+}
+.content>.header>div:nth-child(2) {
+    text-align: right;
+}
+
+.content>.cube-steps-area {
+    height: var(--cube-steps-area-height);
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+
+.content>.cube-steps-area>.steps-item {
+    height: 20px;
+    width: calc((100% - 50px) / 4);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: calc(var(--cube-steps-area-height) / 3);
+    background-color:rgba(255, 255, 255, 0.03) !important;
+}
+
+.content>.cube-steps-area>.steps-time {
+    height: 25px;
+    line-height: 25px;
+    width: calc((100% - 50px) / 4);
+    text-align: center;
+    vertical-align: bottom;
+}
+
+.content>.cube-steps-area>.steps-item>span {
+    color:rgba(255, 255, 255, 0.05) !important;
+}
+
+.content>.cube-steps-area>.steps-item.completed {
+    background-color:rgba(255, 255, 255, 0.2) !important;
+}
+
+.content>.cube-steps-area>.steps-item.completed>span {
+    color:rgba(255, 255, 255, 0.5) !important;
+}
+
+
+
+.content>.cube-area {
+    height: var(--cube-area-height);
+    transition: height 250ms ease-out;
+}
+
+
+
+.content.menu-expanded {
+    top: calc(100% - var(--header-height)*1.5)
+}
+
+.tools.tools-expanded {
+    top: calc(100% - var(--tool-area-height) - var(--header-height));
+}
+
+.content.tools-expanded>.cube-area {
+    height: calc(var(--cube-area-height) - var(--tool-area-height));
+}
+
+
+.content>.cube-area .scene {
+    --block-size: calc((100vh - (var(--header-height) * 2)) * 0.11) !important;
+}
+
+.content.tools-expanded>.cube-area .scene {
+    --block-size: calc((100vh - (var(--header-height) * 2) - var(--tool-area-height)) * 0.11) !important;
+}
+
+

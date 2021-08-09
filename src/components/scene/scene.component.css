@@ -1,3 +1,7 @@
+@import url("./cube.css");
+@import url("./cube.rotate.css");
+@import url("./cube.size-3.css");
+
 .scene {
     --block-size: 60px;
     --block-size-half: calc(var(--block-size) / 2);
@@ -15,7 +19,7 @@
 
 .scene>.cube {
     position: absolute;
-    transform: rotateX(-30deg) rotateY(-40deg) rotateZ(0deg);
+    transform: rotateX(-30deg) rotateY(-35deg) rotateZ(0deg);
     transform-style: preserve-3d;
     left: calc(50%);
     top: calc(50%);
