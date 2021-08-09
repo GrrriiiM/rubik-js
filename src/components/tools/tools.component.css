@@ -1,5 +1,6 @@
-@import url("./tools-movement.css");
-@import url("./tools-action.css");
+@import url("./movement/tools-movement.component.css");
+@import url("./action/tools-action.component.css");
+@import url("./history/tools-history.component.css");
 
 .tools>.header {
     display: flex;

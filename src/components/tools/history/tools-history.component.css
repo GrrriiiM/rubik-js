@@ -1,0 +1,4 @@
+.tools>.area>.history>.item {
+    width: calc((100vw - 310px) / 10);
+    height: calc((100vw - 310px) / 10);
+}

@@ -1,3 +1,7 @@
+@import url("./cube.css");
+@import url("./cube.rotate.css");
+@import url("./cube.size-3.css");
+
 .scene {
     --block-size: 60px;
     --block-size-half: calc(var(--block-size) / 2);
