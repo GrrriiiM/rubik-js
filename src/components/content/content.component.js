@@ -74,12 +74,12 @@ export default function contentComponent(sceneComponent) {
             checkPLLElement.classList.remove("completed");
         }
 
-        if (movementsCount != sceneState.movements.length) {
+        if (movementsCount != sceneState.history.length) {
             let excludeMoves = ["X", "X'", "Y", "Y'", "Z", "Z'"];
-            countHtmlElement.innerHTML = `${sceneState.movements.filter(_ => excludeMoves.indexOf(_) < 0).length.toString().padStart(5, "0")}`;
+            countHtmlElement.innerHTML = `${sceneState.history.filter(_ => _.isMovement && excludeMoves.indexOf(_) < 0).length.toString().padStart(5, "0")}`;
         }
 
-        movementsCount = sceneState.movements.length;
+        movementsCount = sceneState.history.length;
 
     }
     return {

@@ -1,4 +1,14 @@
+.tools>.area>.history {
+    overflow-y: scroll;
+}
+
 .tools>.area>.history>.item {
-    width: calc((100vw - 310px) / 10);
+    width: calc((100% - 310px) / 10);
+    height: calc((100vw - 310px) / 10);
+}
+
+
+.tools>.area>.history>.check {
+    width: calc((100% - 40px));;
     height: calc((100vw - 310px) / 10);
 }

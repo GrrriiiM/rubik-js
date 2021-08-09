@@ -1,6 +1,6 @@
 import { COLORS, SIDES } from "../../objs/constants.js";
 import { createCube } from "../../objs/creator.js";
-import { cubeIsCompleted, findCubeCrosses, findCubeF2L, findCubeOLL } from "../../objs/finder.js";
+import { isCubeCompleted, findCubeCrosses, findCubeF2L, findCubeOLL } from "../../objs/finder.js";
 import { rotateCube, shuffleCube } from "../../objs/rotator.js";
 import { axisToString, coordsToLayers, inverseKeyValue } from "../../objs/transformer.js";
 
@@ -9,11 +9,13 @@ export default function sceneComponent(dragSceneHandler) {
     let dragHandler = dragSceneHandler;
     let element;
     let cubeElement;
+    let rotationDelay = 350;
 
     let state = {
         cube: shuffleCube(createCube(3)),
         createAt: new Date(Date.now()),
-        movements: [],
+        history: [],
+        movementCOunt: 0,
         isBusy: false,
         crossSides: [],
         f2lSides: [],
@@ -105,7 +107,7 @@ export default function sceneComponent(dragSceneHandler) {
         if (state.isBusy) return;
         state.isBusy = true;
         let axis = axisToString(movement.axis);
-        state.movements.push(movement.str);
+        state.history.push({ isMovement: true, value: movement.str });
         let layers = coordsToLayers(movement.layers, state.cube.length);
         for (let layer of layers) {
             cubeElement.querySelectorAll(`.block.position-${axis}-${layer}:not(.template)`).forEach(_ => {
@@ -118,26 +120,44 @@ export default function sceneComponent(dragSceneHandler) {
             updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
             onFinished && onFinished();
             state.isBusy = false;
-        }, 350);
+        }, rotationDelay);
     }
 
     function updateStateCube(cube) {
         state.cube = cube;
-        state.isCompleted = state.isCompleted || cubeIsCompleted(state.cube);
-        if (state.isCompleted) {
-            state.crossAt = state.crossAt || new Date(Date.now());
-            state.f2lAt = state.f2lAt || new Date(Date.now());
-            state.ollAt = state.ollAt || new Date(Date.now());
-            state.completedAt = new Date(Date.now());
+
+        state.crossSides = findCubeCrosses(state.cube);
+        let f2l = findCubeF2L(state.cube, state.crossSides);
+        state.f2lSides = f2l ? f2l.sides : [];
+        state.ollSide = state.f2lSides.length == 4 && findCubeOLL(state.cube, f2l.crossSide);
+        state.isCompleted = isCubeCompleted(state.cube);
+
+        if (!state.crossAt) {    
+            if (state.crossSides.length || state.isCompleted) {
+                state.crossAt = new Date(Date.now());
+                state.history.push({ isCheck: true, value: "Cross" });
+            }
         }
-        if (!state.isCompleted) {
-            state.crossSides = findCubeCrosses(state.cube);
-            if (state.crossSides.length) state.crossAt = state.crossAt || new Date(Date.now());
-            let f2lSide = findCubeF2L(state.cube, state.crossSides);
-            state.f2lSides = f2lSide.sides;
-            if (state.f2lSides.length == 4) state.f2lAt = state.f2lAt || state.f2lAt || new Date(Date.now());
-            state.ollSide = findCubeOLL(state.cube, f2lSide.crossSide);
-            if (state.ollSide != SIDES.CENTER) state.ollAt = state.ollAt || new Date(Date.now());
+
+        if (state.crossAt && !state.f2lAt) {
+            if (state.f2lSides.length == 4 || state.isCompleted) {
+                state.f2lAt = new Date(Date.now());
+                state.history.push({ isCheck: true, value: "F2L" });
+            }
+        }
+
+        if (state.f2lAt && !state.ollAt) {
+            if (state.ollSide != SIDES.CENTER || state.isCompleted) {
+                state.ollAt = new Date(Date.now());
+                state.history.push({ isCheck: true, value: "OLL" });
+            }
+        }
+
+        if (state.ollAt && !state.completedAt) {
+            if (state.isCompleted) {
+                state.completedAt = new Date(Date.now());
+                state.history.push({ isCheck: true, value: "Completo" });
+            }
         }
         refreshCubeElement();
     }
@@ -154,13 +174,14 @@ export default function sceneComponent(dragSceneHandler) {
             });
             onFinished && onFinished();
             state.isBusy = false;
-        }, 350);
+        }, rotationDelay);
     }
 
     function reset() {
         state.cube = shuffleCube(createCube(state.cube.length));
         state.createAt = new Date(Date.now());
-        state.movements = [];
+        state.history = [];
+        state.movementCOunt = 0;
         state.crossSides = [];
         state.f2lSides = [];
         state.ollSide = SIDES.CENTER;

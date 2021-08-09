@@ -1,7 +1,7 @@
 export default function toolsHistoryComponent(sceneComponent) {
     let scene = sceneComponent;
     let element;
-    let movementsCount = 0;
+    let historyCount = 0;
     function render(parentElement) {
         fetch("./components/tools/history/tools-history.component.html").then(async (reponse) => {
             element = parentElement.querySelector(".history");
@@ -11,22 +11,30 @@ export default function toolsHistoryComponent(sceneComponent) {
 
     function refresh() {
         if (!element) return;
-        if (movementsCount != scene.state.movements.length) {
-            let movements = [];
-            if (movementsCount < scene.state.movements.length) {
-                movements = scene.state.movements.slice(movementsCount);
-            } else if (movementsCount > scene.state.movements.length) {
-                movements = scene.state.movements;
+        if (historyCount != scene.state.history.length) {
+            let histories = [];
+            if (historyCount < scene.state.history.length) {
+                histories = scene.state.history.slice(historyCount);
+            } else if (historyCount > scene.state.history.length) {
+                histories = scene.state.history;
                 element.querySelectorAll(".item:not(.template)").forEach(_ => _.remove());
             }
-            for (let movement of movements) {
-                let itemElmement = element.querySelector(".item").cloneNode(true);
-                itemElmement.classList.remove("template");
-                itemElmement.querySelector("div").innerHTML = movement;
-                element.appendChild(itemElmement);
+            for (let history of histories) {
+                if (history.isMovement) {
+                    let itemElmement = element.querySelector(".item").cloneNode(true);
+                    itemElmement.classList.remove("template");
+                    itemElmement.querySelector("div").innerHTML = history.value;
+                    element.appendChild(itemElmement);
+                } else {
+                    let historyElmement = element.querySelector(".check").cloneNode(true);
+                    historyElmement.classList.remove("template");
+                    historyElmement.querySelector("div").innerHTML = history.value;
+                    element.appendChild(historyElmement);
+                }
             }
+            element.scrollTo({ top: element.scrollHeight })
         }
-        movementsCount = scene.state.movements.length;
+        historyCount = scene.state.history.length;
     }
 
     return {
