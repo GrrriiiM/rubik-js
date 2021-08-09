@@ -1,11 +1,9 @@
-import { AXIS, CLOCK, SIDES } from "../constants.js";
-import { MOVEMENTS } from "../movements.js";
-import { axisToString, movementByValues } from "../transformer.js";
-import { resetScene } from "./scene.js";
+import { AXIS, CLOCK, SIDES } from "../objs/constants.js";
+import { axisToString, movementByValues } from "../objs/transformer.js";
 
-export function createDragger(scene) {
+export default function dragSceneHandler() {
 
-    let dragScene = scene;
+    let scene;
     let isDragging;
     let isDragMoving;
     let isDragMovingX;
@@ -24,15 +22,41 @@ export function createDragger(scene) {
     let dragOffsetY;
     let dragDirection;
 
-    /**
-     * 
-     * @param {HTMLElement} sideElement 
-     * @param {number} x 
-     * @param {number} y 
-     * @returns 
-     */
-    function dragStart(sideElement, x, y) {
-        if (scene.isBusy || isDragging) return;
+    function attach(sceneComponent) {
+        scene = sceneComponent;
+        scene.element.addEventListener("touchstart", (event) => start(null, event.touches[0].screenX, event.touches[0].screenY));
+        scene.element.addEventListener("mousedown", (event) => start(null, event.screenX, event.screenY));
+        scene.element.addEventListener("touchmove", (event) => move(event.touches[0].screenX, event.touches[0].screenY));
+        scene.element.addEventListener("mousemove", (event) => move(event.screenX, event.screenY));
+        scene.element.addEventListener("touchleave", () => end());
+        scene.element.addEventListener("touchend", () => end());
+        scene.element.addEventListener("touchcancel", () => end());
+        scene.element.addEventListener("mouseup", () => end());
+        scene.element.querySelectorAll(".side:not(.template)").forEach(_ => {
+            _.addEventListener("touchstart", (event) => start(event.target, event.touches[0].screenX, event.touches[0].screenY));
+            _.addEventListener("mousedown", (event) => start(event.target, event.screenX, event.screenY));
+        });
+    }
+
+    function dettach() {
+        scene.element.touchstart = null;
+        scene.element.mousedown = null;
+        scene.element.touchmove = null;
+        scene.element.mousemove = null;
+        scene.element.touchleave = null;
+        scene.element.touchend = null;
+        scene.element.touchcancel = null;
+        scene.element.mouseup = null;
+        scene.element.querySelectorAll(".side:not(.template)").forEach(_ => {
+            _.touchstart = null;
+            _.mousedown = null;
+        });
+        scene = null;
+    }
+
+
+    function start(sideElement, x, y) {
+        if (scene.state.isBusy || isDragging) return;
         isDragging = true;
         dragSideElement = sideElement;
         if (dragSideElement) {
@@ -46,14 +70,8 @@ export function createDragger(scene) {
         dragStartY = y;
     }
 
-    /**
-     * 
-     * @param {HTMLElement} cubeElement 
-     * @param {number} x 
-     * @param {number} y 
-     * @returns 
-     */
-    function dragMove(x, y) {
+
+    function move(x, y) {
         if (!isDragging || isDragEnding) return;
         dragLastX = x;
         dragLastY = y;
@@ -75,10 +93,10 @@ export function createDragger(scene) {
             }
             if (dragSideElement) {
                 dragLayers = [parseInt(dragSideElement.parentElement.dataset[axisToString(dragAxis)])];
-                dragBlockElements = scene.cubeHtmlElement.querySelectorAll(`.block.position-${axisToString(dragAxis)}-${dragLayers}`)
+                dragBlockElements = scene.element.querySelectorAll(`.block.position-${axisToString(dragAxis)}-${dragLayers}`)
             } else {
                 dragLayers = [];
-                dragBlockElements = scene.cubeHtmlElement.querySelectorAll(`.block`)
+                dragBlockElements = scene.element.querySelectorAll(`.block`)
             }
         }
         if (isDragMoving) {
@@ -103,10 +121,9 @@ export function createDragger(scene) {
                 _.style.transform = transform;
             })
         }
-
     }
 
-    function dragEnd(rotateScene) {
+    function end() {
         if (!isDragging || isDragEnding) return;
         isDragEnding = true;
         let offsetX = dragLastX - dragStartX;
@@ -120,12 +137,12 @@ export function createDragger(scene) {
             if (dragSide == SIDES.UP) clock = !clock;
             if (dragSide == SIDES.FRONT && dragAxis == AXIS.X) clock = !clock;
             if (dragSide == SIDES.RIGHT && dragAxis == AXIS.Z) clock = !clock;
-            let movement = movementByValues(dragAxis, dragLayers, clock, scene.cube.length);
+            let movement = movementByValues(dragAxis, dragLayers, clock, scene.state.cube.length);
             // let movement = {
             //     axis: dragAxis, layers: dragLayers, clock: clock
             // };
 
-            rotateScene(dragScene, movement, () => {
+            scene.rotate(movement, () => {
                 isDragMoving = false;
                 isDragMovingX = false;
                 isDragMovingY = false;
@@ -134,7 +151,7 @@ export function createDragger(scene) {
             });
 
         } else {
-            resetScene(dragScene, () => {
+            scene.resetRotation(() => {
                 isDragMoving = false;
                 isDragMovingX = false;
                 isDragMovingY = false;
@@ -146,9 +163,8 @@ export function createDragger(scene) {
     }
 
     return {
-        dragStart: dragStart,
-        dragMove: dragMove,
-        dragEnd: dragEnd
+        attach,
+        dettach
     }
 }
 

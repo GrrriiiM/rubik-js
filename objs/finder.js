@@ -184,7 +184,7 @@ export function findCubeOLL(cube, crossSide) {
     return SIDES.CENTER
 }
 
-export function cubeIsCompleted(cube) {
+export function isCubeCompleted(cube) {
     let checkCube = cube;
     let layers = coordsToLayers([], cube.length);
     if (!checkFrontSideCompleted(checkCube)) return false;
