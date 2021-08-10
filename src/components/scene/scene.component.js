@@ -1,7 +1,7 @@
 import { COLORS, SIDES } from "../../objs/constants.js";
 import { createCube } from "../../objs/creator.js";
 import { crossAlgorithm } from "../../objs/cross-algorithm.js";
-import { isCubeCompleted, findCubeCrosses, findCubeF2L, findCubeOLL, findCubeColorBySide, findCornerPositionByColor, findEdgePositionByColor, findColorsByPosition } from "../../objs/finder.js";
+import { isCubeCompleted, findCubeCrosses, findCubeF2L, findCubeOLL, findCubeColorBySide, findCornerPositionByColor, findEdgePositionByColor, findColorsByPosition, findCrossAlgorithm, findF2LAlgorithm } from "../../objs/finder.js";
 import { MOVEMENTS } from "../../objs/movements.js";
 import { rotateCube, shuffleCube } from "../../objs/rotator.js";
 import { axisToString, coordsToLayers, inverseKeyValue, movementFromString } from "../../objs/transformer.js";
@@ -204,20 +204,33 @@ export default function sceneComponent(dragSceneHandler) {
         refreshCubeElement();
     }
 
+    async function solve() {
+        await solveCross();
+        await solveF2L();
+    }
+
     async function solveCross() {
         while (!state.crossAt) {
-            let centerColors = crossAlgorithm.sides.map(_ => findCubeColorBySide(state.cube, _));
-            let position = findEdgePositionByColor(state.cube, centerColors[0], centerColors[1]);
-            let algo = Object.entries(crossAlgorithm.cases).find(_ => {
-                let c = _[1];
-                if (c.positions[0] != position) return false;
-                let positionColors = findColorsByPosition(state.cube, position);
-                let colors = c.sides.map(_ => positionColors[_]);
-                return colors.every((c, i) => c == centerColors[i]);
-            });
-            for (let move of [...algo[1].moves.map(_ => movementFromString(_)), MOVEMENTS.Y]) {
+            let algo = findCrossAlgorithm(state.cube)
+            for (let move of [...algo.moves.map(_ => movementFromString(_)), MOVEMENTS.Y]) {
                 await rotate(move);   
             }
+        }
+    }
+
+    async function solveF2L() {
+        let tries = 0;
+        while (!state.f2lAt && tries < 4) {
+            let algo = findF2LAlgorithm(state.cube);
+            if (!algo) { await rotate(MOVEMENTS.U); algo = findF2LAlgorithm(state.cube); }
+            if (!algo) { await rotate(MOVEMENTS.U); algo = findF2LAlgorithm(state.cube); }
+            if (!algo) { await rotate(MOVEMENTS.U); algo = findF2LAlgorithm(state.cube); }
+            if (!algo) { await rotate(MOVEMENTS.Y); continue; }
+            if (algo.moves.length) tries = 0;
+            for (let move of [...algo.moves, MOVEMENTS.Y]) {
+                await rotate(move);
+            }
+            tries+=1;
         }
     }
 
@@ -228,7 +241,9 @@ export default function sceneComponent(dragSceneHandler) {
         rotate,
         resetRotation,
         reset,
-        solve: solveCross
+        solve,
+        solveCross,
+        solveF2L
     };
 }
 
