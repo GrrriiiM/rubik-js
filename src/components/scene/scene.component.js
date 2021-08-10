@@ -1,9 +1,10 @@
 import { COLORS, SIDES } from "../../objs/constants.js";
 import { createCube } from "../../objs/creator.js";
-import { crossAlgorithm } from "../../objs/cross-algorithm.js";
-import { isCubeCompleted, findCubeCrosses, findCubeF2L, findCubeOLL, findCubeColorBySide, findCornerPositionByColor, findEdgePositionByColor, findColorsByPosition, findCrossAlgorithm, findF2LAlgorithm } from "../../objs/finder.js";
+import { isCubeCompleted, findCubeSideCrosses, findCubeF2L, findCubeOLL, findCubeColorBySide, findCornerPositionByColor, findEdgePositionByColor, findColorsByPosition, findCrossAlgorithm, findF2LAlgorithm } from "../../objs/finder.js";
+import { fixMovementsRemoveY, fixRedundance } from "../../objs/fixer.js";
 import { MOVEMENTS } from "../../objs/movements.js";
 import { rotateCube, shuffleCube } from "../../objs/rotator.js";
+import { solveCubeCross, solveCubeCrossMovements, solveCubeF2L, solveCubeF2LMovements, solveCubeMovements } from "../../objs/solver.js";
 import { axisToString, coordsToLayers, inverseKeyValue, movementFromString } from "../../objs/transformer.js";
 
 export default function sceneComponent(dragSceneHandler) {
@@ -137,7 +138,7 @@ export default function sceneComponent(dragSceneHandler) {
     function updateStateCube(cube) {
         state.cube = cube;
 
-        state.crossSides = findCubeCrosses(state.cube);
+        state.crossSides = findCubeSideCrosses(state.cube);
         let f2l = findCubeF2L(state.cube, state.crossSides);
         state.f2lSides = f2l ? f2l.sides : [];
         state.ollSide = state.f2lSides.length == 4 && findCubeOLL(state.cube, f2l.crossSide);
@@ -205,32 +206,8 @@ export default function sceneComponent(dragSceneHandler) {
     }
 
     async function solve() {
-        await solveCross();
-        await solveF2L();
-    }
-
-    async function solveCross() {
-        while (!state.crossAt) {
-            let algo = findCrossAlgorithm(state.cube)
-            for (let move of [...algo.moves.map(_ => movementFromString(_)), MOVEMENTS.Y]) {
-                await rotate(move);   
-            }
-        }
-    }
-
-    async function solveF2L() {
-        let tries = 0;
-        while (!state.f2lAt && tries < 4) {
-            let algo = findF2LAlgorithm(state.cube);
-            if (!algo) { await rotate(MOVEMENTS.U); algo = findF2LAlgorithm(state.cube); }
-            if (!algo) { await rotate(MOVEMENTS.U); algo = findF2LAlgorithm(state.cube); }
-            if (!algo) { await rotate(MOVEMENTS.U); algo = findF2LAlgorithm(state.cube); }
-            if (!algo) { await rotate(MOVEMENTS.Y); continue; }
-            if (algo.moves.length) tries = 0;
-            for (let move of [...algo.moves, MOVEMENTS.Y]) {
-                await rotate(move);
-            }
-            tries+=1;
+        for (let move of solveCubeMovements(state.cube)) {
+            await rotate(move);
         }
     }
 
@@ -241,9 +218,7 @@ export default function sceneComponent(dragSceneHandler) {
         rotate,
         resetRotation,
         reset,
-        solve,
-        solveCross,
-        solveF2L
+        solve
     };
 }
 

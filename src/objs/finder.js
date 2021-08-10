@@ -1,8 +1,8 @@
+import { crossAlgorithm } from "./algotithms/cross-algorithm.js";
+import { f2lAlgorithm } from "./algotithms/f2l-algorithm.js";
 import { AXIS, CLOCK, COLORS, SIDES } from "./constants.js";
-import { crossAlgorithm } from "./cross-algorithm.js";
-import { f2lAlgorithm } from "./f2l-algorithm.js";
 import { rotateCube } from "./rotator.js";
-import { cloneCube, coordsToLayers, cubeToFlat, movementFromString } from "./transformer.js";
+import { cloneCube, coordsToLayers, cubeToFlat, movementFromString, movementsFromNotation } from "./transformer.js";
 
 
 export function findCubeColorBySide(cube, side) {
@@ -67,7 +67,7 @@ export function findCornerPositionByColor(cube, color1, color2, color3) {
     return findPositionByColors(cube, [color1, color2, color3]);
 }
 
-export function findCubeCrosses(cube) {
+export function findCubeSideCrosses(cube) {
     let sides = [];
     let layers = coordsToLayers([], cube.length);
 
@@ -233,7 +233,7 @@ export function findCrossAlgorithm(cube) {
         let colors = c.corner.map(_ => blockEdgeColors[_]);
         return colors.every((c, i) => c == cubeEdgeColors[i]);
     });
-    return { name: algo[0], moves: algo[1].moves };
+    return { name: algo[0], moves: movementsFromNotation(algo[1].moves) };
 }
 
 export function findF2LAlgorithm(cube) {
@@ -253,18 +253,11 @@ export function findF2LAlgorithm(cube) {
             && cornerColors.every((c, i) => c == cubeCornerColors[i]);
     });
     if (algo) {
-        let moves = [];
+        let moves = algo[1];
         if (algo[1].moves) {
-            for (let move of algo[1].moves.split(' ')) {
-                if (move.endsWith("2")) {
-                    moves.push(movementFromString(move.replace("2", "")));
-                    moves.push(movementFromString(move.replace("2", "")));
-                } else {
-                    moves.push(movementFromString(move));
-                }
-            }
+            
         }
-        return { name: algo[0], moves };
+        return { name: algo[0], moves: movementsFromNotation(algo[1].moves) };
     }
     return null;
 }

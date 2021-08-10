@@ -2,7 +2,8 @@ import { expect, test } from "@jest/globals";
 import theoretically from "jest-theories";
 import { AXIS, CLOCK, SIDES } from "../src/objs/constants";
 import { createCube } from "../src/objs/creator";
-import { rotatePosition, rotateSide, shuffleCube } from "../src/objs/rotator";
+import { MOVEMENTS } from "../src/objs/movements";
+import { rotateMovementsFromTo, rotatePosition, rotateSide, shuffleCube } from "../src/objs/rotator";
 
 
 describe('Rotate Side', () => {
@@ -63,6 +64,20 @@ describe('Shuffle', () => {
     ]
     theoretically('input {input} expected {expected}', theories, theory => {
         expect(shuffleCube(theory.input)).not.toEqual(theory.expected);
+    })
+});
+
+
+describe('movements FromSide ToSide', () => {
+    const theories = [
+        { input: { movements: [ MOVEMENTS.F, MOVEMENTS.R_, MOVEMENTS.D_ ], fromSide: SIDES.FRONT , toSide: SIDES.RIGHT }, expected: [ MOVEMENTS.R, MOVEMENTS.B_, MOVEMENTS.D_ ] },
+        { input: { movements: [ MOVEMENTS.F, MOVEMENTS.R_, MOVEMENTS.D_ ], fromSide: SIDES.FRONT , toSide: SIDES.BACK }, expected: [ MOVEMENTS.B, MOVEMENTS.L_, MOVEMENTS.D_ ] },
+        { input: { movements: [ MOVEMENTS.F, MOVEMENTS.R_, MOVEMENTS.D_ ], fromSide: SIDES.FRONT , toSide: SIDES.LEFT }, expected: [ MOVEMENTS.L, MOVEMENTS.F_, MOVEMENTS.D_ ] },
+        { input: { movements: [ MOVEMENTS.F, MOVEMENTS.R_, MOVEMENTS.D_ ], fromSide: SIDES.FRONT , toSide: SIDES.DOWN }, expected: [ MOVEMENTS.D, MOVEMENTS.R_, MOVEMENTS.B_ ] },
+        { input: { movements: [ MOVEMENTS.F, MOVEMENTS.R_, MOVEMENTS.D_ ], fromSide: SIDES.FRONT , toSide: SIDES.UP }, expected: [ MOVEMENTS.U, MOVEMENTS.R_, MOVEMENTS.F_ ] },
+    ]
+    theoretically('input {input} expected {expected}', theories, theory => {
+        expect(rotateMovementsFromTo(theory.input.movements, theory.input.fromSide, theory.input.toSide)).toEqual(theory.expected);
     })
 });
 

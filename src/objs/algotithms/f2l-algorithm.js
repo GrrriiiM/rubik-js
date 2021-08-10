@@ -1,4 +1,4 @@
-import { SIDES } from "./constants.js";
+import { SIDES } from "../constants.js";
 
 let ret = {
     edge: [SIDES.FRONT, SIDES.RIGHT],
