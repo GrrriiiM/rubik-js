@@ -3,6 +3,12 @@ import { SIDES } from "../constants.js";
 let ret = {
     edge: [SIDES.FRONT, SIDES.RIGHT],
     corner: [SIDES.DOWN, SIDES.FRONT, SIDES.RIGHT],
+    fixes: [
+        { side: SIDES.FRONT, moves: "R U R'"},
+        { side: SIDES.RIGHT, moves: "B U B'"},
+        { side: SIDES.BACK, moves: "L U L'"},
+        { side: SIDES.LEFT, moves: "F U F'"}
+    ],
     cases: {
 
     }

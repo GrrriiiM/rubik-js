@@ -1,5 +1,6 @@
 import { crossAlgorithm } from "./algotithms/cross-algorithm.js";
 import { f2lAlgorithm } from "./algotithms/f2l-algorithm.js";
+import { ollAlgorithm } from "./algotithms/oll-algorithm.js";
 import { AXIS, CLOCK, COLORS, SIDES } from "./constants.js";
 import { rotateCube } from "./rotator.js";
 import { cloneCube, coordsToLayers, cubeToFlat, movementFromString, movementsFromNotation } from "./transformer.js";
@@ -253,10 +254,29 @@ export function findF2LAlgorithm(cube) {
             && cornerColors.every((c, i) => c == cubeCornerColors[i]);
     });
     if (algo) {
-        let moves = algo[1];
-        if (algo[1].moves) {
-            
-        }
+        return { name: algo[0], moves: movementsFromNotation(algo[1].moves) };
+    }
+    return null;
+}
+
+export function findFixF2LAlgorithm(f2lSides) {
+    let movements = [];
+    for(let fix of f2lAlgorithm.fixes) {
+        if (!f2lSides.sides.includes(fix.side)) movements.push(...movementsFromNotation(fix.moves));
+    }
+    return movements;
+}
+
+
+
+export function findOLLAlgorithm(cube) {
+    let color = findCubeColorBySide(cube, ollAlgorithm.side);
+    let positionColors = ollAlgorithm.positions.map(_ => findColorsByPosition(cube, _));
+    let algo = Object.entries(ollAlgorithm.cases).find(_ => {
+        let c = _[1];
+        return positionColors.every((p, i) => p[c.sides[i]] == color);
+    });
+    if (algo) {
         return { name: algo[0], moves: movementsFromNotation(algo[1].moves) };
     }
     return null;

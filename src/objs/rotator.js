@@ -9,6 +9,11 @@ let movementsAxisZ = ["U", "R", "D", "L"];
 let movementsAxisY = ["B", "R", "F", "L"];
 let movementsAxisX = ["U", "F", "D", "B"];
 
+let movementsAxisZ1 = ["Y", "X'", "Y'", "X"];
+let movementsAxisY1 = ["Z'", "X'", "Z", "L"];
+let movementsAxisX1 = ["Y", "Z", "Y'", "Z'"];
+
+
 export function rotateSide(axis, side, clock = CLOCK.NORMAL) {
     let sides = [];
     if (axis == AXIS.Z) sides = sidesAxisZ;
@@ -121,25 +126,33 @@ export function rotateMovementsFromTo(movements, fromSide, toSide) {
     let movementsRotated = [];
     let sidesAxis;
     let movementsAxis;
+    let movementsAxis1;
     
     if (sidesAxisZ.includes(fromSide) && sidesAxisZ.includes(toSide)) {
         sidesAxis = sidesAxisZ;
         movementsAxis = movementsAxisZ;
+        movementsAxis1 = movementsAxisZ1;
     } else if (sidesAxisY.includes(fromSide) && sidesAxisY.includes(toSide)) {
         sidesAxis = sidesAxisY;
         movementsAxis = movementsAxisY;
+        movementsAxis1 = movementsAxisY1;
     } else if (sidesAxisX.includes(fromSide) && sidesAxisX.includes(toSide)) {
         sidesAxis = sidesAxisX;
         movementsAxis = movementsAxisX;
+        movementsAxis1 = movementsAxisX1;
     }
     let direction = sidesAxis.indexOf(toSide) - sidesAxis.indexOf(fromSide);
     direction = Math.abs(direction) == 2 ? 2 : direction;
     for(let movement of movements) {
         let movementAxisIndex = movementsAxis.indexOf(movement.str.replace("'", ""));
+        let movementAxisIndex1 = movementsAxis1.indexOf(movement.str);
         if (movementAxisIndex >=0) {
             let movementRotated = movementFromString(movementsAxis[(movementAxisIndex + direction + 4) % 4]);
-            if (movement.str.includes("'") != movementRotated.str.includes("'")) movementRotated = invertClockMovement(movementRotated);
+            if (movement.str.includes("'") != movementRotated.str.includes("'")) movementRotated = invertClockMovement(movementRotated);            
             movementsRotated.push(movementRotated);
+        // } else if (movementAxisIndex1 >=0) {
+        //     let movementRotated = movementFromString(movementsAxis1[(movementAxisIndex1 + direction + 4) % 4]);
+        //     movementsRotated.push(movementRotated);
         } else {
             movementsRotated.push(movement);
         }
