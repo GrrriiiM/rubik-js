@@ -1,4 +1,4 @@
-import { coordsToLayers, coordToLayer, cubeFromFlat, cubeToFlat, invertClockMovement, movementFromString } from "./transformer.js";
+import { coordsToLayers, coordToLayer, cubeFromFlat, cubeToFlat, invertClockMovement, movementFromString, movementsFromNotation } from "./transformer.js";
 import { AXIS, CLOCK, SIDES } from "./constants.js";
 import { MOVEMENTS, MOVEMENTS_STR } from "./movements.js";
 
@@ -82,6 +82,11 @@ export function rotateCubeWithMovement(cube, movement, history = null) {
     return cube;
 }
 
+export function rotateCubeWithNotation(cube, notation, history = null) {
+    movementsFromNotation(notation).forEach(_ => cube = rotateCubeWithMovement(cube, _, history));
+    return cube;
+}
+
 
 export function shuffleCube(cube, history = null) {
     let str = Object.keys(MOVEMENTS_STR);
@@ -106,8 +111,8 @@ export function rotateCubeFromTo(cube, fromSide, toSide, history = null) {
         moveAnti = MOVEMENTS.Y_;
     } else if (sidesAxisX.includes(fromSide) && sidesAxisX.includes(toSide)) {
         direction = sidesAxisX.indexOf(toSide) - sidesAxisX.indexOf(fromSide);
-        move = MOVEMENTS.X;
-        moveAnti = MOVEMENTS.X_;
+        move = MOVEMENTS.X_;
+        moveAnti = MOVEMENTS.X;
     }
     if (direction) {
         if (Math.abs(direction) == 2) {

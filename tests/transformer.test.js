@@ -1,6 +1,7 @@
 import { expect } from "@jest/globals";
 import theoretically from "jest-theories";
-import { cubeFromFlat, cubeToFlat, positionToAxis } from "../src/objs/transformer";
+import { createCube, CUBE_DEFAULT_PATTERN } from "../src/objs/creator";
+import { cubeFromFlat, cubeToFlat, cubeToPattern, positionToAxis } from "../src/objs/transformer";
 
 describe('Cube to Flat', () => {
     const theories = [
@@ -40,5 +41,14 @@ describe('Position to Axis', () => {
     ]
     theoretically('input {input} expected {expected}', theories, theory => {
         expect(positionToAxis(theory.input.position, theory.input.size)).toEqual(theory.expected);
+    })
+});
+
+describe('Cube to Pattern', () => {
+    const theories = [
+        { input: createCube(3), expected: CUBE_DEFAULT_PATTERN }
+    ]
+    theoretically('input {input} expected {expected}', theories, theory => {
+        expect(cubeToPattern(theory.input)).toEqual(theory.expected);
     })
 });

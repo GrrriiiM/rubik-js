@@ -1,5 +1,7 @@
 import { AXIS, COLORS, SIDES } from "./constants.js";
+import { createCubeEmpty, patternColors } from "./creator.js";
 import { MOVEMENTS, MOVEMENTS_STR } from "./movements.js";
+import { rotateCubeFromTo } from "./rotator.js";
 
 
 /**
@@ -11,7 +13,7 @@ export function cubeToFlat(cube) {
     return cube.flat(2);
 }
 
-export function cubeFromFlat(flat, size) {
+export function cubeFromFlat(flat, size = 3) {
     let layers = [...Array(size).keys()];
     return layers.map(z => layers.map(y => layers.map(x => flat[z * size * size + y * size + x])));
 }
@@ -99,4 +101,26 @@ export function invertClockMovement(movement) {
 
 export function movementsToNotation(movements) {
     return movements.map(_ => _.str).join(' ');
+}
+
+export function cubeToPattern(cube) {
+    let size = cube.length;
+    let pattern = [];
+
+    let sides = Object.values(SIDES).filter(_ => _ != SIDES.CENTER);
+    let layers = [...Array(size).keys()]
+
+    let colors = inverseKeyValue(patternColors);
+
+    for (let side of sides) {
+        cube = rotateCubeFromTo(cube, side, SIDES.FRONT);
+        for (let y of layers) {
+            for (let x of layers) {
+                pattern.push(colors[cube[0][y][x][SIDES.FRONT]])
+            }
+        }
+        cube = rotateCubeFromTo(cube, SIDES.FRONT, side);
+    }
+
+    return pattern.join("");
 }

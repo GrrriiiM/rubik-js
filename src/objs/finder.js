@@ -260,11 +260,10 @@ export function findF2LAlgorithm(cube) {
 }
 
 export function findFixF2LAlgorithm(f2lSides) {
-    let movements = [];
     for(let fix of f2lAlgorithm.fixes) {
-        if (!f2lSides.sides.includes(fix.side)) movements.push(...movementsFromNotation(fix.moves));
+        if (!f2lSides.sides.includes(fix.side)) return movementsFromNotation(fix.moves);
     }
-    return movements;
+    return [];
 }
 
 

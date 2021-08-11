@@ -2,7 +2,7 @@ import { expect } from "@jest/globals";
 import theoretically from "jest-theories";
 import { COLORS, SIDES } from "../src/objs/constants";
 import { createCube } from "../src/objs/creator";
-import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor, findCubeCrosses as findCubeCrosses } from "../src/objs/finder";
+import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor, findCubeSideCrosses } from "../src/objs/finder";
 
 describe("Find side color from Cube", () => {
     const cube = createCube(3);
@@ -128,6 +128,6 @@ describe("Find Cube Crosses", () => {
         }
     ];
     theoretically('input {input} expected {expected}', theories, theory => {
-        expect(findCubeCrosses(theory.input)).toEqual(theory.expected);
+        expect(findCubeSideCrosses(theory.input)).toEqual(theory.expected);
     })
 });
