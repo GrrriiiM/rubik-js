@@ -1,7 +1,9 @@
 import { crossAlgorithm } from "./algotithms/cross-algorithm.js";
 import { f2lAlgorithm } from "./algotithms/f2l-algorithm.js";
 import { ollAlgorithm } from "./algotithms/oll-algorithm.js";
+import { pllAlgorithm } from "./algotithms/pll-algorithm.js";
 import { AXIS, CLOCK, COLORS, SIDES } from "./constants.js";
+import { createCube, createCubeWithColors } from "./creator.js";
 import { rotateCube } from "./rotator.js";
 import { cloneCube, coordsToLayers, cubeToFlat, movementFromString, movementsFromNotation } from "./transformer.js";
 
@@ -278,5 +280,16 @@ export function findOLLAlgorithm(cube) {
     if (algo) {
         return { name: algo[0], moves: movementsFromNotation(algo[1].moves) };
     }
+    return null;
+}
+
+export function findPLLAlgorithm(cube) {
+    let cubeRef = createCubeWithColors(Object.values(SIDES).filter(_ => _ != SIDES.CENTER).map(_ => findCubeColorBySide(cube, _)), cube.length);
+    let colors = pllAlgorithm.positions.map(_ => findColorsByPosition(cube, _));
+    let algo = Object.values(pllAlgorithm.cases).find(c => {
+        let colorsRef = c.positions.map(_ => findColorsByPosition(cubeRef, _));
+        return colors.every((color, i) => color.every(_ => colorsRef[i].includes(_)));
+    });
+    if (algo) return { name: algo.name, moves: movementsFromNotation(algo.moves) };
     return null;
 }

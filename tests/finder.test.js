@@ -1,8 +1,9 @@
 import { expect } from "@jest/globals";
 import theoretically from "jest-theories";
+import { pllAlgorithm } from "../src/objs/algotithms/pll-algorithm";
 import { COLORS, SIDES } from "../src/objs/constants";
-import { createCube } from "../src/objs/creator";
-import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor, findCubeSideCrosses } from "../src/objs/finder";
+import { createCube, createCubeWithPattern } from "../src/objs/creator";
+import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor, findCubeSideCrosses, findPLLAlgorithm } from "../src/objs/finder";
 
 describe("Find side color from Cube", () => {
     const cube = createCube(3);
@@ -129,5 +130,18 @@ describe("Find Cube Crosses", () => {
     ];
     theoretically('input {input} expected {expected}', theories, theory => {
         expect(findCubeSideCrosses(theory.input)).toEqual(theory.expected);
+    })
+});
+
+
+
+describe("Find PLL Algorithm", () => {
+    const theories = Object.values(pllAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findPLLAlgorithm(theory.input.cube);
+        expect(algo.name).toEqual(theory.expected);
     })
 });

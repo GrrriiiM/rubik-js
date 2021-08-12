@@ -1,6 +1,6 @@
 import { f2lAlgorithm } from "./algotithms/f2l-algorithm.js";
 import { SIDES } from "./constants.js";
-import { findCrossAlgorithm, findCubeF2L, findCubeSideCrosses, findF2LAlgorithm, findFixF2LAlgorithm, findOLLAlgorithm } from "./finder.js";
+import { findCrossAlgorithm, findCubeF2L, findCubeSideCrosses, findF2LAlgorithm, findFixF2LAlgorithm, findOLLAlgorithm, findPLLAlgorithm } from "./finder.js";
 import { fixMovementsRemoveY, fixRedundance } from "./fixer.js";
 import { MOVEMENTS } from "./movements.js";
 import { rotateCubeFromTo, rotateCubeWithMovement } from "./rotator.js";
@@ -29,7 +29,7 @@ export function solveCubeF2L(cube, side, history) {
     let changed = false;
     let limit = 10;
     cube = rotateCubeFromTo(cube, side, SIDES.DOWN, history);
-    while (!solved && limit > 0) {
+    while (limit > 0) {
         changed = false;
         for (let i = 0; i < 4; i++) {
             let algo;
@@ -40,13 +40,15 @@ export function solveCubeF2L(cube, side, history) {
             }
             if (algo && algo.moves.length) {
                 algo.moves.forEach(_ => cube = rotateCubeWithMovement(cube, _, history));
+                limit = 10;
                 changed = true;
             }
-            cube = rotateCubeFromTo(cube, SIDES.FRONT, SIDES.LEFT, history);
+            cube = rotateCubeWithMovement(cube, MOVEMENTS.Y, history);
         }
         let f2lSides = findCubeF2L(cube, [SIDES.DOWN]);
         solved = f2lSides && f2lSides.sides.length == 4;
-        if (!solved && !changed) {
+        if (solved) break;
+        if (!changed) {
             findFixF2LAlgorithm(f2lSides).forEach(_ => cube = rotateCubeWithMovement(cube, _, history));
             limit -= 1;
         }
@@ -65,9 +67,28 @@ export function solveCubeOLL(cube, side, history) {
             algo.moves.forEach(_ => cube = rotateCubeWithMovement(cube, _, history));
             break;
         }
-        cube = rotateCubeWithMovement(cube, MOVEMENTS.Y, history);
+        cube = rotateCubeWithMovement(cube, MOVEMENTS.U, history);
     }
     cube = rotateCubeFromTo(cube, SIDES.DOWN, side, history);
+    return cube;
+}
+
+export function solveCubePLL(cube, crossSide, history) {
+    cube = rotateCubeFromTo(cube, crossSide, SIDES.DOWN, history);
+    for (let i = 0; i < 4; i++) {
+        let algo;
+        for (let j = 0; j < 4; j++) {
+            algo = findPLLAlgorithm(cube);
+            if (algo) break;
+            cube = rotateCubeWithMovement(cube, MOVEMENTS.U, history);
+        }
+        if (algo) {
+            algo.moves.forEach(_ => cube = rotateCubeWithMovement(cube, _, history));
+            break;
+        }
+        cube = rotateCubeWithMovement(cube, MOVEMENTS.Y, history);
+    }
+    cube = rotateCubeFromTo(cube, SIDES.DOWN, crossSide, history);
     return cube;
 }
 
@@ -109,7 +130,7 @@ export function solveCubeMovements(cube, side = SIDES.DOWN, fix = true) {
     let history = [];
     cube = solveCubeCross(cube, side, history);
     cube = solveCubeF2L(cube, side, history);
-    
+
     let movements = history.map(_ => movementFromString(_));
     if (fix) {
         movements = fixMovementsRemoveY(movements);
@@ -117,6 +138,9 @@ export function solveCubeMovements(cube, side = SIDES.DOWN, fix = true) {
     }
     history = [];
     cube = solveCubeOLL(cube, side, history);
+    movements.push(...fixRedundance(history.map(_ => movementFromString(_))));
+    history = [];
+    cube = solveCubePLL(cube, side, history);
     movements.push(...fixRedundance(history.map(_ => movementFromString(_))));
     return movements;
 }

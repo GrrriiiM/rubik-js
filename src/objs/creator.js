@@ -1,6 +1,6 @@
 import { COLORS, SIDES } from "./constants.js";
 import { rotateCubeFromTo } from "./rotator.js";
-import { colorFromSide, cubeFromFlat, sideFromCube } from "./transformer.js";
+import { colorFromSide, cubeFromFlat, inverseKeyValue, sideFromCube } from "./transformer.js";
 
 export function createBlock({
     front = COLORS.BLACK,
@@ -63,4 +63,13 @@ export function createCubeWithPattern(pattern, size = 3) {
     }
     
     return cube;
+}
+
+export function createCubeWithColors(colors, size = 3) {
+    let pattern = [];
+    let colorPatternsValue = inverseKeyValue(patternColors)
+    for(let color of colors) {
+        pattern.push(colorPatternsValue[color].repeat(size * size));
+    }
+    return createCubeWithPattern(pattern.join(""), size);
 }
