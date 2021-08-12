@@ -47,6 +47,9 @@
     border-style: solid;
     border-collapse: separate;
     background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .scene>.cube>.block>.side.orange {
     background-color: #f3722c;

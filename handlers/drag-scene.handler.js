@@ -142,7 +142,7 @@ export default function dragSceneHandler() {
             //     axis: dragAxis, layers: dragLayers, clock: clock
             // };
 
-            scene.rotate(movement, () => {
+            scene.rotate(movement).then(() => {
                 isDragMoving = false;
                 isDragMovingX = false;
                 isDragMovingY = false;
