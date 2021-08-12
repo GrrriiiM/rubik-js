@@ -1,5 +1,7 @@
 import { AXIS, COLORS, SIDES } from "./constants.js";
+import { createCubeEmpty, patternColors } from "./creator.js";
 import { MOVEMENTS, MOVEMENTS_STR } from "./movements.js";
+import { rotateCubeFromTo } from "./rotator.js";
 
 
 /**
@@ -11,7 +13,7 @@ export function cubeToFlat(cube) {
     return cube.flat(2);
 }
 
-export function cubeFromFlat(flat, size) {
+export function cubeFromFlat(flat, size = 3) {
     let layers = [...Array(size).keys()];
     return layers.map(z => layers.map(y => layers.map(x => flat[z * size * size + y * size + x])));
 }
@@ -56,20 +58,69 @@ export function coordToLayer(coord, size) {
 
 export function coordsToLayers(coords, size) {
     coords = coords && coords.length > 0 ? coords : [...Array(size).keys()]
-    return coords.map(_ => coordToLayer(_ , size));
+    return coords.map(_ => coordToLayer(_, size));
 }
 
 
 export function movementByValues(axis, layers, clock, size) {
     let movements = Object.values(MOVEMENTS);
     layers = coordsToLayers(layers, size).join(' ');
-    let movement = movements.find(_ => 
-        _.axis == axis 
-        && _.clock == clock 
+    let movement = movements.find(_ =>
+        _.axis == axis
+        && _.clock == clock
         && coordsToLayers(_.layers, 3).join(' ') == layers);
     return movement;
 }
 
 export function cloneCube(cube) {
     return cube.map(z => z.map(y => y.map(x => x.map(_ => _))));
+}
+
+export function movementsFromNotation(notation) {
+    let moves = [];
+    for (let move of notation.split(' ')) {
+        if (move) {
+            if (move.endsWith("2")) {
+                moves.push(movementFromString(move.replace("2", "")));
+                moves.push(movementFromString(move.replace("2", "")));
+            } else {
+                moves.push(movementFromString(move));
+            }
+        }
+    }
+    return moves;
+}
+
+export function invertClockMovement(movement) {
+    if (movement.str.indexOf("'") >= 0) {
+        return movementFromString(movement.str.replace("'", ""));
+    } else {
+        return movementFromString(`${movement.str}'`);
+    }
+}
+
+export function movementsToNotation(movements) {
+    return movements.map(_ => _.str).join(' ');
+}
+
+export function cubeToPattern(cube) {
+    let size = cube.length;
+    let pattern = [];
+
+    let sides = Object.values(SIDES).filter(_ => _ != SIDES.CENTER);
+    let layers = [...Array(size).keys()]
+
+    let colors = inverseKeyValue(patternColors);
+
+    for (let side of sides) {
+        cube = rotateCubeFromTo(cube, side, SIDES.FRONT);
+        for (let y of layers) {
+            for (let x of layers) {
+                pattern.push(colors[cube[0][y][x][SIDES.FRONT]])
+            }
+        }
+        cube = rotateCubeFromTo(cube, SIDES.FRONT, side);
+    }
+
+    return pattern.join("");
 }

@@ -21,10 +21,10 @@ export const MOVEMENTS = {
     E_: { str: "M'", axis: AXIS.X, layers: [0.1], clock: CLOCK.ANTI },
     Z: { str: "Z", axis: AXIS.Z, layers: [], clock: CLOCK.NORMAL },
     Y: { str: "Y", axis: AXIS.Y, layers: [], clock: CLOCK.NORMAL },
-    X: { str: "X", axis: AXIS.X, layers: [], clock: CLOCK.NORMAL },
+    X_: { str: "X'", axis: AXIS.X, layers: [], clock: CLOCK.NORMAL },
     Z_: { str: "Z'", axis: AXIS.Z, layers: [], clock: CLOCK.ANTI },
     Y_: { str: "Y'", axis: AXIS.Y, layers: [], clock: CLOCK.ANTI },
-    X_: { str: "X'", axis: AXIS.X, layers: [], clock: CLOCK.ANTI },
+    X: { str: "X", axis: AXIS.X, layers: [], clock: CLOCK.ANTI },
 }
 
 export const MOVEMENTS_STR = {};

@@ -1,5 +1,5 @@
 .scene>.cube.size-3>.block.rotate {
-    transition: transform 300ms ease-out;
+    transition: transform 250ms ease-out;
 }
 .scene>.cube.size-3>.block.rotate-z {
     --rotate-z: 90deg;
