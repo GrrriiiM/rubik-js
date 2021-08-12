@@ -13,6 +13,8 @@ export default function toolsActionComponent(sceneComponent) {
 
             element.querySelector(".button-tool-action-reset").addEventListener("click", () => scene.reset());
 
+            element.querySelector(".button-tool-action-solve").addEventListener("click", () => scene.solve());
+
         });
     }
 
