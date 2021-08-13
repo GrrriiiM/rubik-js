@@ -1,6 +1,7 @@
 import { SIDES } from "../constants.js";
 
 let ret = {
+    name: "F2L",
     edge: [SIDES.FRONT, SIDES.RIGHT],
     corner: [SIDES.DOWN, SIDES.FRONT, SIDES.RIGHT],
     sample: "BBBOOOOOOBBBBYBBBBBBBGGGGGGBBBRRRRRRWWWWWWWWWBBBUUUUUU",

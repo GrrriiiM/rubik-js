@@ -5,31 +5,22 @@ import { pllAlgorithm } from "../../../objs/algotithms/pll-algorithm.js";
 import algorithmListComponent from "../../algorithm/list/algorithm-list.component.js";
 import modalComponent from "../../modal/modal.component.js";
 
-export default function toolsAlgorithmComponent(sceneComponent) {
+export default function toolsAlgorithmComponent() {
 
     let self = {
         element: null,
+        className: ".algorithm",
         render
     };
-    let scene = sceneComponent;
     let modal = modalComponent();
-    let algorithmListCross = algorithmListComponent(crossAlgorithm, "cross");
-    let algorithmListF2L = algorithmListComponent(f2lAlgorithm, "f2l");
-    let algorithmListOLL = algorithmListComponent(ollAlgorithm, "oll");
-    let algorithmListPLL = algorithmListComponent(pllAlgorithm, "pll");
-    function render(parentElement) {
-        fetch("./components/tools/algorithm/tools-algorithm.component.html").then(async (reponse) => {
-            self.element = parentElement.querySelector(".algorithm");
-            self.element.innerHTML = await reponse.text();
-            self.element.querySelector(".button-tool-algorithm-cross").addEventListener("click", () => modal.show("algo-cross", "Algorítimos Cross", algorithmListCross.element));
-            self.element.querySelector(".button-tool-algorithm-f2l").addEventListener("click", () => modal.show("algo-cross", "Algorítimos F2l", algorithmListF2L.element));
-            self.element.querySelector(".button-tool-algorithm-oll").addEventListener("click", () => modal.show("algo-cross", "Algorítimos OLL", algorithmListOLL.element));
-            self.element.querySelector(".button-tool-algorithm-pll").addEventListener("click", () => modal.show("algo-cross", "Algorítimos PLL", algorithmListPLL.element));
-            algorithmListCross.render(self.element);
-            algorithmListF2L.render(self.element);
-            algorithmListOLL.render(self.element);
-            algorithmListPLL.render(self.element);
-        });
+    async function render(parentElement) {
+        let response = await fetch("./components/tools/algorithm/tools-algorithm.component.html");
+        self.element = parentElement.querySelector(self.className);
+        self.element.innerHTML = await response.text();
+        self.element.querySelector(".button-tool-algorithm-cross").addEventListener("click", () => modal.show("Algorítimos Cross", algorithmListComponent(crossAlgorithm)));
+        self.element.querySelector(".button-tool-algorithm-f2l").addEventListener("click", () => modal.show("Algorítimos F2l", algorithmListComponent(f2lAlgorithm)));
+        self.element.querySelector(".button-tool-algorithm-oll").addEventListener("click", () => modal.show("Algorítimos OLL", algorithmListComponent(ollAlgorithm)));
+        self.element.querySelector(".button-tool-algorithm-pll").addEventListener("click", () => modal.show("Algorítimos PLL", algorithmListComponent(pllAlgorithm)));
     }
 
     return self;;

@@ -2,6 +2,7 @@ import { SIDES } from "../constants.js";
 import { CUBE_DEFAULT_PATTERN } from "../creator.js";
 
 let ret = {
+    name: "PLL",
     side: SIDES.UP,
     positions: [0, 1, 2, 9, 10, 11, 18, 19, 20],
     cases: {}

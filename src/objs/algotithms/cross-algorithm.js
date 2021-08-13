@@ -1,6 +1,7 @@
 import { SIDES } from "../constants.js";
 
 let ret = {
+    name: "Cross",
     edge: [SIDES.DOWN, SIDES.FRONT],
     sample: "BBBBOBBOBBBBBBBBBBBBBBGBBGBBBBBRBBRBBWBWWWBWBBBBBUBBUB",
     cases: {}

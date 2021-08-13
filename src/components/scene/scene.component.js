@@ -8,7 +8,7 @@ import { rotateCube, shuffleCube } from "../../objs/rotator.js";
 import { solveCube } from "../../objs/solver.js";
 import { axisToString, coordsToLayers, inverseKeyValue } from "../../objs/transformer.js";
 
-export default function sceneComponent(dragSceneHandler) {
+export default function sceneComponent(dragSceneHandler, cube = null) {
     let self;
     let dragHandler = dragSceneHandler;
     let element;
@@ -16,7 +16,7 @@ export default function sceneComponent(dragSceneHandler) {
     let rotationDelay = 1000;
 
     let state = {
-        cube: shuffleCube(createCube(3)),
+        cube: cube || shuffleCube(createCube(3)),
         // cube: createCubeWithPattern("RRRROWYORUUGWWOUGGWGWRUUUUROWOORWGRYGYYYYYOYYWGWOGUUGO"),
         // cube: createCubeWithPattern(crossAlgorithm.cases.F04.sample),
         createAt: new Date(Date.now()),

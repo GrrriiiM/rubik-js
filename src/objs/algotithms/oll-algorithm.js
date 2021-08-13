@@ -2,6 +2,7 @@ import { SIDES } from "../constants.js";
 
 
 let ret = {
+    name: "OLL",
     sample: "BBBOOOOOOYYYYYYYYYBBBGGGGGGBBBRRRRRRWWWWWWWWWBBBUUUUUU",
     side: SIDES.UP,
     positions: [0, 1, 2, 9, 10, 11, 18, 19, 20],
