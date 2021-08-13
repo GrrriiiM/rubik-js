@@ -20,6 +20,18 @@ export function findCubeColorBySide(cube, side) {
     return COLORS.BLACK;
 }
 
+export function findCubeSideByColor(cube, color) {
+    let size = cube.length;
+    let middle = (size - 1) / 2
+    if (cube[0][middle][middle][SIDES.FRONT] == color) return SIDES.FRONT;
+    if (cube[middle][0][middle][SIDES.UP] == color) return SIDES.UP;
+    if (cube[middle][middle][0][SIDES.LEFT] == color) return SIDES.LEFT;
+    if (cube[size - 1][middle][middle][SIDES.BACK] == color) return SIDES.BACK;
+    if (cube[middle][size - 1][middle][SIDES.DOWN] == color) return SIDES.DOWN;
+    if (cube[middle][middle][size - 1][SIDES.RIGHT] == color) return SIDES.RIGHT;
+    return COLORS.BLACK;
+}
+
 export function findColorsByPosition(cube, position) {
     let z = Math.floor(position / (cube.length * cube.length));
     let y = Math.floor((position - (z * cube.length * cube.length)) / cube.length);
@@ -124,7 +136,7 @@ function checkFrontCross(cube) {
         && downColor == downSideColor;
 }
 
-export function findCubeF2L(cube, crossSides) {
+export function findCubeF2LSides(cube, crossSides) {
     let layers = coordsToLayers([], cube.length);
     let matchs = { crossSide: SIDES.CENTER, sides: [] };
     for (let crossSide of crossSides) {
@@ -229,14 +241,13 @@ function checkFrontSideCompleted(cube) {
 export function findCrossAlgorithm(cube) {
     let cubeEdgeColors = crossAlgorithm.edge.map(_ => findCubeColorBySide(cube, _));
     let position = findEdgePositionByColor(cube, cubeEdgeColors[0], cubeEdgeColors[1]);
-    let algo = Object.entries(crossAlgorithm.cases).find(_ => {
-        let c = _[1];
+    let algo = Object.values(crossAlgorithm.cases).find(c => {
         if (c.positions[0] != position) return false;
         let blockEdgeColors = findColorsByPosition(cube, position);
         let colors = c.corner.map(_ => blockEdgeColors[_]);
         return colors.every((c, i) => c == cubeEdgeColors[i]);
     });
-    return { name: algo[0], moves: movementsFromNotation(algo[1].moves) };
+    if (algo) return { name: algo.name, movements: movementsFromNotation(algo.moves) };
 }
 
 export function findF2LAlgorithm(cube) {
@@ -256,16 +267,17 @@ export function findF2LAlgorithm(cube) {
             && cornerColors.every((c, i) => c == cubeCornerColors[i]);
     });
     if (algo) {
-        return { name: algo[0], moves: movementsFromNotation(algo[1].moves) };
+        return { name: algo[0], movements: movementsFromNotation(algo[1].moves) };
     }
     return null;
 }
 
 export function findFixF2LAlgorithm(f2lSides) {
+    let movements = [];
     for(let fix of f2lAlgorithm.fixes) {
-        if (!f2lSides.sides.includes(fix.side)) return movementsFromNotation(fix.moves);
+        if (!f2lSides.sides.includes(fix.side)) movements.push(...movementsFromNotation(fix.moves));
     }
-    return [];
+    return movements;
 }
 
 
@@ -278,7 +290,7 @@ export function findOLLAlgorithm(cube) {
         return positionColors.every((p, i) => p[c.sides[i]] == color);
     });
     if (algo) {
-        return { name: algo[0], moves: movementsFromNotation(algo[1].moves) };
+        return { name: algo[0], movements: movementsFromNotation(algo[1].moves) };
     }
     return null;
 }
@@ -290,6 +302,6 @@ export function findPLLAlgorithm(cube) {
         let colorsRef = c.positions.map(_ => findColorsByPosition(cubeRef, _));
         return colors.every((color, i) => color.every(_ => colorsRef[i].includes(_)));
     });
-    if (algo) return { name: algo.name, moves: movementsFromNotation(algo.moves) };
+    if (algo) return { name: algo.name, movements: movementsFromNotation(algo.moves) };
     return null;
 }

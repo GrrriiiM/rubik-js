@@ -1,11 +1,12 @@
+import { crossAlgorithm } from "../../objs/algotithms/cross-algorithm.js";
+import { f2lAlgorithm } from "../../objs/algotithms/f2l-algorithm.js";
+import { ollAlgorithm } from "../../objs/algotithms/oll-algorithm.js";
 import { COLORS, SIDES } from "../../objs/constants.js";
-import { createCube } from "../../objs/creator.js";
-import { isCubeCompleted, findCubeSideCrosses, findCubeF2L, findCubeOLL, findCubeColorBySide, findCornerPositionByColor, findEdgePositionByColor, findColorsByPosition, findCrossAlgorithm, findF2LAlgorithm } from "../../objs/finder.js";
-import { fixMovementsRemoveY, fixRedundance } from "../../objs/fixer.js";
-import { MOVEMENTS } from "../../objs/movements.js";
+import { createCube, createCubeWithPattern } from "../../objs/creator.js";
+import { isCubeCompleted, findCubeSideCrosses, findCubeF2LSides, findCubeOLL } from "../../objs/finder.js";
 import { rotateCube, shuffleCube } from "../../objs/rotator.js";
-import { solveCubeCross, solveCubeCrossMovements, solveCubeF2L, solveCubeF2LMovements, solveCubeMovements } from "../../objs/solver.js";
-import { axisToString, coordsToLayers, inverseKeyValue, movementFromString } from "../../objs/transformer.js";
+import { solveCube } from "../../objs/solver.js";
+import { axisToString, coordsToLayers, inverseKeyValue } from "../../objs/transformer.js";
 
 export default function sceneComponent(dragSceneHandler) {
     let self;
@@ -15,7 +16,9 @@ export default function sceneComponent(dragSceneHandler) {
     let rotationDelay = 1000;
 
     let state = {
-        cube: shuffleCube(createCube(3)),
+        // cube: shuffleCube(createCube(3)),
+        cube: createCubeWithPattern("OOWRGOYYYYYUGRWGGROYWWWGYUORRGWUROORUUUROUGWUGUWYYGROW"),
+        // cube: createCubeWithPattern(crossAlgorithm.cases.F04.sample),
         createAt: new Date(Date.now()),
         history: [],
         movementCOunt: 0,
@@ -139,7 +142,7 @@ export default function sceneComponent(dragSceneHandler) {
         state.cube = cube;
 
         state.crossSides = findCubeSideCrosses(state.cube);
-        let f2l = findCubeF2L(state.cube, state.crossSides);
+        let f2l = findCubeF2LSides(state.cube, state.crossSides);
         state.f2lSides = f2l ? f2l.sides : [];
         state.ollSide = state.f2lSides.length == 4 && findCubeOLL(state.cube, f2l.crossSide);
         state.isCompleted = isCubeCompleted(state.cube);
@@ -206,8 +209,11 @@ export default function sceneComponent(dragSceneHandler) {
     }
 
     async function solve() {
-        for (let move of solveCubeMovements(state.cube)) {
-            await rotate(move);
+        let solution = solveCube(state.cube);
+        if (solution.solved) {
+            for (let movement of solution.movements) {
+                await rotate(movement);
+            }
         }
     }
 

@@ -1,9 +1,12 @@
 import { expect } from "@jest/globals";
 import theoretically from "jest-theories";
+import { crossAlgorithm } from "../src/objs/algotithms/cross-algorithm";
+import { f2lAlgorithm } from "../src/objs/algotithms/f2l-algorithm";
+import { ollAlgorithm } from "../src/objs/algotithms/oll-algorithm";
 import { pllAlgorithm } from "../src/objs/algotithms/pll-algorithm";
 import { COLORS, SIDES } from "../src/objs/constants";
 import { createCube, createCubeWithPattern } from "../src/objs/creator";
-import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor, findCubeSideCrosses, findPLLAlgorithm } from "../src/objs/finder";
+import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor, findCubeSideCrosses, findPLLAlgorithm, findCrossAlgorithm, findF2LAlgorithm, findOLLAlgorithm } from "../src/objs/finder";
 
 describe("Find side color from Cube", () => {
     const cube = createCube(3);
@@ -133,6 +136,39 @@ describe("Find Cube Crosses", () => {
     })
 });
 
+
+describe("Find Cross Algorithm", () => {
+    const theories = Object.values(crossAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findCrossAlgorithm(theory.input.cube);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
+
+describe("Find F2L Algorithm", () => {
+    const theories = Object.values(f2lAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findF2LAlgorithm(theory.input.cube);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
+
+describe("Find OLL Algorithm", () => {
+    const theories = Object.values(ollAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findOLLAlgorithm(theory.input.cube);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
 
 
 describe("Find PLL Algorithm", () => {
