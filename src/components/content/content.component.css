@@ -83,12 +83,13 @@
 .content>.cube-area {
     height: var(--cube-area-height);
     transition: height 250ms ease-out;
+    padding-bottom: var(--header-height);
 }
 
 
 
 .content.menu-expanded {
-    top: calc(100% - var(--header-height)*1.5)
+    top: calc(100vh - var(--header-height)*1.5)
 }
 
 .tools.tools-expanded {

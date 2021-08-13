@@ -1,5 +1,6 @@
 import dragSceneHandler from "../../handlers/drag-scene.handler.js";
 import contentComponent from "../content/content.component.js";
+import modalComponent from "../modal/modal.component.js";
 import sceneComponent from "../scene/scene.component.js";
 import toolsComponent from "../tools/tools.component.js";
 
@@ -17,7 +18,6 @@ export default function appComponent() {
             tools.render(element);
             content.render(element);
             element.querySelector(".button-help").addEventListener("click", () => toggleMenuHelp())
-
         });
     }
 
@@ -34,13 +34,13 @@ export default function appComponent() {
     function showMenuHelp() {
         tools.hide();
         isMenuExpanded = true;
-        document.querySelector(".content").classList.add("menu-expanded");
+        content.element.classList.add("menu-expanded");
         document.querySelector(".button-help").classList.add("selected");
     }
 
     function hideMenuHelp() {
         isMenuExpanded = false;
-        document.querySelector(".content").classList.remove("menu-expanded");
+        content.element.classList.remove("menu-expanded");
         document.querySelector(".button-help").classList.remove("selected");
     }
 

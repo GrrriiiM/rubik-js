@@ -2,9 +2,10 @@ import { SIDES } from "../../../objs/constants.js";
 import { createCube } from "../../../objs/creator.js";
 import { shuffleCube } from "../../../objs/rotator.js";
 
-export default function toolsActionComponent(sceneComponent) {
+export default function toolsActionComponent(sceneComponent, modalComponent) {
     let element;
     let scene = sceneComponent;
+    let modal = modalComponent;
     function render(parentElement) {
         fetch("./components/tools/action/tools-action.component.html").then(async (reponse) => {
 

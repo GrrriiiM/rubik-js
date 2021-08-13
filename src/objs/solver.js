@@ -39,7 +39,7 @@ export function solveCubeF2L(cube, crossSide = SIDES.DOWN) {
     let history = [];
     let algo;
     let solvedCube = rotateCubeFromTo(cube, crossSide, SIDES.DOWN, history);
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 20; i++) {
         for (let j = 0; j < 4; j++) {
             for (let k = 0; k < 4; k++) {
                 algo = findF2LAlgorithm(solvedCube);
@@ -50,6 +50,7 @@ export function solveCubeF2L(cube, crossSide = SIDES.DOWN) {
             solvedCube = rotateCubeWithMovement(solvedCube, MOVEMENTS.Y, history);
         }
         if (algo) break;
+        solvedCube = rotateCubeWithMovement(solvedCube, MOVEMENTS.Y, history);
         let fix = findFixF2LAlgorithm(findCubeF2LSides(solvedCube, [SIDES.DOWN]));
         if (!fix) break;
         fix.forEach(_ => solvedCube = rotateCubeWithMovement(solvedCube, _, history));
@@ -109,6 +110,7 @@ export function solveCubePLL(cube, crossSide = SIDES.DOWN) {
             algo = findPLLAlgorithm(solvedCube);
             if (algo) break;
             solvedCube = rotateCubeWithMovement(solvedCube, MOVEMENTS.U, history);
+            if (isCubeCompleted(solvedCube)) return { solved: true, cube: solvedCube,  adjusts: fixRedundance(history.map(_ => movementFromString(_)))};
         }
         if (algo) break;
         solvedCube = rotateCubeWithMovement(solvedCube, MOVEMENTS.Y, history);
@@ -146,36 +148,46 @@ export function solveCube(cube, crossSide = SIDES.DOWN) {
         solvedCube = cross.cube;
         if (cross.algo) crosses.push(cross);
     }
-    if (crosses.length) ret.cross = crosses.map(_ => ({ algo: _.algo, adjusts: _.adjusts }));
+    ret.cross = crosses.map(_ => ({ algo: _.algo, adjusts: _.adjusts }));
 
 
     let f2ls = [];
     for (let i = 0; i < 4; i++) {
+        console.log(cubeToPattern(solvedCube));
         if (findCubeF2LSides(solvedCube, [SIDES.DOWN]).sides.length == 4) break;
         let f2l = solveCubeF2L(solvedCube);
         if (!f2l.solved) return { solved: false, cube };
         solvedCube = f2l.cube;
         if (f2l.algo) f2ls.push(f2l);
     }
-    if (f2ls.length) ret.f2ls = f2ls.map(_ => ({ algo: _.algo, adjusts: _.adjusts }));
+    ret.f2ls = f2ls.map(_ => ({ algo: _.algo, adjusts: _.adjusts }));
 
     
     let oll = solveCubeOLL(solvedCube);
     if (!oll.solved) return { solved: false, cube };
     solvedCube = oll.cube;
-    if (oll.algo) ret.oll = { algo: oll.algo, adjusts: oll.adjusts };
+    ret.oll = { algo: oll.algo, adjusts: oll.adjusts };
 
     let pll = solveCubePLL(solvedCube);
     if (!pll.solved) return { solved: false, cube };
     solvedCube = pll.cube;
-    if (pll.algo) ret.pll = { algo: pll.algo, adjusts: pll.adjusts };
+    ret.pll = { algo: pll.algo, adjusts: pll.adjusts };
 
     ret.cube = solvedCube;
     
-    if (ret.cross) ret.cross.forEach(_ => ret.movements.push(..._.adjusts, ..._.algo.movements));
-    if (ret.f2ls) ret.f2ls.forEach(_ => ret.movements.push(..._.adjusts, ..._.algo.movements));
-    if (ret.oll) ret.movements.push(...ret.oll.adjusts, ...ret.oll.algo.movements);
-    if (ret.pll) ret.movements.push(...ret.pll.adjusts, ...ret.pll.algo.movements);
+    ret.cross.forEach(_ => {
+        if (_.adjusts) ret.movements.push(..._.adjusts);
+        if (_.algo && _.algo.movements) ret.movements.push(..._.algo.movements);
+    });
+    ret.f2ls.forEach(_ => {
+        if (_.adjusts) ret.movements.push(..._.adjusts);
+        if (_.algo && _.algo.movements) ret.movements.push(..._.algo.movements);
+    });
+    if (ret.oll.adjusts) ret.movements.push(...ret.oll.adjusts);
+    if (ret.oll.algo && ret.oll.algo.movements) ret.movements.push(...ret.oll.algo.movements);
+    if (ret.pll.adjusts) ret.movements.push(...ret.pll.adjusts);
+    if (ret.pll.algo && ret.pll.algo.movements) ret.movements.push(...ret.pll.algo.movements);
+
     ret.solved = true;
     return ret;
 }

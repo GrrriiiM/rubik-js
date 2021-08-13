@@ -16,8 +16,8 @@ export default function sceneComponent(dragSceneHandler) {
     let rotationDelay = 1000;
 
     let state = {
-        // cube: shuffleCube(createCube(3)),
-        cube: createCubeWithPattern("OOWRGOYYYYYUGRWGGROYWWWGYUORRGWUROORUUUROUGWUGUWYYGROW"),
+        cube: shuffleCube(createCube(3)),
+        // cube: createCubeWithPattern("RRRROWYORUUGWWOUGGWGWRUUUUROWOORWGRYGYYYYYOYYWGWOGUUGO"),
         // cube: createCubeWithPattern(crossAlgorithm.cases.F04.sample),
         createAt: new Date(Date.now()),
         history: [],

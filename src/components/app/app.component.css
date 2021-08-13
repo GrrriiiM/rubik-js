@@ -1,13 +1,14 @@
 @import url("../content/content.component.css");
 @import url("../tools/tools.component.css");
 @import url("../scene/scene.component.css");
+@import url("../modal/modal.component.css");
 
 :root {
     --header-height: 60px;
     --header-radius: 15px;
     --tool-area-height: 200px;
     --cube-steps-area-height: 60px;
-    --cube-area-height: calc(100% - var(--cube-steps-area-height) - (var(--header-height) * 2));
+    --cube-area-height: calc(100% - var(--cube-steps-area-height) - (var(--header-height) * 3));
 }
 
 

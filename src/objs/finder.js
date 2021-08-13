@@ -151,11 +151,11 @@ export function findCubeF2LSides(cube, crossSides) {
 
         if (checkFrontRightF2L(checkCube)) sides.push(SIDES.FRONT)
         checkCube = rotateCube(AXIS.Y, checkCube, layers, true);
-        if (checkFrontRightF2L(checkCube)) sides.push(SIDES.LEFT)
+        if (checkFrontRightF2L(checkCube)) sides.push(SIDES.RIGHT)
         checkCube = rotateCube(AXIS.Y, checkCube, layers, true);
         if (checkFrontRightF2L(checkCube)) sides.push(SIDES.BACK)
         checkCube = rotateCube(AXIS.Y, checkCube, layers, true);
-        if (checkFrontRightF2L(checkCube)) sides.push(SIDES.RIGHT);
+        if (checkFrontRightF2L(checkCube)) sides.push(SIDES.LEFT);
 
         if (sides.length > matchs.sides.length) matchs = { crossSide: crossSide, sides: sides };
     }
@@ -275,7 +275,7 @@ export function findF2LAlgorithm(cube) {
 export function findFixF2LAlgorithm(f2lSides) {
     let movements = [];
     for(let fix of f2lAlgorithm.fixes) {
-        if (!f2lSides.sides.includes(fix.side)) movements.push(...movementsFromNotation(fix.moves));
+        if (!f2lSides.sides.includes(fix.side)) return movementsFromNotation(fix.moves);
     }
     return movements;
 }
