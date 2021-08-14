@@ -8,7 +8,7 @@
     --header-radius: 15px;
     --tool-area-height: 200px;
     --cube-steps-area-height: 60px;
-    --cube-area-height: calc(100% - var(--cube-steps-area-height) - (var(--header-height) * 3));
+    --cube-area-height: calc(100% - var(--cube-steps-area-height) - (var(--header-height) * 2));
 }
 
 

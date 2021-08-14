@@ -83,7 +83,7 @@
 .content>.cube-area {
     height: var(--cube-area-height);
     transition: height 250ms ease-out;
-    padding-bottom: var(--header-height);
+    /* padding-bottom: var(--header-height); */
 }
 
 

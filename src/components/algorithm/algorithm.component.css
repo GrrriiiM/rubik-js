@@ -8,6 +8,21 @@
     width: 100vw;
 }
 
+.algorithm>.header-algorithm {
+    position: absolute;
+    top: calc(var(--header-height));
+    left: 25px;
+    height: auto;
+    line-height: 25px;
+    width: calc((100% - 50px));
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: calc(var(--cube-steps-area-height) / 3);
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
 .algorithm>.cube-area {
     height: calc(100% - var(--movement-area-height) * 2);
 }

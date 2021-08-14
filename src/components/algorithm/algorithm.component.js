@@ -19,6 +19,7 @@ export function algorithmComponent(cube, name, movements, headers) {
         render
     };
     let movementsAreaElement;
+    let headerAlgorithmElement;
     let isPlay = false;
     async function render(parentElement) {
         let response = await fetch("./components/algorithm/algorithm.component.html");
@@ -27,6 +28,7 @@ export function algorithmComponent(cube, name, movements, headers) {
         scene.render(self.element);
 
         movementsAreaElement = self.element.querySelector(".movements-area");
+        headerAlgorithmElement = self.element.querySelector(".header-algorithm");
 
         self.element.querySelector(".button-next").onclick = nextMovement;
         self.element.querySelector(".button-prev").onclick = previousMovement;
@@ -108,6 +110,11 @@ export function algorithmComponent(cube, name, movements, headers) {
                 el.classList.remove("big")
             }
         });
+        if (state.movementPosition < headers.length) {
+            headerAlgorithmElement.innerHTML = headers[state.movementPosition];
+        } else {
+            headerAlgorithmElement.innerHTML = "";
+        }
     }
 
     function canRotate(movement) {

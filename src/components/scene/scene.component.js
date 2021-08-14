@@ -136,7 +136,10 @@ export default function sceneComponent(dragSceneHandler, cube = null, canRotate 
                     _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)
                     _.style.transform = '';
                 });
-                if (!transition) state.isBusy = false;
+                if (!transition) {
+                    state.isBusy = false;
+                    resolve();
+                }
             }
         });
     }
@@ -153,7 +156,10 @@ export default function sceneComponent(dragSceneHandler, cube = null, canRotate 
                 _.classList.add('rotate');
                 _.style.transform = '';
             });
-            if (!transition) state.isBusy = false;
+            if (!transition) {
+                state.isBusy = false;
+                resolve();
+            }
         });
         // setTimeout(() => {
         //     cubeElement.querySelectorAll(`.block`).forEach(_ => {
