@@ -2,6 +2,8 @@ import { SIDES } from "../constants.js";
 
 
 let ret = {
+    name: "OLL",
+    sample: "BBBOOOOOOYYYYYYYYYBBBGGGGGGBBBRRRRRRWWWWWWWWWBBBUUUUUU",
     side: SIDES.UP,
     positions: [0, 1, 2, 9, 10, 11, 18, 19, 20],
     cases: {
@@ -9,6 +11,7 @@ let ret = {
 };
 
 ret.cases.dot01 = {
+    sample: "BYBOOOOOOBBBBYBBBBYYYGGGGGGBYBRRRRRRWWWWWWWWWYYYUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
@@ -18,33 +21,37 @@ ret.cases.dot01 = {
 }
 
 ret.cases.dot02 = {
+    sample: "YYYOOOOOOBBBBYBBBBYYBGGGGGGBYBRRRRRRWWWWWWWWWBYYUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.FRONT,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.LEFT, SIDES.BACK, SIDES.RIGHT
     ],
-    moves: "R' F R F' U2 R' F R Y' R2 U2 R"
+    moves: "R' F R F' U2 R' F R Y' R2 U2 R Y"
 }
 
 ret.cases.dot03 = {
+    sample: "BYBOOOOOOBBBBYBBBYBYYGGGGGGBYYRRRRRRWWWWWWWWWBYYUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.UP,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.BACK, SIDES.BACK, SIDES.RIGHT
     ],
-    moves: "Y L' R2 B R' B L U2 L' B M' X'"
+    moves: "Y L' R2 B R' B L U2 L' B M' X' Y'"
 }
 
 ret.cases.dot04 = {
+    sample: "YYBOOOOOOBBYBYBBBBYYBGGGGGGBYBRRRRRRWWWWWWWWWYYBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.LEFT, SIDES.BACK, SIDES.UP
     ],
-    moves: "R' U2 X R' U R U' Y R' U' R' U R' F Z'"
+    moves: "R' U2 X R' U R U' Y R' U' R' U R' F Z' Y'"
 }
 
 ret.cases.dot05 = {
+    sample: "BYBOOOOOOYBBBYBBBYBYYGGGGGGYYBRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.UP,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
@@ -54,6 +61,7 @@ ret.cases.dot05 = {
 }
 
 ret.cases.dot06 = {
+    sample: "BYBOOOOOOYBYBYBYBYBYBGGGGGGBYBRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.UP,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
@@ -63,21 +71,23 @@ ret.cases.dot06 = {
 }
 
 ret.cases.dot07 = {
+    sample: "BYBOOOOOOYBYBYBBBBBYYGGGGGGBYBRRRRRRWWWWWWWWWYYBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.UP, SIDES.BACK, SIDES.UP
     ],
-    moves: "R' U2 F R U R' U' Y' R2 U2 X' R U X"
+    moves: "R' U2 F R U R' U' Y' R2 U2 X' R U X Y"
 }
 
 ret.cases.dot08 = {
+    sample: "BYBOOOOOOBBBBYBYBYBYBGGGGGGYYYRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.UP,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.BACK, SIDES.BACK, SIDES.BACK
     ],
-    moves: "F R U R' U Y' R' U2 R' F R F'"
+    moves: "F R U R' U Y' R' U2 R' F R F' Y"
 }
 
 
@@ -85,6 +95,7 @@ ret.cases.dot08 = {
 
 
 ret.cases.line01 = {
+    sample: "YBBOOOOOOBYBBYBBYBBYBGGGGGGBBYRRRRRRWWWWWWWWWYYYUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.UP, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
@@ -94,6 +105,7 @@ ret.cases.line01 = {
 }
 
 ret.cases.line02 = {
+    sample: "BBBOOOOOOBYBBYBBYBYYYGGGGGGBBBRRRRRRWWWWWWWWWYYYUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
@@ -103,6 +115,7 @@ ret.cases.line02 = {
 }
 
 ret.cases.line03 = {
+    sample: "YYBOOOOOOBBBYYYBBBBBBGGGGGGBYYRRRRRRWWWWWWWWWYBYUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -112,6 +125,7 @@ ret.cases.line03 = {
 }
 
 ret.cases.line04 = {
+    sample: "BYBOOOOOOBBBYYYBBBYBYGGGGGGBYBRRRRRRWWWWWWWWWYBYUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -124,6 +138,7 @@ ret.cases.line04 = {
 
 
 ret.cases.cross01 = {
+    sample: "YBBOOOOOOBYBYYYBYBBBBGGGGGGBBYRRRRRRWWWWWWWWWYBYUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.UP, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -133,6 +148,7 @@ ret.cases.cross01 = {
 }
 
 ret.cases.cross02 = {
+    sample: "BBBOOOOOOBYBYYYBYBYBYGGGGGGBBBRRRRRRWWWWWWWWWYBYUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -142,6 +158,7 @@ ret.cases.cross02 = {
 }
 
 ret.cases.cross03 = {
+    sample: "YBBOOOOOOBYBYYYBYYYBBGGGGGGYBBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.UP, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -151,6 +168,7 @@ ret.cases.cross03 = {
 }
 
 ret.cases.cross04 = {
+    sample: "BBBOOOOOOBYBYYYBYYBBYGGGGGGBBYRRRRRRWWWWWWWWWBBYUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -160,6 +178,7 @@ ret.cases.cross04 = {
 }
 
 ret.cases.cross05 = {
+    sample: "BBYOOOOOOYYBYYYYYBBBBGGGGGGYBBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.UP, SIDES.UP, SIDES.FRONT,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -169,6 +188,7 @@ ret.cases.cross05 = {
 }
 
 ret.cases.cross06 = {
+    sample: "YBYOOOOOOYYYYYYBYBBBBGGGGGGBBBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.UP, SIDES.FRONT,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -178,6 +198,7 @@ ret.cases.cross06 = {
 }
 
 ret.cases.cross07 = {
+    sample: "BBBOOOOOOYYBYYYBYYBBYGGGGGGYBBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -189,6 +210,7 @@ ret.cases.cross07 = {
 
 
 ret.cases.fourCorner01 = {
+    sample: "BBBOOOOOOYBYYYBYYYBBBGGGGGGBYBRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.UP, SIDES.UP, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -198,6 +220,7 @@ ret.cases.fourCorner01 = {
 }
 
 ret.cases.fourCorner02 = {
+    sample: "BYBOOOOOOYBYYYYYBYBBBGGGGGGBYBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -209,6 +232,7 @@ ret.cases.fourCorner02 = {
 
 
 ret.cases.shapeA01 = {
+    sample: "BYYOOOOOOBYBYYBYBBBBBGGGGGGBBYRRRRRRWWWWWWWWWBYYUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.FRONT,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -218,6 +242,7 @@ ret.cases.shapeA01 = {
 }
 
 ret.cases.shapeA02 = {
+    sample: "YYBOOOOOOYYBYYBBBYBBBGGGGGGBBBRRRRRRWWWWWWWWWBYYUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -227,24 +252,27 @@ ret.cases.shapeA02 = {
 }
 
 ret.cases.shapeA03 = {
+    sample: "YYBOOOOOOBYBYYBBBYYBBGGGGGGYBBRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.BACK
     ],
-    moves: "R' U' R Y' X' R U' R' F R U R' X"
+    moves: "R' U' R Y' X' R U' R' F R U R' X Y"
 }
 
 ret.cases.shapeA04 = {
+    sample: "BYBOOOOOOBYBYYBYBYBBBGGGGGGYBYRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
         SIDES.BACK, SIDES.UP, SIDES.BACK
     ],
-    moves: "U' R U2 R' U' R U' R2 Y' R' U' R U B"
+    moves: "U' R U2 R' U' R U' R2 Y' R' U' R U B Y"
 }
 
 ret.cases.shapeA05 = {
+    sample: "BYYOOOOOOBYBYYBBBBYBYGGGGGGYBBRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.FRONT,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -254,26 +282,29 @@ ret.cases.shapeA05 = {
 }
 
 ret.cases.shapeA06 = {
+    sample: "YYYOOOOOOBYBYYBBBBBBBGGGGGGYBYRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.FRONT,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
         SIDES.BACK, SIDES.UP, SIDES.BACK
     ],
-    moves: "L F' L' F U2 L2 Y' L F L' F"
+    moves: "L F' L' F U2 L2 Y' L F L' F Y"
 }
 
 
 
 ret.cases.shapeB01 = {
+    sample: "BYBOOOOOOBYBBYYYBYBYBGGGGGGYBYRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.UP,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
         SIDES.BACK, SIDES.UP, SIDES.BACK
     ],
-    moves: "U' R' U2 R U R' U R2 Y R U R' U' F'"
+    moves: "U' R' U2 R U R' U R2 Y R U R' U' F' Y'"
 }
 
 ret.cases.shapeB02 = {
+    sample: "YYBOOOOOOBYYBYYBBBYYBGGGGGGBBBRRRRRRWWWWWWWWWYBBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -283,6 +314,7 @@ ret.cases.shapeB02 = {
 }
 
 ret.cases.shapeB03 = {
+    sample: "BYBOOOOOOBYYBYYYBBBYBGGGGGGBBYRRRRRRWWWWWWWWWYBBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -292,6 +324,7 @@ ret.cases.shapeB03 = {
 }
 
 ret.cases.shapeB04 = {
+    sample: "YYBOOOOOOBYBBYYBBBBYBGGGGGGBBYRRRRRRWWWWWWWWWYBYUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -301,6 +334,7 @@ ret.cases.shapeB04 = {
 }
 
 ret.cases.shapeB05 = {
+    sample: "BYYOOOOOOBYBBYYBBBYYYGGGGGGYBBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.FRONT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -310,26 +344,29 @@ ret.cases.shapeB05 = {
 }
 
 ret.cases.shapeB06 = {
+    sample: "YYYOOOOOOBYBBYYBBBBYBGGGGGGYBYRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.FRONT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
         SIDES.BACK, SIDES.UP, SIDES.BACK
     ],
-    moves: "R' F R F' U2 R2 Y R' F' R F'"
+    moves: "R' F R F' U2 R2 Y R' F' R F' Y'"
 }
 
 
 
 ret.cases.shapeC01 = {
+    sample: "BBYOOOOOOBBYYYBBYBBBYGGGGGGBYYRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.FRONT,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
         SIDES.BACK, SIDES.BACK, SIDES.UP
     ],
-    moves: "R U R' Y R' F R U' R' F' R"
+    moves: "R U R' Y R' F R U' R' F' R Y'"
 }
 
 ret.cases.shapeC02 = {
+    sample: "YBBOOOOOOYBBYYBBYBBBBGGGGGGYYBRRRRRRWWWWWWWWWYYBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.UP, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -339,6 +376,7 @@ ret.cases.shapeC02 = {
 }
 
 ret.cases.shapeC03 = {
+    sample: "YBBOOOOOOBBBYYBBYYYBBGGGGGGYYBRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.UP, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -348,6 +386,7 @@ ret.cases.shapeC03 = {
 }
 
 ret.cases.shapeC04 = {
+    sample: "BBBOOOOOOYBYYYBBYBBBYGGGGGGBYBRRRRRRWWWWWWWWWYYBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -359,6 +398,7 @@ ret.cases.shapeC04 = {
 
 
 ret.cases.shapeD01 = {
+    sample: "BBYOOOOOOBBBBYYBYBYYYGGGGGGYYBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.FRONT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -368,6 +408,7 @@ ret.cases.shapeD01 = {
 }
 
 ret.cases.shapeD02 = {
+    sample: "BBYOOOOOOBBBBYYYYBBYBGGGGGGBYYRRRRRRWWWWWWWWWBBYUUUUUU",
     sides: [
         SIDES.UP, SIDES.UP, SIDES.FRONT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -377,6 +418,7 @@ ret.cases.shapeD02 = {
 }
 
 ret.cases.shapeD03 = {
+    sample: "BBBOOOOOOYBYBYYBYBBYYGGGGGGBYBRRRRRRWWWWWWWWWYBBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -386,6 +428,7 @@ ret.cases.shapeD03 = {
 }
 
 ret.cases.shapeD04 = {
+    sample: "BBBOOOOOOBBBBYYBYYBYYGGGGGGBYYRRRRRRWWWWWWWWWBBYUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.UP, SIDES.UP,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -397,6 +440,7 @@ ret.cases.shapeD04 = {
 
 
 ret.cases.C01 = {
+    sample: "BBBOOOOOOYYBBYBYYBBYBGGGGGGBBBRRRRRRWWWWWWWWWYYYUUUUUU",
     sides: [
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
         SIDES.LEFT, SIDES.UP, SIDES.RIGHT,
@@ -406,36 +450,40 @@ ret.cases.C01 = {
 }
 
 ret.cases.C02 = {
+    sample: "BYBOOOOOOBBBYYYYBYYBBGGGGGGBYBRRRRRRWWWWWWWWWBBYUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
         SIDES.LEFT, SIDES.BACK, SIDES.RIGHT
     ],
-    moves: "R U R' U' X D' R' U R E Z'"
+    moves: "R U R' U' X D' R' U R E Z' Y'"
 }
 
 
 
 
 ret.cases.L01 = {
+    sample: "YYBOOOOOOBBBYYYBBYYBBGGGGGGYYBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
         SIDES.LEFT, SIDES.BACK, SIDES.BACK
     ],
-    moves: "R' F R U R' F' R Y L U' L'"
+    moves: "R' F R U R' F' R Y L U' L' Y'"
 }
 
 ret.cases.L02 = {
+    sample: "BYYOOOOOOBBBYYYYBBBBBGGGGGGBYYRRRRRRWWWWWWWWWBBYUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.FRONT,
         SIDES.UP, SIDES.UP, SIDES.UP,
         SIDES.BACK, SIDES.BACK, SIDES.RIGHT
     ],
-    moves: "L F' L' U' L F L' Y' R' U R"
+    moves: "L F' L' U' L F L' Y' R' U R Y"
 }
 
 ret.cases.L03 = {
+    sample: "BYBOOOOOOBBBYYYBBYBBYGGGGGGBYYRRRRRRWWWWWWWWWBBYUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -445,6 +493,7 @@ ret.cases.L03 = {
 }
 
 ret.cases.L04 = {
+    sample: "BYBOOOOOOBBBYYYYBBYBBGGGGGGYYBRRRRRRWWWWWWWWWYBBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -457,6 +506,7 @@ ret.cases.L04 = {
 
 
 ret.cases.P01 = {
+    sample: "BYBOOOOOOYYBYYBYBBBBBGGGGGGBBBRRRRRRWWWWWWWWWYYYUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -466,6 +516,7 @@ ret.cases.P01 = {
 }
 
 ret.cases.P02 = {
+    sample: "YYBOOOOOOBYYBYYBBYBYBGGGGGGBBYRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.UP,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -475,6 +526,7 @@ ret.cases.P02 = {
 }
 
 ret.cases.P03 = {
+    sample: "BYYOOOOOOYYBYYBYBBBBBGGGGGGYBBRRRRRRWWWWWWWWWBYBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.FRONT,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
@@ -484,6 +536,7 @@ ret.cases.P03 = {
 }
 
 ret.cases.P04 = {
+    sample: "BYBOOOOOOBYYBYYBBYYYYGGGGGGBBBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.UP,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
@@ -496,6 +549,7 @@ ret.cases.P04 = {
 
 
 ret.cases.T01 = {
+    sample: "BYBOOOOOOBBYYYYBBYYBYGGGGGGBYBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -505,6 +559,7 @@ ret.cases.T01 = {
 }
 
 ret.cases.T02 = {
+    sample: "YYBOOOOOOBBYYYYBBYBBBGGGGGGBYYRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -517,24 +572,27 @@ ret.cases.T02 = {
 
 
 ret.cases.W01 = {
+    sample: "BBYOOOOOOBBYBYYYYBYYBGGGGGGBYBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.UP, SIDES.UP, SIDES.FRONT,
         SIDES.LEFT, SIDES.UP, SIDES.UP,
         SIDES.LEFT, SIDES.BACK, SIDES.UP
     ],
-    moves: "L U L' U L U' L' U' Y2 R' F R F'"
+    moves: "L U L' U L U' L' U' Y2 R' F R F' Y2"
 }
 
 ret.cases.W02 = {
+    sample: "YBBOOOOOOYBBYYBBYYBBBGGGGGGBYBRRRRRRWWWWWWWWWBYYUUUUUU",
     sides: [
         SIDES.FRONT, SIDES.UP, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.RIGHT,
         SIDES.UP, SIDES.BACK, SIDES.RIGHT
     ],
-    moves: "R' U' R U' R' U R U Y F R' F' R"
+    moves: "R' U' R U' R' U R U Y F R' F' R Y'"
 }
 
 ret.cases.Z01 = {
+    sample: "BYBOOOOOOYBBYYYBBYBBYGGGGGGYYBRRRRRRWWWWWWWWWBBBUUUUUU",
     sides: [
         SIDES.LEFT, SIDES.FRONT, SIDES.UP,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -544,6 +602,7 @@ ret.cases.Z01 = {
 }
 
 ret.cases.Z02 = {
+    sample: "BYBOOOOOOBBYYYYYBBBBBGGGGGGBYYRRRRRRWWWWWWWWWYBBUUUUUU",
     sides: [
         SIDES.UP, SIDES.FRONT, SIDES.RIGHT,
         SIDES.UP, SIDES.UP, SIDES.UP,
@@ -551,10 +610,6 @@ ret.cases.Z02 = {
     ],
     moves: "L F' L' U' L U Y' R Y U' L'"
 }
-
-
-
-
 
 
 Object.entries(ret.cases).forEach(_ => _[1].name = _[0]);
