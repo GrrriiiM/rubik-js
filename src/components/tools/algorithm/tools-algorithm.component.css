@@ -1,0 +1,10 @@
+@import url("../../algorithm/list/algorithm-list.component.css");
+
+.tools.tools-algorithm-expanded>.area>.algorithm {
+    display: flex;
+}
+
+.tools>.area>.algorithm>.button {
+    height: calc((100% - 30px) / 2);
+    width: calc((100% - 50px) / 4);
+}

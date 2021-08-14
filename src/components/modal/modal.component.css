@@ -1,0 +1,57 @@
+.modal {
+    --modal-area-height: calc(100% - var(--header-height) * 1.5);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+}
+
+.modal>.shadow {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(0,0,0);
+    top: 100%;
+    opacity: 0;
+    transition: opacity 250ms ease-out;
+}
+
+.modal>.modal-area {
+    display: flex;
+    flex-direction: column;
+    top: 100%;
+    position: absolute;
+    height: var(--modal-area-height);
+    width: 100%;
+    transition: top 250ms ease-out;
+}
+
+.modal>.modal-area>.header {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal>.modal-area>.header {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal>.modal-area>.modal-content {
+    height: 100%;
+}
+
+
+.modal.expanded>.shadow {
+    top: 0px;
+    opacity: 0.5;
+}
+.modal.expanded>.modal-area {
+    top: calc(var(--header-height) * 1.5);
+}

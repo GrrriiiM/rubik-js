@@ -1,5 +1,6 @@
 
 export default function contentComponent(sceneComponent) {
+    let self;
     let scene = sceneComponent
     let sceneState = scene.state;
     let element;
@@ -19,21 +20,21 @@ export default function contentComponent(sceneComponent) {
 
         fetch("./components/content/content.component.html").then(async (reponse) => {
 
-            element = parentElement.querySelector(".content");
-            element.innerHTML = await reponse.text();
+            self.element = parentElement.querySelector(".content");
+            self.element.innerHTML = await reponse.text();
 
-            scene.render(element);
+            scene.render(self.element);
 
-            timeHtmlElement = document.querySelector(".time");
-            countHtmlElement = document.querySelector(".count");
-            checkCrossElement = element.querySelector(".cube-steps-area>.steps-item.check-cross");
-            checkF2LElement = element.querySelector(".cube-steps-area>.steps-item.check-f2l");
-            checkOLLElement = element.querySelector(".cube-steps-area>.steps-item.check-oll");
-            checkPLLElement = element.querySelector(".cube-steps-area>.steps-item.check-pll");
-            timeCrossElement = element.querySelector(".cube-steps-area>.steps-time.time-cross");
-            timeF2LElement = element.querySelector(".cube-steps-area>.steps-time.time-f2l");
-            timeOLLElement = element.querySelector(".cube-steps-area>.steps-time.time-oll");
-            timePLLElement = element.querySelector(".cube-steps-area>.steps-time.time-pll");
+            timeHtmlElement = self.element.querySelector(".time");
+            countHtmlElement = self.element.querySelector(".count");
+            checkCrossElement = self.element.querySelector(".cube-steps-area>.steps-item.check-cross");
+            checkF2LElement = self.element.querySelector(".cube-steps-area>.steps-item.check-f2l");
+            checkOLLElement = self.element.querySelector(".cube-steps-area>.steps-item.check-oll");
+            checkPLLElement = self.element.querySelector(".cube-steps-area>.steps-item.check-pll");
+            timeCrossElement = self.element.querySelector(".cube-steps-area>.steps-time.time-cross");
+            timeF2LElement = self.element.querySelector(".cube-steps-area>.steps-time.time-f2l");
+            timeOLLElement = self.element.querySelector(".cube-steps-area>.steps-time.time-oll");
+            timePLLElement = self.element.querySelector(".cube-steps-area>.steps-time.time-pll");
         });
     }
 
@@ -82,7 +83,7 @@ export default function contentComponent(sceneComponent) {
         movementsCount = sceneState.history.length;
 
     }
-    return {
+    return self = {
         element,
         render,
         refresh

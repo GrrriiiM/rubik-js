@@ -1,4 +1,5 @@
 @import url("./components/app/app.component.css");
+@import url("./components/algorithm/algorithm.component.css");
 
 body, .wrapper {
     position: absolute;
@@ -6,7 +7,7 @@ body, .wrapper {
     width: 100%;
     height: 100%;
     margin: 0;
-    overflow-y: hidden;
+    overflow: hidden;
     font-family: 'Roboto', sans-serif;
 }
 

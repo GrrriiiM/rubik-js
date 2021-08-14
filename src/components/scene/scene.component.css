@@ -69,6 +69,9 @@
 .scene>.cube>.block>.side.blue {
     background-color: #277da1;
 }
+.scene>.cube>.block>.side.black {
+    background-color: #151515;
+}
 
 .scene>.cube>.block>.side.up {
     transform: rotateX(90deg) translateZ(var(--block-size-half));
