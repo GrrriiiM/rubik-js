@@ -11,7 +11,7 @@ export function algorithmComponent(cube, name, movements, headers) {
         movementPosition: 0
     }
     let dragHandler = dragSceneHandler();
-    let scene = sceneComponent(dragHandler, cube);
+    let scene = sceneComponent(dragHandler, cube, canRotate);
     let self = {
         className: "algorithm",
         element: null,
@@ -31,7 +31,10 @@ export function algorithmComponent(cube, name, movements, headers) {
         self.element.querySelector(".button-next").onclick = nextMovement;
         self.element.querySelector(".button-prev").onclick = previousMovement;
         self.element.querySelector(".button-play").onclick = playMovement;
+        self.element.querySelector(".button-begin").onclick = beginMovement;
+        self.element.querySelector(".button-end").onclick = endMovement;
         
+
 
 
 
@@ -41,13 +44,18 @@ export function algorithmComponent(cube, name, movements, headers) {
             buttonMovementElement.innerHTML = movement.str;
             movementsAreaElement.appendChild(buttonMovementElement);
         }
+        let buttonMovementElement = self.element.querySelector(".button-movement.template").cloneNode(true);
+        buttonMovementElement.classList.remove("template");
+        movementsAreaElement.appendChild(buttonMovementElement);
 
         await updateMovementsArea();
     }
 
-    async function playMovement() {
-        if (scene.state.isBusy) return;
+    async function playMovement(event) {
         isPlay = !isPlay
+        if (isPlay) event.currentTarget.classList.add("playing");
+        else event.currentTarget.classList.remove("playing");
+        if (scene.state.isBusy) return;
         while (isPlay) {
             if (state.movementPosition >= state.movements.length) break;
             await nextMovement();
@@ -58,19 +66,30 @@ export function algorithmComponent(cube, name, movements, headers) {
 
     async function nextMovement() {
         if (scene.state.isBusy) return;
-        if (state.movementPosition < state.movements.length) {
-            state.movementPosition += 1;
-            await updateMovementsArea();
-            await scene.rotate(state.movements[state.movementPosition - 1]);
-        }
+        await scene.rotate(state.movements[state.movementPosition]);
     }
 
+    let isInvert = false;
     async function previousMovement() {
         if (scene.state.isBusy) return;
-        if (state.movementPosition > 0) {
-            state.movementPosition -= 1;
-            await updateMovementsArea();
-            await scene.rotate(invertClockMovement(state.movements[state.movementPosition]));
+        isInvert = true;
+        await scene.rotate(invertClockMovement(state.movements[state.movementPosition - 1]));
+        isInvert = false;
+    }
+
+    async function beginMovement() {
+        let movements = state.movements.slice(0, state.movementPosition).reverse();
+        isInvert = true;
+        for(let movement of movements) {
+            await scene.rotate(invertClockMovement(movement), false);
+        }
+        isInvert = false;
+    }
+
+    async function endMovement() {
+        let movements = state.movements.slice(state.movementPosition);
+        for(let movement of movements) {
+            await scene.rotate(movement, false);
         }
     }
 
@@ -89,6 +108,25 @@ export function algorithmComponent(cube, name, movements, headers) {
                 el.classList.remove("big")
             }
         });
+    }
+
+    function canRotate(movement) {
+        if (!isInvert) {
+            if (state.movementPosition >= state.movements.length) return false;
+            if (state.movements[state.movementPosition] == movement) {
+                state.movementPosition += 1;
+                updateMovementsArea();
+                return true;
+            }
+        } else {
+            if (state.movementPosition == 0) return false;
+            if (state.movements[state.movementPosition - 1] == invertClockMovement(movement)) {
+                state.movementPosition -= 1;
+                updateMovementsArea();
+                return true;
+            }
+        }
+        return false;
     }
 
     return self;

@@ -33,6 +33,23 @@
     width: var(--movement-button-big);
 }
 
+.algorithm>.play-area>.button-play>.stop {
+    display: none;
+}
+
+.algorithm>.play-area>.button-play.playing>.play {
+    display: none;
+}
+
+.algorithm>.play-area>.button-play.playing>.stop {
+    display: block;
+}
+
+.algorithm>.play-area>.button-play {
+    height: var(--movement-button-big);
+    width: var(--movement-button-big);
+}
+
 .algorithm>.movements-area {
     height: var(--movement-area-height);
     width: max-content;

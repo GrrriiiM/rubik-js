@@ -4,11 +4,11 @@ import { ollAlgorithm } from "../../objs/algotithms/oll-algorithm.js";
 import { COLORS, SIDES } from "../../objs/constants.js";
 import { createCube, createCubeWithPattern } from "../../objs/creator.js";
 import { isCubeCompleted, findCubeSideCrosses, findCubeF2LSides, findCubeOLL } from "../../objs/finder.js";
-import { rotateCube, shuffleCube } from "../../objs/rotator.js";
+import { rotateCube, rotateCubeWithMovement, shuffleCube } from "../../objs/rotator.js";
 import { solveCube } from "../../objs/solver.js";
 import { axisToString, coordsToLayers, inverseKeyValue } from "../../objs/transformer.js";
 
-export default function sceneComponent(dragSceneHandler, cube = null) {
+export default function sceneComponent(dragSceneHandler, cube = null, canRotate = null) {
     let self;
     let dragHandler = dragSceneHandler;
     let element;
@@ -109,31 +109,69 @@ export default function sceneComponent(dragSceneHandler, cube = null) {
     }
 
 
-    function rotate(movement) {
+    function rotate(movement, animate = true) {
         if (state.isBusy) Promise.resolve();
+        if (canRotate) {
+            if (!canRotate(movement)) return resetRotation();
+        }
         return new Promise((resolve) => {
             state.isBusy = true;
-            let axis = axisToString(movement.axis);
             state.history.push({ isMovement: true, value: movement.str });
+            let axis = axisToString(movement.axis);
             let layers = coordsToLayers(movement.layers, state.cube.length);
-            let transtion = false;
+            if (!animate) {
+                updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
+                state.isBusy = false;
+                resolve();
+                return;
+            }
+            let transition = false;
             for (let layer of layers) {
                 let blockElements = cubeElement.querySelectorAll(`.block.position-${axis}-${layer}:not(.template)`);
-                if (!transtion) {
-                    transtion = true;
-                    blockElements[0].ontransitionend = (e) => rotateTransitionEnd(blockElements[0], movement, layers, resolve);
-                }
-                blockElements.forEach(_ => {
+                blockElements.forEach((_, i) => {
+                    if (!transition) {
+                        transition = true;
+                        _.ontransitionend = (e) => rotateTransitionEnd(_, movement, layers, resolve);
+                    }
                     _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)
                     _.style.transform = '';
                 });
+                if (!transition) state.isBusy = false;
             }
         });
     }
 
+    function resetRotation() {
+        return new Promise(resolve => {
+            state.isBusy = true;
+            let transition = false;
+            cubeElement.querySelectorAll(`.block:not(.template)`).forEach((_, i) => {
+                if (!transition && _.style.transform) {
+                    transition = true;
+                    _.ontransitionend = (e) => rotateTransitionEnd(_, null, null, resolve);
+                }
+                _.classList.add('rotate');
+                _.style.transform = '';
+            });
+            if (!transition) state.isBusy = false;
+        });
+        // setTimeout(() => {
+        //     cubeElement.querySelectorAll(`.block`).forEach(_ => {
+        //         _.classList.remove('rotate');
+        //     });
+        //     onFinished && onFinished();
+        //     state.isBusy = false;
+        // }, rotationDelay);
+    }
+
     function rotateTransitionEnd(element, movement, layers, resolve) {
         element.ontransitionend = null;
-        updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
+        if (movement && layers) {
+            updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
+        }
+        cubeElement.querySelectorAll(`.block`).forEach(_ => {
+            _.classList.remove('rotate');
+        });
         state.isBusy = false;
         setTimeout(resolve, 1);
     }
@@ -177,20 +215,7 @@ export default function sceneComponent(dragSceneHandler, cube = null) {
         refreshCubeElement();
     }
 
-    function resetRotation(onFinished) {
-        state.isBusy = true;
-        cubeElement.querySelectorAll(`.block`).forEach(_ => {
-            _.classList.add('rotate');
-            _.style.transform = '';
-        });
-        setTimeout(() => {
-            cubeElement.querySelectorAll(`.block`).forEach(_ => {
-                _.classList.remove('rotate');
-            });
-            onFinished && onFinished();
-            state.isBusy = false;
-        }, rotationDelay);
-    }
+    
 
     function reset() {
         state.cube = shuffleCube(createCube(state.cube.length));
