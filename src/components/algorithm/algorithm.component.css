@@ -12,8 +12,9 @@
     position: absolute;
     top: calc(var(--header-height));
     left: 25px;
+    margin-top: 5px;
     height: auto;
-    line-height: 25px;
+    line-height: 30px;
     width: calc((100% - 50px));
     display: flex;
     flex-direction: row;
@@ -52,11 +53,16 @@
     display: none;
 }
 
-.algorithm>.play-area>.button-play.playing>.play {
+.algorithm>.play-area.playing>.button:not(.button-play) {
+    opacity: 0.2;
+}
+
+
+.algorithm>.play-area.playing>.button-play>.play {
     display: none;
 }
 
-.algorithm>.play-area>.button-play.playing>.stop {
+.algorithm>.play-area.playing>.button-play>.stop {
     display: block;
 }
 
