@@ -2,7 +2,7 @@ import dragSceneHandler from "../../handlers/drag-scene.handler.js";
 import { invertClockMovement } from "../../objs/transformer.js";
 import sceneComponent from "../scene/scene.component.js";
 
-export function algorithmComponent(cube, name, movements, headers) {
+export function algorithmComponent(cube, name, movements, headers = []) {
     let state = {
         cube,
         name,
