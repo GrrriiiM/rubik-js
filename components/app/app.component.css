@@ -1,6 +1,7 @@
 @import url("../content/content.component.css");
 @import url("../tools/tools.component.css");
 @import url("../scene/scene.component.css");
+@import url("../modal/modal.component.css");
 
 :root {
     --header-height: 60px;

@@ -1,40 +1,49 @@
 import toolsHistoryComponent from "./history/tools-history.component.js";
 import toolsActionComponent from "./action/tools-action.component.js";
 import toolsMovementComponent from "./movement/tools-movement.component.js";
+import toolsAlgorithmComponent from "./algorithm/tools-algorithm.component.js";
 
 
 export default function toolsComponent(sceneComponent) {
     let scene = sceneComponent;
-    let element;
+    let self = {
+        element: null,
+        render,
+        refresh,
+        hide,
+        onExpanded: null
+    }
     let buttonMovementElement;
     let buttonHistoryElement;
-    let buttonAlgoElement;
+    let buttonAlgorithmElement;
     let buttonActionElement;
 
     let action = toolsActionComponent(scene);
     let history = toolsHistoryComponent(scene);
     let movement = toolsMovementComponent(scene);
-    let onExpanded;
+    let algorithm = toolsAlgorithmComponent(scene)
 
     function render(parentElement) {
 
         fetch("./components/tools/tools.component.html").then(async (reponse) => {
 
-            element = parentElement.querySelector(".tools");
-            element.innerHTML = await reponse.text();
+            self.element = parentElement.querySelector(".tools");
+            self.element.innerHTML = await reponse.text();
 
-            buttonHistoryElement = element.querySelector(".button-tool-history");
-            buttonMovementElement = element.querySelector(".button-tool-movement");
-            buttonActionElement = element.querySelector(".button-tool-action");
+            buttonHistoryElement = self.element.querySelector(".button-tool-history");
+            buttonMovementElement = self.element.querySelector(".button-tool-movement");
+            buttonActionElement = self.element.querySelector(".button-tool-action");
+            buttonAlgorithmElement = self.element.querySelector(".button-tool-algorithm");
 
             buttonHistoryElement.addEventListener("click", () => toggleToolHistory())
             buttonMovementElement.addEventListener("click", () => toggleToolMovement())
             buttonActionElement.addEventListener("click", () => toggleToolAction())
+            buttonAlgorithmElement.addEventListener("click", () => toggleToolAlgorithm())
 
-            action.render(element);
-            history.render(element);
-            movement.render(element);
-
+            action.render(self.element);
+            history.render(self.element);
+            movement.render(self.element);
+            algorithm.render(self.element);
         });
     }
 
@@ -48,11 +57,12 @@ export default function toolsComponent(sceneComponent) {
         hideToolAction();
         hideToolMovement();
         hideToolHistory();
+        hideToolAlgorithm();
     }
 
     function reset() {
         hide();
-        onExpanded && onExpanded();
+        self.onExpanded && self.onExpanded();
     }
 
     let isToolActionExpanded = false;
@@ -64,15 +74,15 @@ export default function toolsComponent(sceneComponent) {
     function showToolAction() {
         reset();
         isToolActionExpanded = true;
-        element.classList.add("tools-expanded");
-        element.classList.add("tools-action-expanded");
+        self.element.classList.add("tools-expanded");
+        self.element.classList.add("tools-action-expanded");
         document.querySelector(".content").classList.add("tools-expanded");
         document.querySelector(".button-tool-action").classList.add("selected");
     }
     function hideToolAction() {
         isToolActionExpanded = false;
-        element.classList.remove("tools-expanded");
-        element.classList.remove("tools-action-expanded");
+        self.element.classList.remove("tools-expanded");
+        self.element.classList.remove("tools-action-expanded");
         document.querySelector(".content").classList.remove("tools-expanded");
         document.querySelector(".button-tool-action").classList.remove("selected");
     }
@@ -88,15 +98,15 @@ export default function toolsComponent(sceneComponent) {
     function showToolMovement() {
         reset();
         isToolMovementExpanded = true;
-        element.classList.add("tools-expanded");
-        element.classList.add("tools-movement-expanded");
+        self.element.classList.add("tools-expanded");
+        self.element.classList.add("tools-movement-expanded");
         document.querySelector(".content").classList.add("tools-expanded");
         document.querySelector(".button-tool-movement").classList.add("selected");
     }
     function hideToolMovement() {
         isToolMovementExpanded = false;
-        element.classList.remove("tools-expanded");
-        element.classList.remove("tools-movement-expanded");
+        self.element.classList.remove("tools-expanded");
+        self.element.classList.remove("tools-movement-expanded");
         document.querySelector(".content").classList.remove("tools-expanded");
         document.querySelector(".button-tool-movement").classList.remove("selected");
     }
@@ -111,26 +121,42 @@ export default function toolsComponent(sceneComponent) {
     function showToolHistory() {
         reset();
         isToolHistoryExpanded = true;
-        element.classList.add("tools-expanded");
-        element.classList.add("tools-history-expanded");
+        self.element.classList.add("tools-expanded");
+        self.element.classList.add("tools-history-expanded");
         document.querySelector(".content").classList.add("tools-expanded");
         document.querySelector(".button-tool-history").classList.add("selected");
     }
     function hideToolHistory() {
         isToolHistoryExpanded = false;
-        element.classList.remove("tools-expanded");
-        element.classList.remove("tools-history-expanded");
+        self.element.classList.remove("tools-expanded");
+        self.element.classList.remove("tools-history-expanded");
         document.querySelector(".content").classList.remove("tools-expanded");
         document.querySelector(".button-tool-history").classList.remove("selected");
     }
 
-    return {
-        element,
-        render,
-        refresh,
-        hide,
-        onExpanded
+    let isToolAlgorithmExpanded = false;
+    function toggleToolAlgorithm() {
+        if (!isToolAlgorithmExpanded) showToolAlgorithm();
+        else hideToolAlgorithm();
     }
+    function showToolAlgorithm() {
+        reset();
+        isToolAlgorithmExpanded = true;
+        self.element.classList.add("tools-expanded");
+        self.element.classList.add("tools-algorithm-expanded");
+        document.querySelector(".content").classList.add("tools-expanded");
+        document.querySelector(".button-tool-algorithm").classList.add("selected");
+    }
+    function hideToolAlgorithm() {
+        isToolAlgorithmExpanded = false;
+        self.element.classList.remove("tools-expanded");
+        self.element.classList.remove("tools-algorithm-expanded");
+        document.querySelector(".content").classList.remove("tools-expanded");
+        document.querySelector(".button-tool-algorithm").classList.remove("selected");
+    }
+
+
+    return self;
 
 }
 

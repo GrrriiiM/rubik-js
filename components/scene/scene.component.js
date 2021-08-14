@@ -1,13 +1,14 @@
+import { crossAlgorithm } from "../../objs/algotithms/cross-algorithm.js";
+import { f2lAlgorithm } from "../../objs/algotithms/f2l-algorithm.js";
+import { ollAlgorithm } from "../../objs/algotithms/oll-algorithm.js";
 import { COLORS, SIDES } from "../../objs/constants.js";
-import { createCube } from "../../objs/creator.js";
-import { isCubeCompleted, findCubeSideCrosses, findCubeF2L, findCubeOLL, findCubeColorBySide, findCornerPositionByColor, findEdgePositionByColor, findColorsByPosition, findCrossAlgorithm, findF2LAlgorithm } from "../../objs/finder.js";
-import { fixMovementsRemoveY, fixRedundance } from "../../objs/fixer.js";
-import { MOVEMENTS } from "../../objs/movements.js";
-import { rotateCube, shuffleCube } from "../../objs/rotator.js";
-import { solveCubeCross, solveCubeCrossMovements, solveCubeF2L, solveCubeF2LMovements, solveCubeMovements } from "../../objs/solver.js";
-import { axisToString, coordsToLayers, inverseKeyValue, movementFromString } from "../../objs/transformer.js";
+import { createCube, createCubeWithPattern } from "../../objs/creator.js";
+import { isCubeCompleted, findCubeSideCrosses, findCubeF2LSides, findCubeOLL } from "../../objs/finder.js";
+import { rotateCube, rotateCubeWithMovement, shuffleCube } from "../../objs/rotator.js";
+import { solveCube } from "../../objs/solver.js";
+import { axisToString, coordsToLayers, inverseKeyValue } from "../../objs/transformer.js";
 
-export default function sceneComponent(dragSceneHandler) {
+export default function sceneComponent(dragSceneHandler, cube = null, canRotate = null) {
     let self;
     let dragHandler = dragSceneHandler;
     let element;
@@ -15,7 +16,9 @@ export default function sceneComponent(dragSceneHandler) {
     let rotationDelay = 1000;
 
     let state = {
-        cube: shuffleCube(createCube(3)),
+        cube: cube || shuffleCube(createCube(3)),
+        // cube: createCubeWithPattern("RRRROWYORUUGWWOUGGWGWRUUUUROWOORWGRYGYYYYYOYYWGWOGUUGO"),
+        // cube: createCubeWithPattern(crossAlgorithm.cases.F04.sample),
         createAt: new Date(Date.now()),
         history: [],
         movementCOunt: 0,
@@ -106,31 +109,75 @@ export default function sceneComponent(dragSceneHandler) {
     }
 
 
-    function rotate(movement) {
+    function rotate(movement, animate = true) {
         if (state.isBusy) Promise.resolve();
+        if (canRotate) {
+            if (!canRotate(movement)) return resetRotation();
+        }
         return new Promise((resolve) => {
             state.isBusy = true;
-            let axis = axisToString(movement.axis);
             state.history.push({ isMovement: true, value: movement.str });
+            let axis = axisToString(movement.axis);
             let layers = coordsToLayers(movement.layers, state.cube.length);
-            let transtion = false;
+            if (!animate) {
+                updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
+                state.isBusy = false;
+                resolve();
+                return;
+            }
+            let transition = false;
             for (let layer of layers) {
                 let blockElements = cubeElement.querySelectorAll(`.block.position-${axis}-${layer}:not(.template)`);
-                if (!transtion) {
-                    transtion = true;
-                    blockElements[0].ontransitionend = (e) => rotateTransitionEnd(blockElements[0], movement, layers, resolve);
-                }
-                blockElements.forEach(_ => {
+                blockElements.forEach((_, i) => {
+                    if (!transition) {
+                        transition = true;
+                        _.ontransitionend = (e) => rotateTransitionEnd(_, movement, layers, resolve);
+                    }
                     _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)
                     _.style.transform = '';
                 });
+                if (!transition) {
+                    state.isBusy = false;
+                    resolve();
+                }
             }
         });
     }
 
+    function resetRotation() {
+        return new Promise(resolve => {
+            state.isBusy = true;
+            let transition = false;
+            cubeElement.querySelectorAll(`.block:not(.template)`).forEach((_, i) => {
+                if (!transition && _.style.transform) {
+                    transition = true;
+                    _.ontransitionend = (e) => rotateTransitionEnd(_, null, null, resolve);
+                }
+                _.classList.add('rotate');
+                _.style.transform = '';
+            });
+            if (!transition) {
+                state.isBusy = false;
+                resolve();
+            }
+        });
+        // setTimeout(() => {
+        //     cubeElement.querySelectorAll(`.block`).forEach(_ => {
+        //         _.classList.remove('rotate');
+        //     });
+        //     onFinished && onFinished();
+        //     state.isBusy = false;
+        // }, rotationDelay);
+    }
+
     function rotateTransitionEnd(element, movement, layers, resolve) {
         element.ontransitionend = null;
-        updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
+        if (movement && layers) {
+            updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
+        }
+        cubeElement.querySelectorAll(`.block`).forEach(_ => {
+            _.classList.remove('rotate');
+        });
         state.isBusy = false;
         setTimeout(resolve, 1);
     }
@@ -139,7 +186,7 @@ export default function sceneComponent(dragSceneHandler) {
         state.cube = cube;
 
         state.crossSides = findCubeSideCrosses(state.cube);
-        let f2l = findCubeF2L(state.cube, state.crossSides);
+        let f2l = findCubeF2LSides(state.cube, state.crossSides);
         state.f2lSides = f2l ? f2l.sides : [];
         state.ollSide = state.f2lSides.length == 4 && findCubeOLL(state.cube, f2l.crossSide);
         state.isCompleted = isCubeCompleted(state.cube);
@@ -174,20 +221,7 @@ export default function sceneComponent(dragSceneHandler) {
         refreshCubeElement();
     }
 
-    function resetRotation(onFinished) {
-        state.isBusy = true;
-        cubeElement.querySelectorAll(`.block`).forEach(_ => {
-            _.classList.add('rotate');
-            _.style.transform = '';
-        });
-        setTimeout(() => {
-            cubeElement.querySelectorAll(`.block`).forEach(_ => {
-                _.classList.remove('rotate');
-            });
-            onFinished && onFinished();
-            state.isBusy = false;
-        }, rotationDelay);
-    }
+    
 
     function reset() {
         state.cube = shuffleCube(createCube(state.cube.length));
@@ -206,8 +240,11 @@ export default function sceneComponent(dragSceneHandler) {
     }
 
     async function solve() {
-        for (let move of solveCubeMovements(state.cube)) {
-            await rotate(move);
+        let solution = solveCube(state.cube);
+        if (solution.solved) {
+            for (let movement of solution.movements) {
+                await rotate(movement);
+            }
         }
     }
 

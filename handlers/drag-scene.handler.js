@@ -151,7 +151,7 @@ export default function dragSceneHandler() {
             });
 
         } else {
-            scene.resetRotation(() => {
+            scene.resetRotation().then(() => {
                 isDragMoving = false;
                 isDragMovingX = false;
                 isDragMovingY = false;
