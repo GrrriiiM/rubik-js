@@ -29,3 +29,8 @@ export const CLOCK = {
     NORMAL: true,
     ANTI: false
 }
+
+export const POSITION = {
+    CORNER: 1,
+    EDGE: 2
+}
