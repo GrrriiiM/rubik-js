@@ -4,7 +4,18 @@
     display: flex;
 }
 
+.tools>.area>.algorithm>.label {
+    padding-left: 10px;
+    padding-top: 2px;
+    width: 100%;
+}
+
+/* .tools>.area>.algorithm>.button.button-tool-algorithm-cross {
+    margin-top: 10px;
+} */
+
 .tools>.area>.algorithm>.button {
-    height: calc((100% - 30px) / 2);
-    width: calc((100% - 50px) / 4);
+    
+    height: calc(((100% - 30px) / 2));
+    width: calc((100% - 60px) / 5);
 }

@@ -5,14 +5,16 @@ let ret = {
     name: "PLL",
     side: SIDES.UP,
     positions: [0, 1, 2, 9, 10, 11, 18, 19, 20],
+    sample: CUBE_DEFAULT_PATTERN,
     cases: {}
 }
 
-// ret.cases.solved = {
-//     positions: [0, 1, 2, 9, 10, 11, 18, 19, 20],
-//     sample: CUBE_DEFAULT_PATTERN,
-//     moves: ""
-// }
+ret.cases.solved = {
+    solved: true,
+    positions: [0, 1, 2, 9, 10, 11, 18, 19, 20],
+    sample: CUBE_DEFAULT_PATTERN,
+    moves: ""
+}
 
 ret.cases.A1 = {
     positions: [0, 1, 18, 9, 10, 11, 20, 19, 2],

@@ -17,20 +17,21 @@ export default function toolsActionComponent(sceneComponent) {
 
             element.querySelector(".button-tool-action-reset").addEventListener("click", () => scene.reset());
 
-            element.querySelector(".button-tool-action-solve").addEventListener("click", openSolveModal);
+            element.querySelector(".button-tool-action-solve").addEventListener("click", () => openSolveModal(false));
+            element.querySelector(".button-tool-action-solve-basic").addEventListener("click", () => openSolveModal(true));
 
         });
     }
 
-    function openSolveModal() {
+    function openSolveModal(useBasic = false) {
         let cube = scene.state.cube;
-        let solution = solveCube(cube);
+        let solution = solveCube(cube, SIDES.DOWN, useBasic);
         if (solution.solved) {
             let headers = [];
             if (solution.cross) {
                 solution.cross.forEach((c, i) => {
                     c.adjusts.forEach(() => {
-                        headers.push(`Cross - Ajustes`);
+                        headers.push(`Cross (${i + 1}/${solution.cross.length}) - Ajustes`);
                     });
                     if (c.algo) {
                         c.algo.movements.forEach(() => {
@@ -42,7 +43,7 @@ export default function toolsActionComponent(sceneComponent) {
             if (solution.f2ls) {
                 solution.f2ls.forEach((c, i) => {
                     c.adjusts.forEach(() => {
-                        headers.push(`F2L - Ajustes`);
+                        headers.push(`F2L (${i + 1}/${solution.f2ls.length}) - Ajustes`);
                     });
                     if (c.algo) {
                         c.algo.movements.forEach(() => {
@@ -51,28 +52,32 @@ export default function toolsActionComponent(sceneComponent) {
                     }
                 });
             }
-            if (solution.oll) {
-                solution.oll.adjusts.forEach(() => {
-                    headers.push(`OLL - Ajustes`);
-                });
-                if (solution.oll.algo) {
-                    solution.oll.algo.movements.forEach(() => {
-                        headers.push(`OLL - ${solution.oll.algo.name}`);
+            if (solution.olls) {
+                solution.olls.forEach((c, i) => {
+                    c.adjusts.forEach(() => {
+                        headers.push(`OLL (${i + 1}/${solution.olls.length}) - Ajustes`);
                     });
-                }
+                    if (c.algo) {
+                        c.algo.movements.forEach(() => {
+                            headers.push(`OLL (${i + 1}/${solution.olls.length}) - ${c.algo.name}`);
+                        });
+                    }
+                });
             }
-            if (solution.pll) {
-                solution.pll.adjusts.forEach(() => {
-                    headers.push(`PLL - Ajustes`);
-                });
-                if (solution.pll.algo) {
-                    solution.pll.algo.movements.forEach(() => {
-                        headers.push(`PLL - ${solution.pll.algo.name}`);
+            if (solution.plls) {
+                solution.plls.forEach((c, i) => {
+                    c.adjusts.forEach(() => {
+                        headers.push(`PLL (${i + 1}/${solution.plls.length}) - Ajustes`);
                     });
-                }
+                    if (c.algo) {
+                        c.algo.movements.forEach(() => {
+                            headers.push(`PLL (${i + 1}/${solution.plls.length}) - ${c.algo.name}`);
+                        });
+                    }
+                });
             }
             headers.push("Concluído");
-            modal.show("Solução", algorithmComponent(cube, "Solução", solution.movements, headers));
+            modal.show(`Solução (${useBasic ? "Básico" : "Avançado"}) - ${solution.movements.length} movimentos`, algorithmComponent(cube, "Solução", solution.movements, headers));
         }
     }
 

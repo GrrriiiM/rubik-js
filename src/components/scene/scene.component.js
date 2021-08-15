@@ -1,3 +1,7 @@
+import { basicF2LCornerAlgorithm } from "../../objs/algotithms/basic-f2l-c-algorithm.js";
+import { basicF2LEdgeAlgorithm } from "../../objs/algotithms/basic-f2l-e-algorithm.js";
+import { basicOLLEdgeAlgorithm } from "../../objs/algotithms/basic-oll-e-algorithm.js";
+import { basicPllCornerAlgorithm } from "../../objs/algotithms/basic-pll-c-algorithm.js";
 import { crossAlgorithm } from "../../objs/algotithms/cross-algorithm.js";
 import { f2lAlgorithm } from "../../objs/algotithms/f2l-algorithm.js";
 import { ollAlgorithm } from "../../objs/algotithms/oll-algorithm.js";
@@ -17,8 +21,8 @@ export default function sceneComponent(dragSceneHandler, cube = null, canRotate 
 
     let state = {
         cube: cube || shuffleCube(createCube(3)),
-        // cube: createCubeWithPattern("RRRROWYORUUGWWOUGGWGWRUUUUROWOORWGRYGYYYYYOYYWGWOGUUGO"),
-        // cube: createCubeWithPattern(crossAlgorithm.cases.F04.sample),
+        // cube: createCubeWithPattern("RYWYYUYOOGWURRGWUOYGGYGRGUURUOWWOWOYRGUOOGRWGUYWRURYWO"),
+        // cube: createCubeWithPattern(basicPllCornerAlgorithm.sample),
         createAt: new Date(Date.now()),
         history: [],
         movementCOunt: 0,

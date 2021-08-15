@@ -5,12 +5,6 @@ let ret = {
     edge: [SIDES.FRONT, SIDES.RIGHT],
     corner: [SIDES.DOWN, SIDES.FRONT, SIDES.RIGHT],
     sample: "BBBOOOOOOBBBBYBBBBBBBGGGGGGBBBRRRRRRWWWWWWWWWBBBUUUUUU",
-    fixes: [
-        { side: SIDES.FRONT, moves: "R U R'"},
-        { side: SIDES.RIGHT, moves: "B U B'"},
-        { side: SIDES.BACK, moves: "L U L'"},
-        { side: SIDES.LEFT, moves: "F U F'"}
-    ],
     cases: {
 
     }
@@ -579,6 +573,11 @@ ret.cases.F05 = {
         sides: [SIDES.RIGHT, SIDES.FRONT]
     },
     moves: "R U' R' U F' U' F U' F' U' F"
+};
+
+ret.fix = {
+    sample: "BBBBOBOOUBBBBYBBBBBBBBGBGGGBBBBRBRRRWWOWWWWWWBBBBUBWUU",
+    moves: "R U' R'"
 };
 
 Object.entries(ret.cases).forEach(_ => _[1].name = _[0]);

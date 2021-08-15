@@ -1,10 +1,16 @@
 import { expect } from "@jest/globals";
 import theoretically from "jest-theories";
+import { basicF2LCornerAlgorithm } from "../src/objs/algotithms/basic-f2l-c-algorithm";
+import { basicF2LEdgeAlgorithm } from "../src/objs/algotithms/basic-f2l-e-algorithm";
+import { basicOLLCornerAlgorithm } from "../src/objs/algotithms/basic-oll-c-algorithm";
+import { basicOLLEdgeAlgorithm } from "../src/objs/algotithms/basic-oll-e-algorithm";
+import { basicPllCornerAlgorithm } from "../src/objs/algotithms/basic-pll-c-algorithm";
+import { basicPllEdgeAlgorithm } from "../src/objs/algotithms/basic-pll-e.algorithm";
 import { crossAlgorithm } from "../src/objs/algotithms/cross-algorithm";
 import { f2lAlgorithm } from "../src/objs/algotithms/f2l-algorithm";
 import { ollAlgorithm } from "../src/objs/algotithms/oll-algorithm";
 import { pllAlgorithm } from "../src/objs/algotithms/pll-algorithm";
-import { COLORS, SIDES } from "../src/objs/constants";
+import { COLORS, POSITION, SIDES } from "../src/objs/constants";
 import { createCube, createCubeWithPattern } from "../src/objs/creator";
 import { findPositionsByAxis, findCubeColorBySide, findCenterPositionByColor, findEdgePositionByColor, findCornerPositionByColor, findCubeSideCrosses, findPLLAlgorithm, findCrossAlgorithm, findF2LAlgorithm, findOLLAlgorithm } from "../src/objs/finder";
 
@@ -178,6 +184,77 @@ describe("Find PLL Algorithm", () => {
     }));
     theoretically('case {input.algo.name}', theories, theory => {
         let algo = findPLLAlgorithm(theory.input.cube);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
+
+
+describe("Find Basic F2L Corner Algorithm", () => {
+    const theories = Object.values(basicF2LCornerAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findF2LAlgorithm(theory.input.cube, POSITION.CORNER);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
+
+describe("Find Basic F2L Edge Algorithm", () => {
+    const theories = Object.values(basicF2LEdgeAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findF2LAlgorithm(theory.input.cube, POSITION.EDGE);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
+
+
+
+describe("Find Basic OLL Edge Algorithm", () => {
+    const theories = Object.values(basicOLLEdgeAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findOLLAlgorithm(theory.input.cube, POSITION.EDGE);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
+
+describe("Find Basic OLL Corner Algorithm", () => {
+    const theories = Object.values(basicOLLCornerAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findOLLAlgorithm(theory.input.cube, POSITION.CORNER);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
+
+
+
+describe("Find Basic PLL Corner Algorithm", () => {
+    const theories = Object.values(basicPllCornerAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findPLLAlgorithm(theory.input.cube, POSITION.CORNER);
+        expect(algo.name).toEqual(theory.expected);
+    })
+});
+
+describe("Find Basic PLL Edge Algorithm", () => {
+    const theories = Object.values(basicPllEdgeAlgorithm.cases).map(_ => ({
+        input: { algo: _ , cube: createCubeWithPattern(_.sample, 3) },
+        expected: _.name
+    }));
+    theoretically('case {input.algo.name}', theories, theory => {
+        let algo = findPLLAlgorithm(theory.input.cube, POSITION.EDGE);
         expect(algo.name).toEqual(theory.expected);
     })
 });
