@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --collect-coverage"
   },
   "repository": {
     "type": "git",
@@ -24,9 +24,5 @@
     "jest": "^26.6.3",
     "jest-theories": "^1.2.0",
     "serve": "^11.3.2"
-  },
-  "jest": {
-    "collectCoverage": false, 
-    "verbose": true
   }
 }
