@@ -1,10 +1,17 @@
+import { basicF2LCornerAlgorithm } from "./algotithms/basic-f2l-c-algorithm.js";
+import { basicF2LEdgeAlgorithm } from "./algotithms/basic-f2l-e-algorithm.js";
+import { basicOLLCornerAlgorithm } from "./algotithms/basic-oll-c-algorithm.js";
+import { basicOLLEdgeAlgorithm } from "./algotithms/basic-oll-e-algorithm.js";
+import { basicPllCornerAlgorithm } from "./algotithms/basic-pll-c-algorithm.js";
+import { basicPllEdgeAlgorithm } from "./algotithms/basic-pll-e.algorithm.js";
 import { crossAlgorithm } from "./algotithms/cross-algorithm.js";
 import { f2lAlgorithm } from "./algotithms/f2l-algorithm.js";
 import { ollAlgorithm } from "./algotithms/oll-algorithm.js";
 import { pllAlgorithm } from "./algotithms/pll-algorithm.js";
-import { AXIS, CLOCK, COLORS, SIDES } from "./constants.js";
+import { AXIS, CLOCK, COLORS, POSITION, SIDES } from "./constants.js";
 import { createCube, createCubeWithColors } from "./creator.js";
-import { rotateCube } from "./rotator.js";
+import { MOVEMENTS } from "./movements.js";
+import { rotateCube, rotateCubeWithMovement } from "./rotator.js";
 import { cloneCube, coordsToLayers, cubeToFlat, movementFromString, movementsFromNotation } from "./transformer.js";
 
 
@@ -136,7 +143,7 @@ function checkFrontCross(cube) {
         && downColor == downSideColor;
 }
 
-export function findCubeF2LSides(cube, crossSides) {
+export function findCubeF2LSides(cube, crossSides, basicPosition) {
     let layers = coordsToLayers([], cube.length);
     let matchs = { crossSide: SIDES.CENTER, sides: [] };
     for (let crossSide of crossSides) {
@@ -149,13 +156,13 @@ export function findCubeF2LSides(cube, crossSides) {
         if (crossSide == SIDES.RIGHT) checkCube = rotateCube(AXIS.Z, cube, layers, false);
 
 
-        if (checkFrontRightF2L(checkCube)) sides.push(SIDES.FRONT)
+        if (checkFrontRightF2L(checkCube, basicPosition)) sides.push(SIDES.FRONT)
         checkCube = rotateCube(AXIS.Y, checkCube, layers, true);
-        if (checkFrontRightF2L(checkCube)) sides.push(SIDES.RIGHT)
+        if (checkFrontRightF2L(checkCube, basicPosition)) sides.push(SIDES.RIGHT)
         checkCube = rotateCube(AXIS.Y, checkCube, layers, true);
-        if (checkFrontRightF2L(checkCube)) sides.push(SIDES.BACK)
+        if (checkFrontRightF2L(checkCube, basicPosition)) sides.push(SIDES.BACK)
         checkCube = rotateCube(AXIS.Y, checkCube, layers, true);
-        if (checkFrontRightF2L(checkCube)) sides.push(SIDES.LEFT);
+        if (checkFrontRightF2L(checkCube, basicPosition)) sides.push(SIDES.LEFT);
 
         if (sides.length > matchs.sides.length) matchs = { crossSide: crossSide, sides: sides };
     }
@@ -163,7 +170,7 @@ export function findCubeF2LSides(cube, crossSides) {
     return matchs;
 }
 
-function checkFrontRightF2L(cube) {
+function checkFrontRightF2L(cube, basicPosition = null) {
     let middle = Math.floor(cube.length / 2);
     let end = cube.length - 1;
     let frontSideColor = findCubeColorBySide(cube, SIDES.FRONT);
@@ -176,11 +183,17 @@ function checkFrontRightF2L(cube) {
     let cornerRightColor = cube[0][end][end][SIDES.RIGHT];
     let cornerDownColor = cube[0][end][end][SIDES.DOWN];
 
-    return edgeFrontColor == frontSideColor
-        && edgeRightColor == rightSideColor
-        && cornerFrontColor == frontSideColor
-        && cornerRightColor == rightSideColor
-        && cornerDownColor == downSideColor;
+    if (basicPosition == POSITION.CORNER) {
+        return cornerFrontColor == frontSideColor
+            && cornerRightColor == rightSideColor
+            && cornerDownColor == downSideColor;
+    } else {
+        return edgeFrontColor == frontSideColor
+            && edgeRightColor == rightSideColor
+            && cornerFrontColor == frontSideColor
+            && cornerRightColor == rightSideColor
+            && cornerDownColor == downSideColor;
+    }
 }
 
 export function findCubeOLL(cube, crossSide) {
@@ -250,16 +263,32 @@ export function findCrossAlgorithm(cube) {
     if (algo) return { name: algo.name, movements: movementsFromNotation(algo.moves) };
 }
 
-export function findF2LAlgorithm(cube) {
-    let cubeEdgeColors = f2lAlgorithm.edge.map(_ => findCubeColorBySide(cube, _));
-    let cubeCornerColors = f2lAlgorithm.corner.map(_ => findCubeColorBySide(cube, _));
+
+export function findF2LAlgorithm(cube, basicPosition = null) {
+    let algoEdge;
+    let algoCorner;
+    let algoCases;
+    if (basicPosition == POSITION.CORNER) {
+        algoEdge = basicF2LCornerAlgorithm.edge;
+        algoCorner = basicF2LCornerAlgorithm.corner;
+        algoCases = basicF2LCornerAlgorithm.cases;
+    } else if (basicPosition == POSITION.EDGE) {
+        algoEdge = basicF2LEdgeAlgorithm.edge;
+        algoCorner = basicF2LEdgeAlgorithm.corner;
+        algoCases = basicF2LEdgeAlgorithm.cases;
+    } else {
+        algoEdge = f2lAlgorithm.edge;
+        algoCorner = f2lAlgorithm.corner;
+        algoCases = f2lAlgorithm.cases;
+    }
+    let cubeEdgeColors = algoEdge.map(_ => findCubeColorBySide(cube, _));
+    let cubeCornerColors = algoCorner.map(_ => findCubeColorBySide(cube, _));
     let edgePosition = findEdgePositionByColor(cube, cubeEdgeColors[0], cubeEdgeColors[1]);
     let cornerPosition = findCornerPositionByColor(cube, cubeCornerColors[0], cubeCornerColors[1], cubeCornerColors[2]);
-    let algo = Object.entries(f2lAlgorithm.cases).find(_ => {
-        let c = _[1];
+    let algo = Object.values(algoCases).find(c => {
         if (c.edge.position != edgePosition) return false;
         if (c.corner.position != cornerPosition) return false;
-        let blockEdgeColors = findColorsByPosition(cube, edgePosition);
+        let blockEdgeColors = edgePosition >= 0 ? findColorsByPosition(cube, edgePosition) : [];
         let edgeColors = c.edge.sides.map(_ => blockEdgeColors[_]);
         let blockCornerColors = findColorsByPosition(cube, cornerPosition);
         let cornerColors = c.corner.sides.map(_ => blockCornerColors[_]);
@@ -267,38 +296,79 @@ export function findF2LAlgorithm(cube) {
             && cornerColors.every((c, i) => c == cubeCornerColors[i]);
     });
     if (algo) {
-        return { name: algo[0], movements: movementsFromNotation(algo[1].moves) };
+        return { name: algo.name, movements: movementsFromNotation(algo.moves) };
     }
     return null;
 }
 
-export function findFixF2LAlgorithm(f2lSides) {
+export function findFixF2LAlgorithm(cube, basicPosition = null) {
     let movements = [];
-    for(let fix of f2lAlgorithm.fixes) {
-        if (!f2lSides.sides.includes(fix.side)) return movementsFromNotation(fix.moves);
+    for(let i=0;i<4;i++) {
+        if (!checkFrontRightF2L(cube, basicPosition)) {
+            if (basicPosition == POSITION.CORNER) {
+                movements.push(...movementsFromNotation(basicF2LCornerAlgorithm.fix.moves));
+                return movements;
+            } else if (basicPosition == POSITION.EDGE) {
+                movements.push(...movementsFromNotation(basicF2LEdgeAlgorithm.fix.moves));
+                return movements;
+            } else {
+                movements.push(...movementsFromNotation(f2lAlgorithm.fix.moves));
+                return movements;
+            }
+        }
+        movements.push(MOVEMENTS.Y);
+        cube = rotateCubeWithMovement(cube, MOVEMENTS.Y);
     }
-    return movements;
+    
+    return null;
 }
 
 
 
-export function findOLLAlgorithm(cube) {
-    let color = findCubeColorBySide(cube, ollAlgorithm.side);
-    let positionColors = ollAlgorithm.positions.map(_ => findColorsByPosition(cube, _));
-    let algo = Object.entries(ollAlgorithm.cases).find(_ => {
-        let c = _[1];
+export function findOLLAlgorithm(cube, basicPosition = null) {
+    let algoSide;
+    let algoPositions;
+    let algoCases;
+    if (basicPosition == POSITION.CORNER) {
+        algoSide = basicOLLCornerAlgorithm.side;
+        algoPositions = basicOLLCornerAlgorithm.positions;
+        algoCases = basicOLLCornerAlgorithm.cases;
+    } else if (basicPosition == POSITION.EDGE) {
+        algoSide = basicOLLEdgeAlgorithm.side;
+        algoPositions = basicOLLEdgeAlgorithm.positions;
+        algoCases = basicOLLEdgeAlgorithm.cases;
+    } else {
+        algoSide = ollAlgorithm.side;
+        algoPositions = ollAlgorithm.positions;
+        algoCases = ollAlgorithm.cases;
+    }
+    let color = findCubeColorBySide(cube, algoSide);
+    let positionColors = algoPositions.map(_ => findColorsByPosition(cube, _));
+    let algo = Object.values(algoCases).find(c => {
         return positionColors.every((p, i) => p[c.sides[i]] == color);
     });
     if (algo) {
-        return { name: algo[0], movements: movementsFromNotation(algo[1].moves) };
+        return { name: algo.name, movements: movementsFromNotation(algo.moves) };
     }
     return null;
 }
 
-export function findPLLAlgorithm(cube) {
+export function findPLLAlgorithm(cube, basicPosition = null) {
+    let algoPositions;
+    let algoCases;
+    if (basicPosition == POSITION.CORNER) {
+        algoPositions = basicPllCornerAlgorithm.positions;
+        algoCases = basicPllCornerAlgorithm.cases;
+    } else if (basicPosition == POSITION.EDGE) {
+        algoPositions = basicPllEdgeAlgorithm.positions;
+        algoCases = basicPllEdgeAlgorithm.cases;
+    } else {
+        algoPositions = pllAlgorithm.positions;
+        algoCases = pllAlgorithm.cases;
+    }
     let cubeRef = createCubeWithColors(Object.values(SIDES).filter(_ => _ != SIDES.CENTER).map(_ => findCubeColorBySide(cube, _)), cube.length);
-    let colors = pllAlgorithm.positions.map(_ => findColorsByPosition(cube, _));
-    let algo = Object.values(pllAlgorithm.cases).find(c => {
+    let colors = algoPositions.map(_ => findColorsByPosition(cube, _));
+    let algo = Object.values(algoCases).find(c => {
         let colorsRef = c.positions.map(_ => findColorsByPosition(cubeRef, _));
         return colors.every((color, i) => color.every(_ => colorsRef[i].includes(_)));
     });

@@ -1,10 +1,14 @@
+import { basicOLLCornerAlgorithm } from "./algotithms/basic-oll-c-algorithm.js";
+import { basicOLLEdgeAlgorithm } from "./algotithms/basic-oll-e-algorithm.js";
+import { basicPllEdgeAlgorithm } from "./algotithms/basic-pll-e.algorithm.js";
 import { f2lAlgorithm } from "./algotithms/f2l-algorithm.js";
-import { SIDES } from "./constants.js";
-import { findCrossAlgorithm, findCubeF2LSides, findCubeOLL, findCubeSideCrosses, findF2LAlgorithm, findFixF2LAlgorithm, findOLLAlgorithm, findPLLAlgorithm, isCubeCompleted } from "./finder.js";
+import { ollAlgorithm } from "./algotithms/oll-algorithm.js";
+import { POSITION, SIDES } from "./constants.js";
+import { findCrossAlgorithm, findCubeColorBySide, findCubeF2LSides, findCubeOLL, findCubeSideCrosses, findF2LAlgorithm, findFixF2LAlgorithm, findOLLAlgorithm, findPLLAlgorithm, isCubeCompleted } from "./finder.js";
 import { fixMovementsRemoveY, fixRedundance } from "./fixer.js";
 import { MOVEMENTS } from "./movements.js";
 import { rotateCubeFromTo, rotateCubeWithMovement } from "./rotator.js";
-import { cloneCube, cubeToPattern, movementFromString, movementsFromNotation } from "./transformer.js";
+import { cloneCube, cubeToFlat, cubeToPattern, movementFromString, movementsFromNotation } from "./transformer.js";
 
 export function solveCubeCross(cube, crossSide = SIDES.DOWN) {
     if (findCubeSideCrosses(cube).includes(crossSide)) return { solved: true, cube }; 
@@ -34,7 +38,7 @@ export function solveCubeCross(cube, crossSide = SIDES.DOWN) {
 }
 
 
-export function solveCubeF2L(cube, crossSide = SIDES.DOWN) {
+export function solveCubeF2L(cube, crossSide = SIDES.DOWN, basicPosition = null) {
     if (findCubeF2LSides(cube, [crossSide]).sides.length == 4) return { solved: true, cube}
     let history = [];
     let algo;
@@ -42,7 +46,7 @@ export function solveCubeF2L(cube, crossSide = SIDES.DOWN) {
     for (let i = 0; i < 20; i++) {
         for (let j = 0; j < 4; j++) {
             for (let k = 0; k < 4; k++) {
-                algo = findF2LAlgorithm(solvedCube);
+                algo = findF2LAlgorithm(solvedCube, basicPosition);
                 if (algo) break;
                 solvedCube = rotateCubeWithMovement(solvedCube, MOVEMENTS.U, history);
             }
@@ -51,7 +55,7 @@ export function solveCubeF2L(cube, crossSide = SIDES.DOWN) {
         }
         if (algo) break;
         solvedCube = rotateCubeWithMovement(solvedCube, MOVEMENTS.Y, history);
-        let fix = findFixF2LAlgorithm(findCubeF2LSides(solvedCube, [SIDES.DOWN]));
+        let fix = findFixF2LAlgorithm(solvedCube, basicPosition);
         if (!fix) break;
         fix.forEach(_ => solvedCube = rotateCubeWithMovement(solvedCube, _, history));
     }
@@ -74,13 +78,20 @@ export function solveCubeF2L(cube, crossSide = SIDES.DOWN) {
 }
 
 
-export function solveCubeOLL(cube, crossSide = SIDES.DOWN) {
+export function solveCubeOLL(cube, crossSide = SIDES.DOWN, basicPosition = null) {
+    let color = findCubeColorBySide(cube, SIDES.UP);
+    let cubePositions;
+    if (basicPosition == POSITION.EDGE) cubePositions = basicOLLEdgeAlgorithm.positions;
+    else if (basicPosition == POSITION.CORNER) cubePositions = basicOLLCornerAlgorithm.positions;
+    else cubePositions = ollAlgorithm.positions;
+    let cubeFlat = cubeToFlat(cube);
+    if (cubePositions.every(_ => cubeFlat[_][SIDES.UP] == color)) return { solved: true, cube };
+
     let history = [];
     let algo;
     let solvedCube = rotateCubeFromTo(cube, crossSide, SIDES.DOWN, history);
-    if (findCubeOLL(solvedCube, crossSide) == SIDES.UP) return { solved: true, cube };
     for (let i = 0; i < 4; i++) {
-        algo = findOLLAlgorithm(solvedCube);
+        algo = findOLLAlgorithm(solvedCube, basicPosition);
         if (algo) break;
         solvedCube = rotateCubeWithMovement(solvedCube, MOVEMENTS.U, history);
     }
@@ -100,14 +111,13 @@ export function solveCubeOLL(cube, crossSide = SIDES.DOWN) {
     }
 }
 
-export function solveCubePLL(cube, crossSide = SIDES.DOWN) {
-    if (isCubeCompleted(cube)) return { solved: true, cube };
+export function solveCubePLL(cube, crossSide = SIDES.DOWN, basicPosition = null) {
     let history = [];
     let algo;
     let solvedCube = rotateCubeFromTo(cube, crossSide, SIDES.DOWN, history);
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
-            algo = findPLLAlgorithm(solvedCube);
+            algo = findPLLAlgorithm(solvedCube, basicPosition);
             if (algo) break;
             solvedCube = rotateCubeWithMovement(solvedCube, MOVEMENTS.U, history);
             if (isCubeCompleted(solvedCube)) return { solved: true, cube: solvedCube,  adjusts: fixRedundance(history.map(_ => movementFromString(_)))};
@@ -131,14 +141,9 @@ export function solveCubePLL(cube, crossSide = SIDES.DOWN) {
     }
 }
 
-export function solveCube(cube, crossSide = SIDES.DOWN) {
+export function solveCube(cube, crossSide = SIDES.DOWN, useBasic = false) {
     let ret = { movements: [], solved: false, cube };
     let solvedCube = rotateCubeFromTo(cube, crossSide, SIDES.DOWN, history);
-
-    // let cross = solveCubeCross(solvedCube);
-    // if (!cross.solved) return { solved: false, cube };
-    // solvedCube = cross.cube;
-    // if (cross.movements && cross.movements.length) ret.cross = { movements: cross.movements };
 
     let crosses = [];
     for (let i = 0; i < 4; i++) {
@@ -150,28 +155,36 @@ export function solveCube(cube, crossSide = SIDES.DOWN) {
     }
     ret.cross = crosses.map(_ => ({ algo: _.algo, adjusts: _.adjusts }));
 
-
+    
     let f2ls = [];
-    for (let i = 0; i < 4; i++) {
-        console.log(cubeToPattern(solvedCube));
-        if (findCubeF2LSides(solvedCube, [SIDES.DOWN]).sides.length == 4) break;
-        let f2l = solveCubeF2L(solvedCube);
-        if (!f2l.solved) return { solved: false, cube };
-        solvedCube = f2l.cube;
-        if (f2l.algo) f2ls.push(f2l);
-    }
+    for(let basicPosition of (useBasic ? [POSITION.CORNER, POSITION.EDGE] : [null])) {
+        for (let i = 0; i < 4; i++) {
+            if (findCubeF2LSides(solvedCube, [SIDES.DOWN], basicPosition).sides.length == 4) break;
+            let f2l = solveCubeF2L(solvedCube, SIDES.DOWN, basicPosition);
+            if (!f2l.solved) return { solved: false, cube };
+            solvedCube = f2l.cube;
+            if (f2l.algo) f2ls.push(f2l);
+        }
+    } 
     ret.f2ls = f2ls.map(_ => ({ algo: _.algo, adjusts: _.adjusts }));
 
-    
-    let oll = solveCubeOLL(solvedCube);
-    if (!oll.solved) return { solved: false, cube };
-    solvedCube = oll.cube;
-    ret.oll = { algo: oll.algo, adjusts: oll.adjusts };
+    let olls = [];
+    for(let basicPosition of (useBasic ? [POSITION.EDGE, POSITION.CORNER] : [null])) {
+        let oll = solveCubeOLL(solvedCube, SIDES.DOWN, basicPosition);
+        if (!oll.solved) return { solved: false, cube };
+        solvedCube = oll.cube;
+        if (oll.algo) olls.push(oll);
+    }
+    ret.olls = olls.map(_ => ({ algo: _.algo, adjusts: _.adjusts }));
 
-    let pll = solveCubePLL(solvedCube);
-    if (!pll.solved) return { solved: false, cube };
-    solvedCube = pll.cube;
-    ret.pll = { algo: pll.algo, adjusts: pll.adjusts };
+    let plls = [];
+    for(let basicPosition of (useBasic ? [POSITION.CORNER, POSITION.EDGE] : [null])) {
+        let pll = solveCubePLL(solvedCube, SIDES.DOWN, basicPosition);
+        if (!pll.solved) return { solved: false, cube };
+        solvedCube = pll.cube;
+        if (pll.algo) plls.push(pll);
+    }
+    ret.plls = plls.map(_ => ({ algo: _.algo, adjusts: _.adjusts }));
 
     ret.cube = solvedCube;
     
@@ -183,10 +196,14 @@ export function solveCube(cube, crossSide = SIDES.DOWN) {
         if (_.adjusts) ret.movements.push(..._.adjusts);
         if (_.algo && _.algo.movements) ret.movements.push(..._.algo.movements);
     });
-    if (ret.oll.adjusts) ret.movements.push(...ret.oll.adjusts);
-    if (ret.oll.algo && ret.oll.algo.movements) ret.movements.push(...ret.oll.algo.movements);
-    if (ret.pll.adjusts) ret.movements.push(...ret.pll.adjusts);
-    if (ret.pll.algo && ret.pll.algo.movements) ret.movements.push(...ret.pll.algo.movements);
+    ret.olls.forEach(_ => {
+        if (_.adjusts) ret.movements.push(..._.adjusts);
+        if (_.algo && _.algo.movements) ret.movements.push(..._.algo.movements);
+    });
+    ret.plls.forEach(_ => {
+        if (_.adjusts) ret.movements.push(..._.adjusts);
+        if (_.algo && _.algo.movements) ret.movements.push(..._.algo.movements);
+    });
 
     ret.solved = true;
     return ret;
