@@ -19,6 +19,7 @@ export function algorithmComponent(cube, name, movements, headers = []) {
         render
     };
     let movementsAreaElement;
+    let playAreaElement;
     let headerAlgorithmElement;
     let isPlay = false;
     async function render(parentElement) {
@@ -29,6 +30,7 @@ export function algorithmComponent(cube, name, movements, headers = []) {
 
         movementsAreaElement = self.element.querySelector(".movements-area");
         headerAlgorithmElement = self.element.querySelector(".header-algorithm");
+        playAreaElement = self.element.querySelector(".play-area");
 
         self.element.querySelector(".button-next").onclick = nextMovement;
         self.element.querySelector(".button-prev").onclick = previousMovement;
@@ -50,13 +52,13 @@ export function algorithmComponent(cube, name, movements, headers = []) {
         buttonMovementElement.classList.remove("template");
         movementsAreaElement.appendChild(buttonMovementElement);
 
-        await updateMovementsArea();
+        updateMovementsArea();
     }
 
-    async function playMovement(event) {
+    async function playMovement(el) {
         isPlay = !isPlay
-        if (isPlay) event.currentTarget.classList.add("playing");
-        else event.currentTarget.classList.remove("playing");
+        if (isPlay) playAreaElement.classList.add("playing");
+        else playAreaElement.classList.remove("playing");
         if (scene.state.isBusy) return;
         while (isPlay) {
             if (state.movementPosition >= state.movements.length) break;
@@ -64,6 +66,7 @@ export function algorithmComponent(cube, name, movements, headers = []) {
             await new Promise(resolve => setTimeout(resolve, 250));
         }
         isPlay = false;
+        playAreaElement.classList.remove("playing");
     }
 
     async function nextMovement() {
@@ -95,7 +98,7 @@ export function algorithmComponent(cube, name, movements, headers = []) {
         }
     }
 
-    async function updateMovementsArea() {
+    function updateMovementsArea() {
         if (state.movementPosition) movementsAreaElement.style.marginLeft = `calc((((var(--movement-button-small) + 10px)) * -${state.movementPosition}) - 15px)`;
         else movementsAreaElement.style.marginLeft = "-5px";
         movementsAreaElement.querySelectorAll(".button-movement").forEach((el, i) => {

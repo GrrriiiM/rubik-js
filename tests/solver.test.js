@@ -11,14 +11,27 @@ describe("Solver Cube", () => {
 
     const theories = [...Array(20).keys()].map(() => cubeToPattern(shuffleCube(createCube(3))));
     // const theories = [
-    //     "GOUYORRURYGOYYGWWWRROGGORUWGWURROUYGGWUOWRYUOOYYGUUWWY"
-    //     // "RUGOUUYOGRGYUYYYOOWYUWOYYUOORURGOORRUGRRWGGYUWGGWRWWWW",
-    //     // "YWWYOWYRWYYWUGGORUROUOWRGGROOUGRWGYRGUOYUWWUYROUGYRGUO",
-    //     // "WWYWUUUGUYWOYOOGUGUORGWRYYOWOOYGRGOUWWWGRYRUYRGGRYRRUO",
-    //     // "RYGGOUOGOWRRRUOWUOUUGWYRYRWYWRORGUOUUYYYGORUOWWGWWYGGY"
+    //     "OOGOWWYUWWRWURWWGRGWUUUYYRGRUOGYYUGOOORGORUYYYOGRGWUYR"
     // ];
     theoretically(_ => `case ${_}`, theories, theory => {
         let cube = solveCube(createCubeWithPattern(theory)).cube;
+        // cube = rotateCubeFromTo(cube, findCubeSideByColor(cube, COLORS.ORANGE), SIDES.FRONT);
+        // cube = rotateCubeFromTo(cube, findCubeSideByColor(cube, COLORS.YELLOW), SIDES.UP);
+        let isCompleted = isCubeCompleted(cube);
+        if (!isCompleted) console.log(theory);
+        expect(isCompleted).toEqual(true);
+    })
+});
+
+
+describe("Solver Cube Basic", () => {
+
+    const theories = [...Array(20).keys()].map(() => cubeToPattern(shuffleCube(createCube(3))));
+    // const theories = [
+    //     "OOGOWWYUWWRWURWWGRGWUUUYYRGRUOGYYUGOOORGORUYYYOGRGWUYR"
+    // ];
+    theoretically(_ => `case ${_}`, theories, theory => {
+        let cube = solveCube(createCubeWithPattern(theory), SIDES.DOWN, true).cube;
         // cube = rotateCubeFromTo(cube, findCubeSideByColor(cube, COLORS.ORANGE), SIDES.FRONT);
         // cube = rotateCubeFromTo(cube, findCubeSideByColor(cube, COLORS.YELLOW), SIDES.UP);
         let isCompleted = isCubeCompleted(cube);
