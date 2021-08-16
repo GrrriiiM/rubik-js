@@ -1,0 +1,38 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "git flow feature start",
+            "type": "shell",
+            "command": "git flow feature start ${input:branch_name}",
+            "problemMatcher": []
+        },
+        {
+            "label": "git flow feature finish",
+            "type": "shell",
+            "command": "git flow feature finish && git push --all",
+            "problemMatcher": []
+        },
+        {
+            "label": "git flow release start",
+            "type": "shell",
+            "command": "git flow release start ${input:branch_name}",
+            "problemMatcher": []
+        },
+        {
+            "label": "git flow release finish",
+            "type": "shell",
+            "command": "git flow release finish -m \"fim\" && git push --all && git push --tags",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "branch_name",
+            "description": "Nome da branch",
+            "type": "promptString"
+        }
+    ]
+}

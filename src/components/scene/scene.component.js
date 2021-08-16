@@ -228,7 +228,10 @@ export default function sceneComponent(dragSceneHandler, cube = null, canRotate 
     
 
     function reset() {
-        state.cube = shuffleCube(createCube(state.cube.length));
+        setCube(shuffleCube(createCube(state.cube.length)));
+    }
+    function setCube(cube) {
+        state.cube = cube;
         state.createAt = new Date(Date.now());
         state.history = [];
         state.movementCOunt = 0;
@@ -259,7 +262,8 @@ export default function sceneComponent(dragSceneHandler, cube = null, canRotate 
         rotate,
         resetRotation,
         reset,
-        solve
+        solve,
+        setCube
     };
 }
 

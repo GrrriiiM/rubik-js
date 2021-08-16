@@ -1,0 +1,83 @@
+.scan {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-self: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+.scan>.scan-area {
+    display: flex;
+    position: relative;
+}
+
+.scan>.scan-area>.scan-overlay {
+    /* width: 100%;
+    height: 100%; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    /* background-color: rgba(0, 0, 0, 0.4); */
+    opacity: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    align-self: center;
+}
+
+.scan>.scan-area>.scan-overlay>div {
+    width: 18%;
+    height: 18%;
+    border-width: 2px;
+    opacity: 0.8;
+}
+
+.scan>.scan-area>.scan-overlay>div.border {
+    border-style: dashed;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+.scan>.video {
+    display: none;
+}
+
+
+.scan>.scan-color-area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    align-self: center;
+    width: 60%;
+    height: 60%;
+    max-height: 120px;
+    max-width: 120px;
+}
+.scan>.scan-color-area>.scan-color {
+    width: 30%;
+    height: 30%;
+}
+
+.teste-area {
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    align-self: center;
+}
+
+.teste {
+    height: 30px;
+    width: 30px;
+}
+
