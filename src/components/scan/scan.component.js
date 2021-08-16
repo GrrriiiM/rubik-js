@@ -84,8 +84,8 @@ export function scanComponent() {
         [ "blue", "yellow", "orange", "white", "red" ],
         [ "red", "yellow", "blue", "white", "green" ],
         [ "green", "yellow", "red", "white", "orange" ],
-        [ "yellow", "blue", "red", "green", "orange" ],
-        [ "white", "blue", "orange", "green", "red" ],
+        [ "yellow", "red", "green", "orange", "blue" ],
+        [ "white", "orange", "green", "red", "blue" ],
     ];
     let actualSide = -1;
     let scanSides = [0, 1, 2, 3, 4, 5];
@@ -148,7 +148,7 @@ export function scanComponent() {
                     // scanColor8.style.backgroundColor = `rgba(${color8[0]}, ${color8[1]}, ${color8[2]}, 1)`;
 
                     // tempContext.drawImage(canvasElement, sourceX, sourceY, sourceSize, sourceSize, 0, 0, videoWidth, videoHeight)
-                    await new Promise(resolve => setTimeout(resolve, 300))
+                    await new Promise(resolve => setTimeout(resolve, 1000/ 30))
                 }
             }
 
