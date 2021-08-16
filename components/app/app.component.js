@@ -1,6 +1,8 @@
 import dragSceneHandler from "../../handlers/drag-scene.handler.js";
+import { createCubeWithPattern } from "../../objs/creator.js";
 import contentComponent from "../content/content.component.js";
 import modalComponent from "../modal/modal.component.js";
+import { scanComponent } from "../scan/scan.component.js";
 import sceneComponent from "../scene/scene.component.js";
 import toolsComponent from "../tools/tools.component.js";
 
@@ -10,6 +12,7 @@ export default function appComponent() {
     let tools = toolsComponent(scene);
     tools.onExpanded = hideMenuHelp;
     let content = contentComponent(scene);
+    let modal = modalComponent();
     
     function render(parentElement) {
         fetch("./components/app/app.component.html").then(async (reponse) => {
@@ -18,6 +21,14 @@ export default function appComponent() {
             tools.render(element);
             content.render(element);
             element.querySelector(".button-help").addEventListener("click", () => toggleMenuHelp())
+            element.querySelector(".button-scan").addEventListener("click", () => {
+                let scan = scanComponent();
+                scan.onFinished = (pattern) => {
+                    modal.hide();
+                    scene.setCube(createCubeWithPattern(pattern));
+                }
+                modal.show("Escanear Cubo (beta)", scan);
+            })
         });
     }
 
