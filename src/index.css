@@ -1,5 +1,6 @@
 @import url("./components/app/app.component.css");
 @import url("./components/algorithm/algorithm.component.css");
+@import url("./components/scan/scan.component.css");
 
 body, .wrapper {
     position: absolute;
@@ -35,6 +36,28 @@ body {
 
 .background-opacity {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.orange {
+    background-color: #f3722c !important;
+}
+.yellow {
+    background-color: #f9c74f !important;
+}
+.green {
+    background-color: #43aa8b !important;
+}
+.red {
+    background-color: #f94144 !important;
+}
+.white {
+    background-color: white !important;
+}
+.blue {
+    background-color: #277da1 !important;
+}
+.black {
+    background-color: #151515 !important;
 }
 
 .logo {
