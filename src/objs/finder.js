@@ -93,7 +93,7 @@ let sidesAxisZ = [SIDES.UP, SIDES.RIGHT, SIDES.DOWN, SIDES.LEFT];
 let sidesAxisY = [SIDES.BACK, SIDES.RIGHT, SIDES.FRONT, SIDES.LEFT];
 let sidesAxisX = [SIDES.UP, SIDES.FRONT, SIDES.DOWN, SIDES.BACK];
 
-export function findMovementFrontTo(fromSide, toSide) {
+export function findMovementFromTo(fromSide, toSide) {
     let movements = [];
     let direction = 0;
     let move;

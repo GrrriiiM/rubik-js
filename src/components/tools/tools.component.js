@@ -23,28 +23,27 @@ export default function toolsComponent(sceneComponent) {
     let movement = toolsMovementComponent(scene);
     let algorithm = toolsAlgorithmComponent(scene)
 
-    function render(parentElement) {
+    async function render(parentElement) {
 
-        fetch("./components/tools/tools.component.html").then(async (reponse) => {
+        let response = await fetch("./components/tools/tools.component.html");
 
-            self.element = parentElement.querySelector(".tools");
-            self.element.innerHTML = await reponse.text();
+        self.element = parentElement.querySelector(".tools");
+        self.element.innerHTML = await response.text();
 
-            buttonHistoryElement = self.element.querySelector(".button-tool-history");
-            buttonMovementElement = self.element.querySelector(".button-tool-movement");
-            buttonActionElement = self.element.querySelector(".button-tool-action");
-            buttonAlgorithmElement = self.element.querySelector(".button-tool-algorithm");
+        buttonHistoryElement = self.element.querySelector(".button-tool-history");
+        buttonMovementElement = self.element.querySelector(".button-tool-movement");
+        buttonActionElement = self.element.querySelector(".button-tool-action");
+        buttonAlgorithmElement = self.element.querySelector(".button-tool-algorithm");
 
-            buttonHistoryElement.addEventListener("click", () => toggleToolHistory())
-            buttonMovementElement.addEventListener("click", () => toggleToolMovement())
-            buttonActionElement.addEventListener("click", () => toggleToolAction())
-            buttonAlgorithmElement.addEventListener("click", () => toggleToolAlgorithm())
+        buttonHistoryElement.addEventListener("click", () => toggleToolHistory())
+        buttonMovementElement.addEventListener("click", () => toggleToolMovement())
+        buttonActionElement.addEventListener("click", () => toggleToolAction())
+        buttonAlgorithmElement.addEventListener("click", () => toggleToolAlgorithm())
 
-            action.render(self.element);
-            history.render(self.element);
-            movement.render(self.element);
-            algorithm.render(self.element);
-        });
+        action.render(self.element);
+        history.render(self.element);
+        movement.render(self.element);
+        algorithm.render(self.element);
     }
 
     function refresh() {

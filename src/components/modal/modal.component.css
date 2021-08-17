@@ -1,5 +1,6 @@
 .modal {
-    --modal-area-height: calc(100% - var(--header-height) * 1.5);
+    --modal-area-height: calc((100% - var(--header-height) * 1.5) - var(--header-height) * var(--modal-z));
+    --modal-z: 0;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -53,5 +54,21 @@
     opacity: 0.5;
 }
 .modal.expanded>.modal-area {
-    top: calc(var(--header-height) * 1.5);
+    top: calc(100% - var(--modal-area-height));
 }
+
+.modal-z-1 {
+    --modal-z: 0.5 !important;
+    z-index: 10;
+}
+
+.modal-z-2 {
+    --modal-z: 1.5 !important;
+    z-index: 20;
+}
+
+.modal-z-3 {
+    --modal-z: 2 !important;
+    z-index: 30;
+}
+

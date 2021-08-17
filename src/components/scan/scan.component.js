@@ -1,6 +1,6 @@
 import { COLORS, SIDES } from "../../objs/constants.js";
 import { patternColors } from "../../objs/creator.js";
-import { findMovementFrontTo } from "../../objs/finder.js";
+import { findMovementFromTo } from "../../objs/finder.js";
 import { MOVEMENTS } from "../../objs/movements.js";
 import { rotateMovementsFromTo, rotateSide } from "../../objs/rotator.js";
 import { inverseKeyValue } from "../../objs/transformer.js";
@@ -8,7 +8,7 @@ import { pallete, rgbToColor } from "./color-converter.js";
 
 
 
-export function scanComponent() {
+export function scanComponent(scanOrderSides, onFinished) {
     let self = {
         className: "scan",
         element: null,
@@ -19,18 +19,18 @@ export function scanComponent() {
     let videoElement;
     let canvasElement;
     let canvasContext;
-    let videoWidth = Math.min(window.screen.width - 40, 320);
+    let videoWidth = Math.min(window.screen.width - 40, window.screen.width*0.6);
     let videoHeight = videoWidth;
 
     let scanColorElements = [];
 
-    let scanOrderSides = [SIDES.FRONT, SIDES.RIGHT, SIDES.BACK, SIDES.LEFT, SIDES.UP, SIDES.DOWN];
-    let scanColors = [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]];
+    // let scanOrderSides = [SIDES.FRONT, SIDES.RIGHT, SIDES.BACK, SIDES.LEFT, SIDES.UP, SIDES.DOWN];
+    let scanColors = scanOrderSides.map(_ => [0, 0, 0, 0, 0, 0]);
     let scanSidePosition = 0;
 
     let colorEntries = inverseKeyValue(COLORS);
     let sideEntries = inverseKeyValue(SIDES);
-    let colorsClass = Object.keys(COLORS).map(_ => _.toLowerCase());
+    let colorsClass = Object.entries(colorsEntries).map(_ => _[1].toLowerCase());
 
     let tempContext;
     async function render(parentElement) {
@@ -77,8 +77,13 @@ export function scanComponent() {
 
 
     function nextScanSide() {
-        if (scanSidePosition >= 5) return;
         scanSidePosition+=1;
+        if (scanSidePosition >= scanOrderSides.length) {
+            onFinished && onFinished(scanColors);
+            videoElement.pause();
+            return;
+        };
+        
         updateScanSide();
 
         // if (actualSide >= 5) {
@@ -101,7 +106,7 @@ export function scanComponent() {
     }
 
     function updateScanSide() {
-        let movements = findMovementFrontTo(SIDES.FRONT, scanOrderSides[scanSidePosition]);
+        let movements = findMovementFromTo(SIDES.FRONT, scanOrderSides[scanSidePosition]);
         let sides = Object.values(SIDES);
         sides.forEach((side, i) => {
             movements.forEach(_ => sides[i] = rotateSide(_.axis, sides[i], _.clock))
