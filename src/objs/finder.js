@@ -89,6 +89,41 @@ export function findCornerPositionByColor(cube, color1, color2, color3) {
     return findPositionByColors(cube, [color1, color2, color3]);
 }
 
+let sidesAxisZ = [SIDES.UP, SIDES.RIGHT, SIDES.DOWN, SIDES.LEFT];
+let sidesAxisY = [SIDES.BACK, SIDES.RIGHT, SIDES.FRONT, SIDES.LEFT];
+let sidesAxisX = [SIDES.UP, SIDES.FRONT, SIDES.DOWN, SIDES.BACK];
+
+export function findMovementFrontTo(fromSide, toSide) {
+    let movements = [];
+    let direction = 0;
+    let move;
+    let moveAnti;
+    if (sidesAxisZ.includes(fromSide) && sidesAxisZ.includes(toSide)) {
+        direction = sidesAxisZ.indexOf(toSide) - sidesAxisZ.indexOf(fromSide);
+        move = MOVEMENTS.Z;
+        moveAnti = MOVEMENTS.Z_;
+    } else if (sidesAxisY.includes(fromSide) && sidesAxisY.includes(toSide)) {
+        direction = sidesAxisY.indexOf(toSide) - sidesAxisY.indexOf(fromSide);
+        move = MOVEMENTS.Y;
+        moveAnti = MOVEMENTS.Y_;
+    } else if (sidesAxisX.includes(fromSide) && sidesAxisX.includes(toSide)) {
+        direction = sidesAxisX.indexOf(toSide) - sidesAxisX.indexOf(fromSide);
+        move = MOVEMENTS.X_;
+        moveAnti = MOVEMENTS.X;
+    }
+    if (direction) {
+        if (Math.abs(direction) == 2) {
+            movements.push(move);
+            movements.push(move);
+        } else if (direction > 0) {
+            movements.push(move);
+        } else if (direction < 0) {
+            movements.push(moveAnti);
+        }
+    }
+    return movements;
+}
+
 export function findCubeSideCrosses(cube) {
     let sides = [];
     let layers = coordsToLayers([], cube.length);
