@@ -2,8 +2,10 @@ import { COLORS, SIDES } from "../../objs/constants.js";
 import { createCube, createCubeWithPattern, patternColors } from "../../objs/creator.js";
 import { findCubeSideByColor } from "../../objs/finder.js";
 import { rotateCubeFromTo, rotateMovementsFromTo, shuffleCube } from "../../objs/rotator.js";
+import { solveCube } from "../../objs/solver.js";
 import { cubeToPattern, inverseKeyValue } from "../../objs/transformer.js";
 import { editCubeComponent } from "../edit-cube-side/edit-cube-side.component.js";
+import { messageBoxComponent } from "../message-box/message-box.component.js";
 import modalComponent from "../modal/modal.component.js";
 import { scanComponent } from "../scan/scan.component.js";
 
@@ -16,6 +18,7 @@ export function newCubeComponent(onFinished) {
     }
     let selectedSide = SIDES.FRONT;
     let modal = modalComponent();
+    let messageBox = messageBoxComponent();
 
     let sides = {
         "front": SIDES.FRONT,
@@ -81,8 +84,12 @@ export function newCubeComponent(onFinished) {
             cubePattern += colors[2].map(_ => pcolors[_]).join("");
             cubePattern += colors[5].map(_ => pcolors[_]).join("");
             cubePattern += colors[1].map(_ => pcolors[_]).join("");
-            self.onFinished && self.onFinished(cubePattern)
-            return;
+            let solution = solveCube(createCubeWithPattern(cubePattern));
+            if (!solution.solved) {
+                messageBox.show("Atenção", "Cubo inválido", "error", "var(--red)");
+            } else {
+                self.onFinished && self.onFinished(cubePattern)
+            }
         }
     }
 

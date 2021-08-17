@@ -3,6 +3,17 @@
 @import url("./components/scan/scan.component.css");
 @import url("./components/new-cube/new-cube.component.css");
 @import url("./components/edit-cube-side/edit-cube-side.component.css");
+@import url("./components/message-box/message-box.component.css");
+
+:root {
+    --orange: #f3722c;
+    --yellow: #f9c74f;
+    --green: #43aa8b;
+    --red: #f94144;
+    --white: white;
+    --blue: #277da1;
+    --black: #151515;
+}
 
 body, .wrapper {
     position: absolute;
@@ -41,25 +52,25 @@ body {
 }
 
 .orange {
-    background-color: #f3722c !important;
+    background-color:var(--orange) !important;
 }
 .yellow {
-    background-color: #f9c74f !important;
+    background-color:var(--yellow) !important;
 }
 .green {
-    background-color: #43aa8b !important;
+    background-color:var(--green) !important;
 }
 .red {
-    background-color: #f94144 !important;
+    background-color:var(--red) !important;
 }
 .white {
-    background-color: white !important;
+    background-color:var(--white) !important;
 }
 .blue {
-    background-color: #277da1 !important;
+    background-color:var(--blue) !important;
 }
 .black {
-    background-color: #151515 !important;
+    background-color:var(--black) !important;
 }
 
 .logo {

@@ -2,6 +2,7 @@ import { COLORS, SIDES } from "../../objs/constants.js";
 import { findMovementFromTo } from "../../objs/finder.js";
 import { rotateSide } from "../../objs/rotator.js";
 import { inverseKeyValue } from "../../objs/transformer.js";
+import { messageBoxComponent } from "../message-box/message-box.component.js";
 
 export function editCubeComponent(colors, onFinished) {
     let self = {
@@ -10,6 +11,8 @@ export function editCubeComponent(colors, onFinished) {
         render,
         
     };
+
+    let messageBox = messageBoxComponent();
 
     let sideColors = colors;
     let sideColorPosition = 0;
@@ -52,7 +55,12 @@ export function editCubeComponent(colors, onFinished) {
         self.element.querySelector(".edit-side.edit-side-8").onclick = () =>  setPosition(8);
 
         self.element.querySelector(".color-area>.color-button-area>.color-button-accept").onclick = () => {
-            onFinished && onFinished(sideColors);
+            if (sideColors.includes(0)) {
+                messageBox.show("Atenção", "Lado incompleto", "error", "var(--red)");
+            } else {
+                onFinished && onFinished(sideColors);
+            }
+            
         };
         
 
