@@ -30,7 +30,7 @@ export function scanComponent(scanOrderSides, onFinished) {
 
     let colorEntries = inverseKeyValue(COLORS);
     let sideEntries = inverseKeyValue(SIDES);
-    let colorsClass = Object.entries(colorsEntries).map(_ => _[1].toLowerCase());
+    let colorsClass = Object.entries(colorEntries).map(_ => _[1].toLowerCase());
 
     let tempContext;
     async function render(parentElement) {
