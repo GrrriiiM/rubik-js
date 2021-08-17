@@ -11,7 +11,8 @@ export function algorithmComponent(cube, name, movements, headers = []) {
         movementPosition: 0
     }
     let dragHandler = dragSceneHandler();
-    let scene = sceneComponent(dragHandler, cube, canRotate);
+    let scene = sceneComponent(dragHandler, { cube });
+    scene.canRotate = canRotate;
     let self = {
         className: "algorithm",
         element: null,

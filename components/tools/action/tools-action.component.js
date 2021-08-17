@@ -1,9 +1,9 @@
 import { SIDES } from "../../../objs/constants.js";
-import { createCube } from "../../../objs/creator.js";
-import { shuffleCube } from "../../../objs/rotator.js";
+import { createCubeWithPattern } from "../../../objs/creator.js";
 import { solveCube } from "../../../objs/solver.js";
 import { algorithmComponent } from "../../algorithm/algorithm.component.js";
 import modalComponent from "../../modal/modal.component.js";
+import { newCubeComponent } from "../../new-cube/new-cube.component.js";
 
 export default function toolsActionComponent(sceneComponent) {
     let element;
@@ -15,7 +15,12 @@ export default function toolsActionComponent(sceneComponent) {
             element = parentElement.querySelector(".action");
             element.innerHTML = await reponse.text();
 
-            element.querySelector(".button-tool-action-reset").addEventListener("click", () => scene.reset());
+            element.querySelector(".button-tool-action-reset").addEventListener("click", () => {
+                modal.show("Criar Cubo", newCubeComponent(pattern => {
+                    scene.setCube(createCubeWithPattern(pattern, 3));
+                    modal.hide();
+                }));
+            });
 
             element.querySelector(".button-tool-action-solve").addEventListener("click", () => openSolveModal(false));
             element.querySelector(".button-tool-action-solve-basic").addEventListener("click", () => openSolveModal(true));

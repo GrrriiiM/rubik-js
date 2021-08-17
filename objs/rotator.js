@@ -126,9 +126,9 @@ export function rotateCubeFromTo(cube, fromSide, toSide, history = null) {
         if (Math.abs(direction) == 2) {
             cube = rotateCubeWithMovement(cube, move, history);
             cube = rotateCubeWithMovement(cube, move, history);
-        } else if (direction > 0) {
+        } else if (direction == 1 || direction == -3) {
             cube = rotateCubeWithMovement(cube, move, history);
-        } else if (direction < 0) {
+        } else if (direction == -1 || direction == 3) {
             cube = rotateCubeWithMovement(cube, moveAnti, history);
         }
     }
