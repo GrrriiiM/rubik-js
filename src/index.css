@@ -1,6 +1,7 @@
 @import url("./components/app/app.component.css");
 @import url("./components/algorithm/algorithm.component.css");
 @import url("./components/scan/scan.component.css");
+@import url("./components/new-cube/new-cube.component.css");
 
 body, .wrapper {
     position: absolute;

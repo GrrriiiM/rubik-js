@@ -8,7 +8,7 @@ import { pallete, rgbToColor } from "./color-converter.js";
 
 
 
-export function scanComponent() {
+export function scanComponent(scanOrderSides, onFinished) {
     let self = {
         className: "scan",
         element: null,
@@ -19,13 +19,13 @@ export function scanComponent() {
     let videoElement;
     let canvasElement;
     let canvasContext;
-    let videoWidth = Math.min(window.screen.width - 40, 320);
+    let videoWidth = Math.min(window.screen.width - 40, window.screen.width*0.6);
     let videoHeight = videoWidth;
 
     let scanColorElements = [];
 
-    let scanOrderSides = [SIDES.FRONT, SIDES.RIGHT, SIDES.BACK, SIDES.LEFT, SIDES.UP, SIDES.DOWN];
-    let scanColors = [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]];
+    // let scanOrderSides = [SIDES.FRONT, SIDES.RIGHT, SIDES.BACK, SIDES.LEFT, SIDES.UP, SIDES.DOWN];
+    let scanColors = scanOrderSides.map(_ => [0, 0, 0, 0, 0, 0]);
     let scanSidePosition = 0;
 
     let colorEntries = inverseKeyValue(COLORS);
@@ -77,8 +77,13 @@ export function scanComponent() {
 
 
     function nextScanSide() {
-        if (scanSidePosition >= 5) return;
         scanSidePosition+=1;
+        if (scanSidePosition >= scanOrderSides.length) {
+            onFinished && onFinished(scanColors);
+            videoElement.pause();
+            return;
+        };
+        
         updateScanSide();
 
         // if (actualSide >= 5) {

@@ -1,0 +1,73 @@
+.new-cube {
+    padding: 10px;
+    padding-bottom: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    --preview-block-size: calc((100vw - 50px) / 12);
+}
+
+.new-cube>.preview-area {
+    width: calc(var(--preview-block-size) * 12);
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+.new-cube>.preview-area>div {
+    display: flex;
+    width: 100%;
+    height: calc(var(--preview-block-size) * 3);
+    flex-direction: row;
+}
+
+.new-cube>.preview-area>div>div {
+    width: calc(var(--preview-block-size) * 3);
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-around;
+    opacity: 0.5;
+    transition: all 150ms ease-out;
+}
+
+.new-cube>.preview-area>div>div>.block {
+    width: calc(var(--preview-block-size) - 8px);
+    height: calc(var(--preview-block-size) - 8px);
+    border: 2px solid black;
+    background-color: #151515;
+}
+
+.new-cube>.preview-area>div>div.selected {
+    opacity: 1 !important;
+    background-color: black;
+    transform: scale(1.25);
+    z-index: 1;
+}
+
+.option-area {
+    height: 40%;
+    width: 100%;
+}
+
+.option-area>.option-button-area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.option-area>.option-button-area>.button {
+    width: calc((100vw - 50px) / 4); 
+    height: calc((100vw - 50px) / 4); 
+    margin-top: 10px;
+    margin-left: 10px;
+}

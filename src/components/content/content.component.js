@@ -16,32 +16,35 @@ export default function contentComponent(sceneComponent) {
     let timePLLElement;
     let movementsCount;
 
-    function render(parentElement) {
+    async function render(parentElement) {
 
-        fetch("./components/content/content.component.html").then(async (reponse) => {
+        let response = await fetch("./components/content/content.component.html");
+        self.element = parentElement.querySelector(".content");
+        self.element.innerHTML = await response.text();
 
-            self.element = parentElement.querySelector(".content");
-            self.element.innerHTML = await reponse.text();
+        await scene.render(self.element);
 
-            scene.render(self.element);
+        timeHtmlElement = self.element.querySelector(".time");
+        countHtmlElement = self.element.querySelector(".count");
+        checkCrossElement = self.element.querySelector(".cube-steps-area>.steps-item.check-cross");
+        checkF2LElement = self.element.querySelector(".cube-steps-area>.steps-item.check-f2l");
+        checkOLLElement = self.element.querySelector(".cube-steps-area>.steps-item.check-oll");
+        checkPLLElement = self.element.querySelector(".cube-steps-area>.steps-item.check-pll");
+        timeCrossElement = self.element.querySelector(".cube-steps-area>.steps-time.time-cross");
+        timeF2LElement = self.element.querySelector(".cube-steps-area>.steps-time.time-f2l");
+        timeOLLElement = self.element.querySelector(".cube-steps-area>.steps-time.time-oll");
+        timePLLElement = self.element.querySelector(".cube-steps-area>.steps-time.time-pll");
 
-            timeHtmlElement = self.element.querySelector(".time");
-            countHtmlElement = self.element.querySelector(".count");
-            checkCrossElement = self.element.querySelector(".cube-steps-area>.steps-item.check-cross");
-            checkF2LElement = self.element.querySelector(".cube-steps-area>.steps-item.check-f2l");
-            checkOLLElement = self.element.querySelector(".cube-steps-area>.steps-item.check-oll");
-            checkPLLElement = self.element.querySelector(".cube-steps-area>.steps-item.check-pll");
-            timeCrossElement = self.element.querySelector(".cube-steps-area>.steps-time.time-cross");
-            timeF2LElement = self.element.querySelector(".cube-steps-area>.steps-time.time-f2l");
-            timeOLLElement = self.element.querySelector(".cube-steps-area>.steps-time.time-oll");
-            timePLLElement = self.element.querySelector(".cube-steps-area>.steps-time.time-pll");
-        });
+        updateTime()
+        setInterval(updateTime, 1000);
+    }
+
+    function updateTime() {
+        let time = new Date(Date.now() - sceneState.createAt.getTime());
+        timeHtmlElement.innerHTML = `${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}:${time.getUTCSeconds().toString().padStart(2, "0")}`;
     }
 
     function refresh() {
-        let time = new Date(Date.now() - sceneState.createAt.getTime());
-        timeHtmlElement.innerHTML = `${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}:${time.getUTCSeconds().toString().padStart(2, "0")}`;
-
         if (sceneState.crossAt) {
             let at = new Date(sceneState.crossAt.getTime() - sceneState.createAt.getTime());
             timeCrossElement.innerHTML = `${at.getUTCHours().toString().padStart(2, "0")}:${at.getUTCMinutes().toString().padStart(2, "0")}:${at.getUTCSeconds().toString().padStart(2, "0")}`
@@ -75,10 +78,8 @@ export default function contentComponent(sceneComponent) {
             checkPLLElement.classList.remove("completed");
         }
 
-        if (movementsCount != sceneState.history.length) {
-            let excludeMoves = ["X", "X'", "Y", "Y'", "Z", "Z'"];
-            countHtmlElement.innerHTML = `${sceneState.history.filter(_ => _.isMovement && excludeMoves.indexOf(_) < 0).length.toString().padStart(5, "0")}`;
-        }
+
+        countHtmlElement.innerHTML = `${sceneState.movementCount.toString().padStart(5, "0")}`;
 
         movementsCount = sceneState.history.length;
 
