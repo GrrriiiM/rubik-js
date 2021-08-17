@@ -1,6 +1,7 @@
 import { COLORS, SIDES } from "../../objs/constants.js";
-import { createCube, patternColors } from "../../objs/creator.js";
-import { shuffleCube } from "../../objs/rotator.js";
+import { createCube, createCubeWithPattern, patternColors } from "../../objs/creator.js";
+import { findCubeSideByColor } from "../../objs/finder.js";
+import { rotateCubeFromTo, rotateMovementsFromTo, shuffleCube } from "../../objs/rotator.js";
 import { cubeToPattern, inverseKeyValue } from "../../objs/transformer.js";
 import modalComponent from "../modal/modal.component.js";
 import { scanComponent } from "../scan/scan.component.js";
@@ -26,7 +27,7 @@ export function newCubeComponent(onFinished) {
 
     let sidesEntries = inverseKeyValue(SIDES);
     let colorsEntries = inverseKeyValue(COLORS);
-    let colorsClass = Object.keys(COLORS).map(_ => _.toLowerCase());
+    let colorsClass = Object.entries(colorsEntries).map(_ => _[1].toLowerCase());
     let colorOrderSides = [SIDES.FRONT, SIDES.RIGHT, SIDES.BACK, SIDES.LEFT, SIDES.UP, SIDES.DOWN];
     let colors = colorOrderSides.map(_ => [0, 0, 0, 0, _, 0, 0, 0, 0]);
 
@@ -58,11 +59,24 @@ export function newCubeComponent(onFinished) {
         }
 
         self.element.querySelector(".option-button-random").onclick = () => {
-            let cubePattern = cubeToPattern(shuffleCube(createCube(3))).split("");
-            for(let i = 0; i<6; i++) {
+            let cube = shuffleCube(createCube(3));
+            // let cube = createCubeWithPattern("ROOUWYRUGURGRUWWUUOGGYORUOGOWYYYUWRRYWOGGGYYUWOWGROYWR");
+            console.log(cubeToPattern(cube).substring(4,5), cubeToPattern(cube).substring(13,14));
+            console.log(cubeToPattern(cube));
+            console.log(cubeToPattern(cube).substring(4,5), cubeToPattern(cube).substring(13,14));
+            cube = rotateCubeFromTo(cube, findCubeSideByColor(cube, COLORS.ORANGE), SIDES.FRONT);
+            console.log(cubeToPattern(cube));
+            console.log(cubeToPattern(cube).substring(4,5), cubeToPattern(cube).substring(13,14));
+            cube = rotateCubeFromTo(cube, findCubeSideByColor(cube, COLORS.YELLOW), SIDES.UP);
+            let cubePattern = cubeToPattern(cube);
+            console.log(cubeToPattern(cube));
+            console.log(cubeToPattern(cube).substring(4,5), cubeToPattern(cube).substring(13,14));
+            cubePattern = cubePattern.split("");
+            for(let i = 1; i<=6; i++) {
                 let sideColors = cubePattern.splice(0, 9).map(_ => patternColors[_]);
-                colors[inverseKeyValue(colorOrderSides)[i+1]] = sideColors;
-                colors[inverseKeyValue(colorOrderSides)[i+1]][4] = colorOrderSides[i];
+                let side = sideColors[4];
+                let order = inverseKeyValue(colorOrderSides)[side];
+                colors[order] = sideColors;
             }
             updateColors();
         }
@@ -87,10 +101,10 @@ export function newCubeComponent(onFinished) {
         Object.entries(sides).forEach((side, i) => {
             let sideColors = colors[inverseKeyValue(colorOrderSides)[side[1]]]
             self.element.querySelectorAll(`.preview-side.${side[0]}>.block`).forEach((el, i) => {
-                if (!el.classList.contains("center")) {
+                // if (!el.classList.contains("center")) {
                     el.classList.remove(...colorsClass);
                     el.classList.add(colorsClass[sideColors[i]]);
-                }
+                // }
             });
         })
 
