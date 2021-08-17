@@ -1,0 +1,27 @@
+.message-box {
+    position: absolute;
+    z-index: 1000;
+    top: -100px;
+    left: 0px;
+    width: calc(100vw - 20px);
+    height: 10%;
+    padding: 10px;
+    transition: top 150ms ease-out;   
+}
+
+.message-box>.message-box-area {
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.message-box>.message-box-area>.message-box-icon {
+    margin-right: 20px;
+    margin-left: 10px;
+}
+
+.message-box.expanded {
+    top: 0px;
+}

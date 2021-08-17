@@ -8,6 +8,7 @@ export default function modalComponent() {
         let response = await fetch("./components/modal/modal.component.html");
         self.element = document.createElement("div");
         self.element.classList.add("modal");
+        self.element.classList.add(`modal-z-${document.querySelectorAll(".modal").length}`);
         self.element.innerHTML = await response.text();
         self.element.querySelector(".button-close").onclick = hide;
         self.element.querySelector(".modal-title").innerHTML = title;
