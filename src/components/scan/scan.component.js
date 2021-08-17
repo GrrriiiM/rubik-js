@@ -13,7 +13,8 @@ export function scanComponent(scanOrderSides, onFinished) {
         className: "scan",
         element: null,
         render,
-        onFinished: null
+        onFinished: null,
+        close
     };
 
     let videoElement;
@@ -21,6 +22,7 @@ export function scanComponent(scanOrderSides, onFinished) {
     let canvasContext;
     let videoWidth = Math.min(window.screen.width - 40, window.screen.width*0.6);
     let videoHeight = videoWidth;
+    let mediaStream;
 
     let scanColorElements = [];
 
@@ -75,12 +77,21 @@ export function scanComponent(scanOrderSides, onFinished) {
         await openCamera();
     }
 
+    async function close() {
+        videoElement.pause();
+        mediaStream.getTracks().forEach(function(track) {
+            track.stop();
+        });
+    }
 
     function nextScanSide() {
         scanSidePosition+=1;
         if (scanSidePosition >= scanOrderSides.length) {
             onFinished && onFinished(scanColors);
-            videoElement.pause();
+            // videoElement.pause();
+            // mediaStream.getTracks().forEach(function(track) {
+            //     track.stop();
+            // });
             return;
         };
         
@@ -133,7 +144,7 @@ export function scanComponent(scanOrderSides, onFinished) {
             }
         };
         try {
-            let mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
+            mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
             videoElement.onplay = async () => {
                 while (!videoElement.paused && !videoElement.ended) {
 
