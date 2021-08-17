@@ -22,6 +22,14 @@ export function rotateSide(axis, side, clock = CLOCK.NORMAL) {
     return sides.indexOf(side) >= 0 ? sides[(sides.indexOf(side) + (clock ? 1 : sides.length - 1)) % sides.length] : side;
 }
 
+export function rotateSideFromTo(axis, side, from, to) {
+    let sides = [];
+    if (axis == AXIS.Z) sides = sidesAxisZ;
+    if (axis == AXIS.Y) sides = sidesAxisY;
+    if (axis == AXIS.X) sides = sidesAxisX;
+    return sides.indexOf(side) >= 0 ? sides[(sides.indexOf(side) + (clock ? 1 : sides.length - 1)) % sides.length] : side;
+}
+
 export function rotateBlock(axis, colors, clock = CLOCK.NORMAL) {
     let sides = [...Object.values(SIDES).values()]
     return sides.map(s => colors[rotateSide(axis, s, !clock)]);
@@ -126,6 +134,8 @@ export function rotateCubeFromTo(cube, fromSide, toSide, history = null) {
     }
     return cube;
 }
+
+
 
 export function rotateMovementsFromTo(movements, fromSide, toSide) {
     let movementsRotated = [];

@@ -1,5 +1,8 @@
-import { COLORS } from "../../objs/constants.js";
+import { COLORS, SIDES } from "../../objs/constants.js";
 import { patternColors } from "../../objs/creator.js";
+import { findMovementFrontTo } from "../../objs/finder.js";
+import { MOVEMENTS } from "../../objs/movements.js";
+import { rotateMovementsFromTo, rotateSide } from "../../objs/rotator.js";
 import { inverseKeyValue } from "../../objs/transformer.js";
 import { pallete, rgbToColor } from "./color-converter.js";
 
@@ -19,15 +22,15 @@ export function scanComponent() {
     let videoWidth = Math.min(window.screen.width - 40, 320);
     let videoHeight = videoWidth;
 
-    let scanColor0Element;
-    let scanColor1Element;
-    let scanColor2Element;
-    let scanColor3Element;
-    let scanColor4Element;
-    let scanColor5Element;
-    let scanColor6Element;
-    let scanColor7Element;
-    let scanColor8Element;
+    let scanColorElements = [];
+
+    let scanOrderSides = [SIDES.FRONT, SIDES.RIGHT, SIDES.BACK, SIDES.LEFT, SIDES.UP, SIDES.DOWN];
+    let scanColors = [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]];
+    let scanSidePosition = 0;
+
+    let colorEntries = inverseKeyValue(COLORS);
+    let sideEntries = inverseKeyValue(SIDES);
+    let colorsClass = Object.keys(COLORS).map(_ => _.toLowerCase());
 
     let tempContext;
     async function render(parentElement) {
@@ -39,17 +42,12 @@ export function scanComponent() {
         canvasElement.height = videoHeight;
         canvasElement.width = videoWidth;
         canvasContext = canvasElement.getContext('2d');
-        scanColor0Element = self.element.querySelector(".scan-color-0");
-        scanColor1Element = self.element.querySelector(".scan-color-1");
-        scanColor2Element = self.element.querySelector(".scan-color-2");
-        scanColor3Element = self.element.querySelector(".scan-color-3");
-        scanColor4Element = self.element.querySelector(".scan-color-4");
-        scanColor5Element = self.element.querySelector(".scan-color-5");
-        scanColor6Element = self.element.querySelector(".scan-color-6");
-        scanColor7Element = self.element.querySelector(".scan-color-7");
-        scanColor8Element = self.element.querySelector(".scan-color-8");
+        [...Array(9).keys()].forEach(_ => {
+            scanColorElements.push(self.element.querySelector(`.scan-color-${_}`));
+        })
+        
 
-        self.element.querySelector(".button-next").onclick = nextSide;
+        self.element.querySelector(".button-next").onclick = nextScanSide;
 
         let a = [...Array(4).keys()];
 
@@ -57,9 +55,9 @@ export function scanComponent() {
         for (let r = 0; r <= 5; r++) {
             for (let g = 0; g <= 5; g++) {
                 for (let b = 0; b <= 5; b++) {
-                    let r1 = r*51;
-                    let g1 = g*51;
-                    let b1 = b*51;
+                    let r1 = r * 51;
+                    let g1 = g * 51;
+                    let b1 = b * 51;
                     let hex = `#${r1.toString(16).padStart(2, "0").toUpperCase()}${g1.toString(16).padStart(2, "0").toUpperCase()}${b1.toString(16).padStart(2, "0").toUpperCase()}`;
                     if (!hexs.includes(hex)) {
                         let div = document.createElement("div");
@@ -72,42 +70,53 @@ export function scanComponent() {
             }
         }
 
-        nextSide();
+        updateScanSide();
 
         await openCamera();
     }
 
-    let sidesColors = [
-        ["orange", "yellow", "green", "white", "blue"],
-        ["blue", "yellow", "orange", "white", "red"],
-        ["red", "yellow", "blue", "white", "green"],
-        ["green", "yellow", "red", "white", "orange"],
-        ["yellow", "red", "green", "orange", "blue"],
-        ["white", "orange", "green", "red", "blue"],
-    ];
-    let actualSide = -1;
-    let scanSides = [0, 1, 2, 3, 4, 5];
-    let scan = [];
-    function nextSide() {
-        if (actualSide >= 0) scanSides[actualSide] = scan.map(_ => _)
-        if (actualSide >= 5) {
-            let pcolors = inverseKeyValue(patternColors);
-            let cubePattern = scanSides[0].map(_ => pcolors[_]).join("");
-            cubePattern += scanSides[4].map(_ => pcolors[_]).join("");
-            cubePattern += scanSides[3].map(_ => pcolors[_]).join("");
-            cubePattern += scanSides[2].map(_ => pcolors[_]).join("");
-            cubePattern += scanSides[5].map(_ => pcolors[_]).join("");
-            cubePattern += scanSides[1].map(_ => pcolors[_]).join("");
-            self.onFinished && self.onFinished(cubePattern)
-            return;
-        }
-        actualSide += 1;
-        ["center", "up", "left", "down", "right"].forEach((_, i) => {
-            let sidElement = self.element.querySelector(`.scan-overlay>.${_}`);
-            sidElement.classList.remove(...colorsClass);
-            sidElement.classList.add(sidesColors[actualSide][i]);
+
+    function nextScanSide() {
+        if (scanSidePosition >= 5) return;
+        scanSidePosition+=1;
+        updateScanSide();
+
+        // if (actualSide >= 5) {
+        //     let pcolors = inverseKeyValue(patternColors);
+        //     let cubePattern = scanSides[0].map(_ => pcolors[_]).join("");
+        //     cubePattern += scanSides[4].map(_ => pcolors[_]).join("");
+        //     cubePattern += scanSides[3].map(_ => pcolors[_]).join("");
+        //     cubePattern += scanSides[2].map(_ => pcolors[_]).join("");
+        //     cubePattern += scanSides[5].map(_ => pcolors[_]).join("");
+        //     cubePattern += scanSides[1].map(_ => pcolors[_]).join("");
+        //     self.onFinished && self.onFinished(cubePattern)
+        //     return;
+        // }
+        // actualSide += 1;
+        // ["center", "up", "left", "down", "right"].forEach((_, i) => {
+        //     let sidElement = self.element.querySelector(`.scan-overlay>.${_}`);
+        //     sidElement.classList.remove(...colorsClass);
+        //     sidElement.classList.add(sidesColors[actualSide][i]);
+        // });
+    }
+
+    function updateScanSide() {
+        let movements = findMovementFrontTo(SIDES.FRONT, scanOrderSides[scanSidePosition]);
+        let sides = Object.values(SIDES);
+        sides.forEach((side, i) => {
+            movements.forEach(_ => sides[i] = rotateSide(_.axis, sides[i], _.clock))
+        });
+
+        self.element.querySelectorAll(`.scan-overlay>div`).forEach(_ => _.classList.remove(...colorsClass));
+
+        [SIDES.FRONT, SIDES.RIGHT, SIDES.LEFT, SIDES.UP, SIDES.DOWN].forEach(side => {
+            let colorName = colorEntries[sides[side]].toLowerCase();
+            let sideName = sideEntries[side].toLowerCase();
+            self.element.querySelector(`.scan-overlay>.${sideName}`).classList.add(colorName);
         });
     }
+
+    
 
     async function openCamera() {
         let constraints = {
@@ -122,17 +131,26 @@ export function scanComponent() {
             let mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
             videoElement.onplay = async () => {
                 while (!videoElement.paused && !videoElement.ended) {
-                    canvasContext.drawImage(videoElement, 0, 0);
 
-                    fillColor(scanColor0Element, 0, 0, 0);
-                    fillColor(scanColor1Element, 1, 0, 1);
-                    fillColor(scanColor2Element, 2, 0, 2);
-                    fillColor(scanColor3Element, 0, 1, 3);
-                    fillColor(scanColor4Element, 1, 1, 4);
-                    fillColor(scanColor5Element, 2, 1, 5);
-                    fillColor(scanColor6Element, 0, 2, 6);
-                    fillColor(scanColor7Element, 1, 2, 7);
-                    fillColor(scanColor8Element, 2, 2, 8);
+                    canvasContext.drawImage(videoElement, 0, 0);
+                    let scanColor = scanColors[scanSidePosition];
+                    scanColor[0] = getColor(0, 0);
+                    scanColor[1] = getColor(1, 0);
+                    scanColor[2] = getColor(2, 0);
+                    scanColor[3] = getColor(0, 1);
+                    scanColor[4] = getColor(1, 1);
+                    scanColor[5] = getColor(2, 1);
+                    scanColor[6] = getColor(0, 2);
+                    scanColor[7] = getColor(1, 2);
+                    scanColor[8] = getColor(2, 2);
+
+                    scanColor.forEach((_, i) => {
+                        let scanColorElement = scanColorElements[i]
+                        let colorClass = colorEntries[_].toLowerCase()
+                        scanColorElement.classList.remove(...colorsClass);
+                        scanColorElement.classList.add(colorClass);
+                    })
+                    
 
                     // tempContext.drawImage(canvasElement, sourceX, sourceY, sourceSize, sourceSize, 0, 0, videoWidth, videoHeight)
                     await new Promise(resolve => setTimeout(resolve, 1000 / 30))
@@ -148,7 +166,7 @@ export function scanComponent() {
         }
     }
 
-    function fillColor(scanColorElement, x, y, position) {
+    function getColor(x, y) {
 
         try {
             let sourceRange = 0.2;
@@ -174,12 +192,8 @@ export function scanComponent() {
                 }
             }
 
-            let colorClass = colorEntries[color].toLowerCase()
-
-            scanColorElement.classList.remove(...colorsClass);
-            scanColorElement.classList.add(colorClass);
-            // scanColorElement.innerHTML = `${colorR} ${colorG} ${colorB}`;
-            scan[position] = color;
+            return color;
+            
         } catch (error) {
             // alert(error.name + ": " + error.message);
         }
@@ -187,142 +201,7 @@ export function scanComponent() {
 
     }
 
-    let colorEntries = inverseKeyValue(COLORS);
-    let colorsClass = Object.keys(COLORS).map(_ => _.toLowerCase());
-
-
-
-
-    // let fixColorsSize = [...Array(5).keys()]
-    // let fixColors = fixColorsSize.map(() => fixColorsSize.map(() => fixColorsSize.map(() => "")));
-
-
-
-    // fixColors[0][0][0] = COLORS.WHITE;
-    // fixColors[0][0][1] = COLORS.BLUE;
-    // fixColors[0][0][2] = COLORS.BLUE;
-    // fixColors[0][0][3] = COLORS.BLUE;
-    // fixColors[0][0][4] = COLORS.BLUE;
-    // fixColors[0][1][0] = COLORS.GREEN;
-    // fixColors[0][1][1] = COLORS.GREEN;
-    // fixColors[0][1][2] = COLORS.BLUE;
-    // fixColors[0][1][3] = COLORS.BLUE;
-    // fixColors[0][1][4] = COLORS.BLUE;
-    // fixColors[0][2][0] = COLORS.GREEN;
-    // fixColors[0][2][1] = COLORS.GREEN;
-    // fixColors[0][2][2] = COLORS.GREEN;
-    // fixColors[0][2][3] = COLORS.BLUE;
-    // fixColors[0][2][4] = COLORS.BLUE;
-    // fixColors[0][3][0] = COLORS.GREEN;
-    // fixColors[0][3][1] = COLORS.GREEN;
-    // fixColors[0][3][2] = COLORS.GREEN;
-    // fixColors[0][3][3] = COLORS.WHITE;
-    // fixColors[0][3][4] = COLORS.WHITE;
-    // fixColors[0][4][0] = COLORS.GREEN;
-    // fixColors[0][4][1] = COLORS.GREEN;
-    // fixColors[0][4][2] = COLORS.GREEN;
-    // fixColors[0][4][3] = COLORS.WHITE;
-    // fixColors[0][4][4] = COLORS.WHITE;
-    // fixColors[1][0][0] = COLORS.RED;
-    // fixColors[1][0][1] = COLORS.RED;
-    // fixColors[1][0][2] = COLORS.BLUE;
-    // fixColors[1][0][3] = COLORS.BLUE;
-    // fixColors[1][0][4] = COLORS.BLUE;
-    // fixColors[1][1][0] = COLORS.YELLOW;
-    // fixColors[1][1][1] = COLORS.YELLOW;
-    // fixColors[1][1][2] = COLORS.BLUE;
-    // fixColors[1][1][3] = COLORS.BLUE;
-    // fixColors[1][1][4] = COLORS.BLUE;
-    // fixColors[1][2][0] = COLORS.YELLOW;
-    // fixColors[1][2][1] = COLORS.YELLOW;
-    // fixColors[1][2][2] = COLORS.WHITE;
-    // fixColors[1][2][3] = COLORS.WHITE;
-    // fixColors[1][2][4] = COLORS.WHITE;
-    // fixColors[1][3][0] = COLORS.GREEN;
-    // fixColors[1][3][1] = COLORS.GREEN;
-    // fixColors[1][3][2] = COLORS.GREEN;
-    // fixColors[1][3][3] = COLORS.WHITE;
-    // fixColors[1][3][4] = COLORS.WHITE;
-    // fixColors[1][4][0] = COLORS.GREEN;
-    // fixColors[1][4][1] = COLORS.GREEN;
-    // fixColors[1][4][2] = COLORS.GREEN;
-    // fixColors[1][4][3] = COLORS.WHITE;
-    // fixColors[1][4][4] = COLORS.WHITE;
-    // fixColors[2][0][0] = COLORS.RED;
-    // fixColors[2][0][1] = COLORS.RED;
-    // fixColors[2][0][2] = COLORS.RED;
-    // fixColors[2][0][3] = COLORS.BLUE;
-    // fixColors[2][0][4] = COLORS.WHITE;
-    // fixColors[2][1][0] = COLORS.YELLOW;
-    // fixColors[2][1][1] = COLORS.RED;
-    // fixColors[2][1][2] = COLORS.RED;
-    // fixColors[2][1][3] = COLORS.BLUE;
-    // fixColors[2][1][4] = COLORS.BLUE;
-    // fixColors[2][2][0] = COLORS.YELLOW;
-    // fixColors[2][2][1] = COLORS.YELLOW;
-    // fixColors[2][2][2] = COLORS.WHITE;
-    // fixColors[2][2][3] = COLORS.WHITE;
-    // fixColors[2][2][4] = COLORS.WHITE;
-    // fixColors[2][3][0] = COLORS.YELLOW;
-    // fixColors[2][3][1] = COLORS.YELLOW;
-    // fixColors[2][3][2] = COLORS.YELLOW;
-    // fixColors[2][3][3] = COLORS.WHITE;
-    // fixColors[2][3][4] = COLORS.WHITE;
-    // fixColors[2][4][0] = COLORS.YELLOW;
-    // fixColors[2][4][1] = COLORS.YELLOW;
-    // fixColors[2][4][2] = COLORS.YELLOW;
-    // fixColors[2][4][3] = COLORS.WHITE;
-    // fixColors[2][4][4] = COLORS.WHITE;
-    // fixColors[3][0][0] = COLORS.RED;
-    // fixColors[3][0][1] = COLORS.RED;
-    // fixColors[3][0][2] = COLORS.RED;
-    // fixColors[3][0][3] = COLORS.RED;
-    // fixColors[3][0][4] = COLORS.WHITE;
-    // fixColors[3][1][0] = COLORS.ORANGE;
-    // fixColors[3][1][1] = COLORS.ORANGE;
-    // fixColors[3][1][2] = COLORS.RED;
-    // fixColors[3][1][3] = COLORS.BLUE;
-    // fixColors[3][1][4] = COLORS.WHITE;
-    // fixColors[3][2][0] = COLORS.YELLOW;
-    // fixColors[3][2][1] = COLORS.ORANGE;
-    // fixColors[3][2][2] = COLORS.ORANGE;
-    // fixColors[3][2][3] = COLORS.BLUE;
-    // fixColors[3][2][4] = COLORS.WHITE;
-    // fixColors[3][3][0] = COLORS.YELLOW;
-    // fixColors[3][3][1] = COLORS.YELLOW;
-    // fixColors[3][3][2] = COLORS.YELLOW;
-    // fixColors[3][3][3] = COLORS.WHITE;
-    // fixColors[3][3][4] = COLORS.WHITE;
-    // fixColors[3][4][0] = COLORS.YELLOW;
-    // fixColors[3][4][1] = COLORS.YELLOW;
-    // fixColors[3][4][2] = COLORS.YELLOW;
-    // fixColors[3][4][3] = COLORS.WHITE;
-    // fixColors[3][4][4] = COLORS.WHITE;
-    // fixColors[4][0][0] = COLORS.RED;
-    // fixColors[4][0][1] = COLORS.RED;
-    // fixColors[4][0][2] = COLORS.RED;
-    // fixColors[4][0][3] = COLORS.RED;
-    // fixColors[4][0][4] = COLORS.WHITE;
-    // fixColors[4][1][0] = COLORS.ORANGE;
-    // fixColors[4][1][1] = COLORS.ORANGE;
-    // fixColors[4][1][2] = COLORS.RED;
-    // fixColors[4][1][3] = COLORS.RED;
-    // fixColors[4][1][4] = COLORS.WHITE;
-    // fixColors[4][2][0] = COLORS.ORANGE;
-    // fixColors[4][2][1] = COLORS.ORANGE;
-    // fixColors[4][2][2] = COLORS.ORANGE;
-    // fixColors[4][2][3] = COLORS.ORANGE;
-    // fixColors[4][2][4] = COLORS.WHITE;
-    // fixColors[4][3][0] = COLORS.YELLOW;
-    // fixColors[4][3][1] = COLORS.YELLOW;
-    // fixColors[4][3][2] = COLORS.YELLOW;
-    // fixColors[4][3][3] = COLORS.WHITE;
-    // fixColors[4][3][4] = COLORS.WHITE;
-    // fixColors[4][4][0] = COLORS.YELLOW;
-    // fixColors[4][4][1] = COLORS.YELLOW;
-    // fixColors[4][4][2] = COLORS.YELLOW;
-    // fixColors[4][4][3] = COLORS.WHITE;
-    // fixColors[4][4][4] = COLORS.WHITE;
+    
 
 
 
