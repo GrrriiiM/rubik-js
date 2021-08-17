@@ -1,6 +1,6 @@
 import { COLORS, SIDES } from "../../objs/constants.js";
 import { patternColors } from "../../objs/creator.js";
-import { findMovementFrontTo } from "../../objs/finder.js";
+import { findMovementFromTo } from "../../objs/finder.js";
 import { MOVEMENTS } from "../../objs/movements.js";
 import { rotateMovementsFromTo, rotateSide } from "../../objs/rotator.js";
 import { inverseKeyValue } from "../../objs/transformer.js";
@@ -30,7 +30,7 @@ export function scanComponent(scanOrderSides, onFinished) {
 
     let colorEntries = inverseKeyValue(COLORS);
     let sideEntries = inverseKeyValue(SIDES);
-    let colorsClass = Object.keys(COLORS).map(_ => _.toLowerCase());
+    let colorsClass = Object.entries(colorsEntries).map(_ => _[1].toLowerCase());
 
     let tempContext;
     async function render(parentElement) {
@@ -106,7 +106,7 @@ export function scanComponent(scanOrderSides, onFinished) {
     }
 
     function updateScanSide() {
-        let movements = findMovementFrontTo(SIDES.FRONT, scanOrderSides[scanSidePosition]);
+        let movements = findMovementFromTo(SIDES.FRONT, scanOrderSides[scanSidePosition]);
         let sides = Object.values(SIDES);
         sides.forEach((side, i) => {
             movements.forEach(_ => sides[i] = rotateSide(_.axis, sides[i], _.clock))

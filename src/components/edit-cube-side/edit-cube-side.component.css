@@ -1,0 +1,102 @@
+.edit-cube-side {
+    --side-block-size: calc((40vw - 40px) / 3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-self: center;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.edit-side-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 60%;
+}
+
+.edit-side-area>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.edit-side-area>div>div {
+    height: calc(var(--side-block-size) / 3);
+    width: calc(var(--side-block-size) / 3);
+    margin: 5px;
+}
+
+.edit-side-area>div:nth-of-type(1)>div:not(:nth-of-type(1)):not(:nth-of-type(5)),
+.edit-side-area>div:nth-of-type(5)>div:not(:nth-of-type(1)):not(:nth-of-type(5)) {
+    width: calc(var(--side-block-size));
+}
+
+
+.edit-side-area>div:nth-of-type(3)>div:nth-of-type(1) {
+    height: calc(var(--side-block-size));
+}
+
+.edit-side-area>div:nth-of-type(3)>div:nth-of-type(5) {
+    height: calc(var(--side-block-size));
+}
+
+.edit-side-area>div>.edit-side-reference {
+    background-color: blue;
+}
+
+
+.edit-side-area>div>.edit-side-reference.front {
+    height: var(--side-block-size);
+    width: var(--side-block-size);
+}
+
+.edit-side-area>div>.edit-side {
+    height: var(--side-block-size);
+    width: var(--side-block-size);
+    border: 2px solid black;
+    background-color: #151515;
+    margin: 3px;
+    opacity: 0.3;
+    transition: all 100ms ease-out;
+}
+
+.edit-side-area>div>.edit-side.selected {
+    height: var(--side-block-size);
+    width: var(--side-block-size);
+    border: 5px solid black;
+    margin: 0px;
+    opacity: 1;
+    transform: scale(1.3);
+}
+
+
+.color-area {
+    height: 30%;
+    width: 100%;
+}
+
+.color-area>.color-button-area {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.color-area>.color-button-area>.button {
+    width: calc((100vw - 70px) / 6); 
+    height: calc((100vw - 70px) / 6); 
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.color-area>.color-button-area>.color-button-accept {
+    width: calc((100% - 20px)); 
+    height: calc((100% - (calc((100vw - 70px) / 6))) - 20px); 
+    margin-top: 0px;
+}

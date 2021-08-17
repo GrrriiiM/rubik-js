@@ -60,14 +60,21 @@
 }
 
 .option-area>.option-button-area {
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
 .option-area>.option-button-area>.button {
-    width: calc((100vw - 50px) / 4); 
-    height: calc((100vw - 50px) / 4); 
+    width: calc((100% - 50px) / 4); 
+    height: calc((100% - 30px) / 2); 
     margin-top: 10px;
     margin-left: 10px;
+}
+
+.option-area>.option-button-area>.option-button-accept {
+    width: calc((100% - 20px)); 
+    margin-top: 0px;
 }
