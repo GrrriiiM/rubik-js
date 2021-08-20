@@ -122,6 +122,8 @@ export default function sceneComponent(dragSceneHandler, { cube = null, movement
             if (!self.canRotate(movement)) return resetRotation();
         }
         return new Promise((resolve) => {
+            fixResetRotation = Date.now();
+            let fixResetRotationLocal = fixResetRotation;
             state.isBusy = true;
             state.history.push({ isMovement: true, value: movement.str });
             let axis = axisToString(movement.axis);
@@ -143,16 +145,24 @@ export default function sceneComponent(dragSceneHandler, { cube = null, movement
                     _.classList.add('rotate', `rotate-${axis}${movement.clock ? '' : '-anti'}`)
                     _.style.transform = '';
                 });
-                if (!transition) {
-                    state.isBusy = false;
-                    resolve();
-                }
             }
+            if (!transition) {
+                state.isBusy = false;
+                resolve();
+            }
+            setTimeout(() => {
+                if (fixResetRotationLocal == fixResetRotation) {
+                    rotateTransitionEnd(null, null, null, resolve);
+                }
+            }, 300);
         });
     }
 
+    let fixResetRotation;
     function resetRotation() {
         return new Promise(resolve => {
+            fixResetRotation = Date.now();
+            let fixResetRotationLocal = fixResetRotation;
             state.isBusy = true;
             let transition = false;
             cubeElement.querySelectorAll(`.block:not(.template)`).forEach((_, i) => {
@@ -167,6 +177,11 @@ export default function sceneComponent(dragSceneHandler, { cube = null, movement
                 state.isBusy = false;
                 resolve();
             }
+            setTimeout(() => {
+                if (fixResetRotationLocal == fixResetRotation) {
+                    rotateTransitionEnd(null, null, null, resolve);
+                }
+            }, 300);
         });
         // setTimeout(() => {
         //     cubeElement.querySelectorAll(`.block`).forEach(_ => {
@@ -178,7 +193,7 @@ export default function sceneComponent(dragSceneHandler, { cube = null, movement
     }
 
     function rotateTransitionEnd(element, movement, layers, resolve) {
-        element.ontransitionend = null;
+        if (element) element.ontransitionend = null;
         if (movement && layers) {
             updateStateCube(rotateCube(movement.axis, state.cube, layers, movement.clock));
         }
