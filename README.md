@@ -18,6 +18,37 @@ Projeto realizado em Vanilla Javascript a fim de estudo, com a ideia de criar um
 
 ## Instruções
 
+### Movimentação
+
+Segure e arraste a peça na a direção desejada.
+
+Para movimentar o cubo inteiro, segure e arraste no espaço fora do cubo.
+
+![](docs/rubikJS-mover.gif)
+
+
+### Novo cubo
+
+Entre no menu __Ações__ e clique em __Novo cubo__.
+
+É possível criar um novo cubo pelo opção __Escanear__, onde utilizará a câmera para para identificar as faces do cubo, ou criar um cubo __aleatório__, ou editar um cubo pela opção __Editar__ 
+
+![](docs/rubikJS-novo-cubo.gif)
+
+
+### Algorítimos
+
+Pela opção __algorítimos__, é possivel acessar todos os algorítimos do método Fridrich, separados por etapas, e basico ou avançado.
+
+
+![](docs/rubikJS-algoritimos.gif)
+
+
+### Solucionar
+
+Dentro da menu __Ações__ é possivel acessar a opção __Solucionar (Básico)__ e __Solucionar (Avançado)__, onde sera apresentado passo a passo a solução do cubo atual, junto do nome do algorítimo utilizado.
+
+![](docs/rubikJS-solucionar.gif)
 
 ## Implementações Futuras
 - [X] Cubo
